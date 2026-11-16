@@ -92,6 +92,18 @@
     .mobile-actions{display:none}
     @media(max-width:900px){.shell{padding:0 16px 35px}.layout{grid-template-columns:1fr}.preview-sticky{position:static}.chat-bg{max-height:480px}.title-row{margin-top:6px}.head{min-height:67px}.privacy-note{display:none}}
     @media(max-width:560px){.shell{padding:0 12px 120px}.head{min-height:61px}.head-right{font-size:9px}.logo-word{font-size:20px}.logo-word small{font-size:7.5px}.logo-icon{width:34px;height:34px}.title-row{margin:9px 4px 17px}.lead{max-width:320px}.panel-body{padding:18px 16px 19px}.panel-head{margin-bottom:16px}.number{width:28px;height:28px}.fields{gap:12px}.metric-grid{grid-template-columns:.85fr repeat(2,minmax(0,1fr));gap:8px}.metric-grid .metric-label{font-size:11.5px}.metric-grid input{padding:8px;font-size:14px}.head-right{display:none}.chat-bg{padding:14px;max-height:none}.preview-actions{padding:13px 16px}.preview-actions .btn-wa{display:none}.mobile-actions{position:fixed;z-index:20;display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;bottom:0;left:0;right:0;background:rgba(255,255,255,.97);border-top:1px solid var(--border);padding:11px max(13px,env(safe-area-inset-right)) calc(11px + env(safe-area-inset-bottom)) max(13px,env(safe-area-inset-left));box-shadow:0 -5px 20px #253e5111}.mobile-actions .btn{min-height:49px}.btn-preview{background:#edf6fb;color:var(--blue-strong);border:1px solid #d6e9f4;padding:0 15px}.footer{margin-bottom:10px}}
+
+    .destination-card{background:#f1f8fc;border:1px solid #d9eaf4;border-radius:11px;padding:12px 13px;display:grid;gap:4px}
+    .destination-caption{font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:800;color:#637f90}
+    .destination-name{font-size:13px;color:#183e57;font-weight:800;line-height:1.3;word-break:break-word}
+    .destination-help{font-size:11px;color:#607887;line-height:1.4}
+    .mobile-destination{display:none}
+    @media(max-width:560px){
+      .mobile-destination{display:flex;align-items:baseline;gap:5px;grid-column:1/-1;color:#3f6073;font-size:11px;line-height:1.25;min-width:0}
+      .mobile-destination strong{color:#153a51;white-space:normal}
+      .mobile-actions{gap:8px}
+      .mobile-actions .btn{min-height:46px}
+    }
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 
     .cr-list{display:grid;gap:13px}
@@ -351,9 +363,15 @@
         </div></section>
       </form>
       <aside id="previewSection" class="preview-sticky" aria-label="Prévia do relatório">
-        <section class="panel"><div class="preview-heading"><div><h2>Mensagem pronta</h2><p class="sub">Prévia para o grupo de WhatsApp</p></div><span class="live">Ao vivo</span></div>
+        <section class="panel"><div class="preview-heading"><div><h2>Mensagem pronta</h2><p class="sub">Prévia para compartilhar no WhatsApp</p></div><span class="live">Ao vivo</span></div>
           <div class="chat-bg"><div class="chat-bubble"><pre id="preview" aria-live="polite"></pre></div></div>
-          <div class="preview-actions"><button type="button" class="btn btn-wa" data-send><svg class="ui-icon" aria-hidden="true"><use href="#ico-send"/></svg><span>Enviar pelo WhatsApp</span></button>
+          <div class="preview-actions">
+            <div class="destination-card" aria-label="Grupo de destino indicado">
+              <span class="destination-caption">Grupo de destino</span>
+              <span class="destination-name">⚫ GPS - Supervisão Jonathan</span>
+              <span class="destination-help">Ao abrir o WhatsApp, selecione este grupo e confirme o envio.</span>
+            </div>
+            <button type="button" class="btn btn-wa" data-send><svg class="ui-icon" aria-hidden="true"><use href="#ico-send"/></svg><span>Escolher grupo no WhatsApp</span></button>
           <div class="btn-flex"><button type="button" id="copyBtn" class="btn btn-copy"><svg class="ui-icon" aria-hidden="true"><use href="#ico-copy"/></svg>Copiar mensagem</button><button type="button" id="resetBtn" class="btn btn-plain" title="Iniciar novo report com supervisor em branco"><svg class="ui-icon" aria-hidden="true"><use href="#ico-reset"/></svg>Novo report</button></div>
 </div>
         </section>
@@ -361,7 +379,11 @@
     </div>
     <footer class="footer">In-Haus · Report Operacional | Ferramenta de comunicação interna</footer>
   </main>
-  <div class="mobile-actions"><button type="button" class="btn btn-preview" id="showPreview"><svg class="ui-icon" aria-hidden="true"><use href="#ico-eye"/></svg><span>Prévia</span></button><button type="button" class="btn btn-wa" data-send><svg class="ui-icon" aria-hidden="true"><use href="#ico-send"/></svg><span>Enviar pelo WhatsApp</span></button></div>
+  <div class="mobile-actions">
+    <div class="mobile-destination">Destino: <strong>⚫ GPS - Supervisão Jonathan</strong></div>
+    <button type="button" class="btn btn-preview" id="showPreview"><svg class="ui-icon" aria-hidden="true"><use href="#ico-eye"/></svg><span>Prévia</span></button>
+    <button type="button" class="btn btn-wa" data-send aria-label="Abrir WhatsApp para selecionar o grupo GPS - Supervisão Jonathan"><svg class="ui-icon" aria-hidden="true"><use href="#ico-send"/></svg><span>Escolher grupo</span></button>
+  </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script>
     (()=>{
@@ -614,7 +636,7 @@
       form.addEventListener('change',e=>{if(!e.target.closest('#crList')&&e.target.id!=='responsible')update()});
       $('statusChoices').addEventListener('click',e=>{const b=e.target.closest('button[data-value]');if(b)setStatus(val('turnStatus')===b.dataset.value?'':b.dataset.value)});
       form.addEventListener('submit',e=>e.preventDefault());
-      document.querySelectorAll('[data-send]').forEach(b=>b.addEventListener('click',()=>{if(!validate())return;update();window.location.assign('https://api.whatsapp.com/send?text='+encodeURIComponent(message()))}));
+      document.querySelectorAll('[data-send]').forEach(b=>b.addEventListener('click',()=>{if(!validate())return;update();window.location.assign('https://wa.me/?text='+encodeURIComponent(message()))}));
       $('copyBtn').addEventListener('click',async()=>{
         if(!validate())return;
         const txt=message();try{
