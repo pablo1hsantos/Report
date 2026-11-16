@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#006ba6">
+  <meta name="description" content="Relatório operacional In-Haus: preencha o turno e compartilhe pelo WhatsApp.">
+  <title>Report Operacional | In-Haus</title>
+  <style>
+    :root{color-scheme:light;--blue:#0086c8;--blue-strong:#006ba6;--navy:#17344b;--text:#21394c;--muted:#6f8090;--grey:#87939e;--border:#dee6eb;--bg:#f4f7f9;--white:#fff;--soft:#edf7fc;--green:#137b56;--shadow:0 9px 28px rgba(18,51,75,.055)}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--bg);color:var(--text);font:14px/1.48 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+    button,input,select,textarea{font:inherit}button{cursor:pointer}
+    .topline{height:4px;background:linear-gradient(90deg,var(--blue-strong) 0 60%,#9aa6af 60% 100%)}
+    .shell{max-width:1216px;margin:auto;padding:0 26px 55px}
+    .head{min-height:76px;display:flex;justify-content:space-between;align-items:center;gap:16px}
+    .logo{display:flex;align-items:center;gap:11px;text-decoration:none;color:inherit}
+    .logo-icon{width:39px;height:39px;flex:none}
+    .logo-word{font-size:23px;font-weight:840;letter-spacing:-.065em;line-height:1;white-space:nowrap}
+    .logo-word .in{color:var(--blue-strong)} .logo-word .haus{color:#82909c}
+    .logo-word small{display:block;letter-spacing:.13em;font-size:8.4px;color:#708292;font-weight:800;margin-top:7px}
+    .head-right{display:flex;align-items:center;gap:9px;color:#7b8896;font-weight:700;font-size:11px;letter-spacing:.1em}
+    .head-right svg{color:var(--blue)}
+    .title-row{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:17px 0 23px}
+    .eyebrow{font-weight:800;font-size:11px;letter-spacing:.12em;color:var(--blue-strong);text-transform:uppercase}
+    h1{font-size:clamp(26px,3.1vw,34px);line-height:1.15;letter-spacing:-.04em;margin:6px 0 6px;color:var(--navy)}
+    .lead{color:var(--muted);font-size:13px;margin:0}
+    .privacy-note{display:flex;align-items:center;gap:8px;color:#718494;font-size:11px;white-space:nowrap;padding-bottom:6px}
+    .layout{display:grid;grid-template-columns:minmax(0,1.18fr) minmax(340px,.82fr);gap:20px;align-items:start}
+    .form-stack{display:grid;gap:15px;min-width:0}
+    .panel{background:var(--white);border:1px solid var(--border);border-radius:15px;box-shadow:var(--shadow);overflow:hidden;min-width:0}
+    .panel-body{padding:22px 24px 23px}
+    .panel-head{display:flex;align-items:center;gap:11px;margin-bottom:18px}
+    .number{height:31px;width:31px;display:grid;place-items:center;color:var(--blue-strong);background:#e9f5fb;border-radius:9px;font-size:12px;font-weight:850;flex:none}
+    h2{font-size:16px;letter-spacing:-.015em;margin:0;font-weight:780;color:var(--navy)}
+    .sub{font-size:11.5px;color:var(--muted);margin:2px 0 0}
+    .fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .field{min-width:0;display:flex;flex-direction:column;gap:6px}
+    .full{grid-column:1/-1}
+    label,.field-title{font-size:12px;color:#3d5568;font-weight:730}
+    .req{color:#ba5967}
+    select,input,textarea{width:100%;border:1px solid #d4e0e7;border-radius:9px;background:#fcfdfe;color:var(--text);min-height:44px;padding:10px 12px;outline:none;transition:border-color .12s,box-shadow .12s}
+    select{padding-right:27px;text-overflow:ellipsis}
+    input[type="number"]{appearance:textfield;-moz-appearance:textfield} input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+    input:focus,textarea:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,134,200,.11);background:white}
+    ::placeholder{color:#99a8b3}
+    textarea{resize:vertical;min-height:69px}
+    .choice-row{display:flex;gap:7px;flex-wrap:wrap}
+    .choice{border:1px solid #d7e3ea;background:#fbfdfe;border-radius:9px;color:#547084;min-height:39px;padding:8px 13px;font-size:12px;font-weight:740;transition:all .12s}
+    .choice[aria-pressed="true"]{background:#e6f4fc;color:#006b9e;border-color:#70b5d9;box-shadow:inset 0 0 0 .5px #70b5d9}
+    .choice:focus-visible,.btn:focus-visible{outline:3px solid #9ad5f0;outline-offset:2px}
+    .role-buttons .choice{flex:1 1 auto}
+    .hint{font-size:11px;color:#8293a0;margin:5px 0 0}
+    .metrics-head{color:#667e8c;font-size:11px;font-weight:780;letter-spacing:.045em;text-transform:uppercase;display:flex;align-items:center;gap:9px;margin:3px 0 11px}
+    .metrics-head:after{content:"";height:1px;background:#e9eef2;flex:1}
+    .metric-grid{display:grid;grid-template-columns:1.15fr repeat(2,minmax(0,1fr));align-items:center;gap:8px 10px}
+    .metric-grid .metric-label{font-size:12.5px;font-weight:720;color:#3c586a}
+    .col-label{font-size:10px;text-transform:uppercase;font-weight:800;color:#82919c;letter-spacing:.055em;text-align:center}
+    .metric-grid input{min-width:0;text-align:center;height:43px}
+    .people-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+    .unit-row{display:flex;align-items:center;gap:11px;margin:15px 0 19px}
+    .unit-row label{flex:1}
+    .unit-row select{width:190px;min-height:38px;padding:7px 11px}
+    .small-help{color:#7d91a0;font-size:11px;margin:11px 0 0}
+    .segmented{display:flex;gap:7px;flex-wrap:wrap}
+    .segmented .choice{flex:1 1 auto}
+    .reveal[hidden]{display:none!important}
+    .reveal{margin-top:14px;display:grid;gap:13px;animation:reveal .16s ease}
+    @keyframes reveal{from{opacity:.5;transform:translateY(-3px)}to{opacity:1;transform:none}}
+    .split-divider{height:1px;background:#edf1f4;margin:20px 0 17px}
+    .minor-head{margin:0 0 10px;font-size:12px;font-weight:760;color:#435d70}
+    .status-bar{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+    .status-bar .choice{flex:1 1 auto}
+    .status-bar .choice[data-value="Crítico"][aria-pressed="true"]{background:#fff0ee;color:#b5413c;border-color:#e5a29e}
+    .status-bar .choice[data-value="Com ressalvas"][aria-pressed="true"]{background:#fff8e7;color:#986914;border-color:#edce86}
+    .preview-sticky{position:sticky;top:18px;min-width:0}
+    .preview-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:18px 20px;border-bottom:1px solid var(--border)}
+    .preview-heading h2{font-size:15px}
+    .live{display:flex;align-items:center;gap:6px;color:#20725a;font-weight:760;font-size:10px;background:#e9f7f0;padding:5px 9px;border-radius:999px}
+    .live:before{content:"";height:6px;width:6px;background:#40a47c;border-radius:50%}
+    .chat-bg{padding:19px;background-color:#e9f0ed;background-image:radial-gradient(#d6e3dc .9px,transparent .9px);background-size:19px 19px;max-height:560px;overflow:auto}
+    .chat-bubble{background:white;border:1px solid #d7e2dd;border-radius:6px 11px 11px 11px;box-shadow:0 3px 8px rgba(17,64,43,.07);padding:17px 16px;max-width:470px}
+    .chat-bubble pre{margin:0;white-space:pre-wrap;word-break:break-word;font:12px/1.68 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:#31413a}
+    .preview-actions{padding:17px 19px 19px;display:grid;gap:9px}
+    .btn{border:0;border-radius:10px;min-height:47px;display:flex;justify-content:center;align-items:center;gap:10px;font-size:13px;font-weight:830;transition:filter .12s}
+    .btn:hover{filter:brightness(.97)}
+    .btn:active{transform:translateY(1px)}
+    .btn-wa{background:#12845d;color:white}
+    .btn-copy{color:var(--blue-strong);background:#edf6fb;border:1px solid #dbeef6}
+    .btn-plain{color:#7b8b98;background:transparent;font-weight:700;font-size:11px;min-height:34px}
+    .btn-flex{display:grid;grid-template-columns:1fr auto;gap:8px}
+    .notice{margin:1px 0 0;font-size:11px;line-height:1.52;color:#758697;text-align:center}
+    .footer{text-align:center;font-size:11px;color:#98a5b0;margin-top:24px}
+    .toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,95px);opacity:0;pointer-events:none;z-index:30;max-width:calc(100vw - 24px);background:#203c51;color:white;padding:12px 16px;border-radius:10px;box-shadow:0 8px 26px #17364a26;font-size:12px;transition:transform .16s,opacity .16s;text-align:center}
+    .toast.show{transform:translate(-50%,0);opacity:1}
+    .mobile-actions{display:none}
+    @media(max-width:900px){.shell{padding:0 16px 35px}.layout{grid-template-columns:1fr}.preview-sticky{position:static}.chat-bg{max-height:480px}.title-row{margin-top:6px}.head{min-height:67px}.privacy-note{display:none}}
+    @media(max-width:560px){.shell{padding:0 12px 120px}.head{min-height:61px}.head-right{font-size:9px}.logo-word{font-size:20px}.logo-word small{font-size:7.5px}.logo-icon{width:34px;height:34px}.title-row{margin:9px 4px 17px}.lead{max-width:320px}.panel-body{padding:18px 16px 19px}.panel-head{margin-bottom:16px}.number{width:28px;height:28px}.fields{gap:12px}.metric-grid{grid-template-columns:.85fr repeat(2,minmax(0,1fr));gap:8px}.metric-grid .metric-label{font-size:11.5px}.metric-grid input{padding:8px;font-size:14px}.unit-row select{width:155px}.role-buttons .choice{padding:8px 10px}.head-right{display:none}.chat-bg{padding:14px;max-height:none}.preview-actions{padding:13px 16px}.preview-actions .btn-wa{display:none}.mobile-actions{position:fixed;z-index:20;display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;bottom:0;left:0;right:0;background:rgba(255,255,255,.97);border-top:1px solid var(--border);padding:11px max(13px,env(safe-area-inset-right)) calc(11px + env(safe-area-inset-bottom)) max(13px,env(safe-area-inset-left));box-shadow:0 -5px 20px #253e5111}.mobile-actions .btn{min-height:49px}.btn-preview{background:#edf6fb;color:var(--blue-strong);border:1px solid #d6e9f4;padding:0 15px}.footer{margin-bottom:10px}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+  </style>
+</head>
+<body>
+  <div class="topline"></div>
+  <main class="shell">
+    <header class="head">
+      <a class="logo" href="https://inhauslogistica.com.br/" target="_blank" rel="noopener noreferrer" aria-label="In-Haus Logística, site oficial">
+        <svg class="logo-icon" aria-hidden="true" viewBox="0 0 48 48" fill="none"><path d="M5 17L24 6l19 11-7 4-12-7-12 7-7-4Z" fill="#0086C8"/><path d="M5 25l7-4 12 7 12-7 7 4-19 11L5 25Z" fill="#86949E"/><path d="M5 34l7-4 12 7 12-7 7 4-19 11L5 34Z" fill="#A9B2B9"/></svg>
+        <span class="logo-word"><span class="in">In·</span><span class="haus">Haus</span><small>LOGÍSTICA</small></span>
+      </a>
+      <div class="head-right"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M7 2v4m10-4v4M3 10h18"/></svg><span>COMUNICAÇÃO OPERACIONAL</span></div>
+    </header>
+    <div class="title-row"><div><div class="eyebrow">Report diário</div><h1>Fechamento de turno</h1><p class="lead">Selecione a operação, registre os resultados e envie ao grupo.</p></div><span class="privacy-note">● Rascunho salvo neste dispositivo</span></div>
+    <div class="layout">
+      <form id="reportForm" class="form-stack" novalidate>
+        <section class="panel" aria-labelledby="h-ident"><div class="panel-body">
+          <div class="panel-head"><span class="number">01</span><div><h2 id="h-ident">Identificação</h2><p class="sub">Dados da operação e do responsável</p></div></div>
+          <div class="fields">
+            <div class="field full"><span class="field-title">Função <span class="req">*</span></span><div class="choice-row role-buttons" id="roleChoices" role="group" aria-label="Função"><button type="button" class="choice" data-value="Coordenador" aria-pressed="false">Coordenador</button><button type="button" class="choice" data-value="Supervisor" aria-pressed="false">Supervisor</button><button type="button" class="choice" data-value="Engenheiro SSMA" aria-pressed="false">Eng. SSMA</button></div><input type="hidden" id="role" name="role"></div>
+            <div class="field full"><label for="responsible">Responsável <span class="req">*</span></label><select id="responsible" name="responsible" required disabled><option value="">Selecione a função primeiro</option></select></div>
+            <div class="field full"><label for="cr">CR / Operação <span class="req">*</span></label><select id="cr" name="cr" required><option value="">Selecione o CR</option></select></div>
+            <div class="field"><label for="date">Data <span class="req">*</span></label><input id="date" name="date" type="date" required></div>
+            <div class="field"><label for="shift">Turno <span class="req">*</span></label><select id="shift" name="shift" required><option value="">Selecione</option><option value="1º turno">1º turno</option><option value="2º turno">2º turno</option><option value="3º turno">3º turno</option><option value="Administrativo">Administrativo</option></select></div>
+          </div>
+        </div></section>
+        <section class="panel" aria-labelledby="h-numbers"><div class="panel-body">
+          <div class="panel-head"><span class="number">02</span><div><h2 id="h-numbers">Indicadores do turno</h2><p class="sub">Preencha apenas os indicadores aplicáveis à operação</p></div></div>
+          <div class="metrics-head">Programação x realizado</div>
+          <div class="metric-grid">
+            <div></div><div class="col-label">Programado</div><div class="col-label">Realizado</div>
+            <label class="metric-label" for="vehiclesPlan">Veículos</label><input id="vehiclesPlan" name="vehiclesPlan" type="number" step="1" min="0" placeholder="—" inputmode="numeric" aria-label="Veículos programados"><input id="vehiclesActual" name="vehiclesActual" type="number" step="1" min="0" placeholder="—" inputmode="numeric" aria-label="Veículos realizados">
+            <label class="metric-label" for="volumePlan">Volume</label><input id="volumePlan" name="volumePlan" type="text" inputmode="decimal" maxlength="20" placeholder="—" aria-label="Volume programado"><input id="volumeActual" name="volumeActual" type="text" inputmode="decimal" maxlength="20" placeholder="—" aria-label="Volume realizado">
+          </div>
+          <div class="unit-row"><label for="volumeUnit">Unidade do volume</label><select id="volumeUnit" name="volumeUnit"><option value="">Não especificada</option><option value="paletes">Paletes</option><option value="toneladas">Toneladas</option><option value="unidades">Unidades</option><option value="caixas">Caixas</option><option value="cargas">Cargas</option><option value="pedidos">Pedidos</option><option value="m³">m³</option></select></div>
+          <div class="metrics-head">Quadro de pessoal</div>
+          <div class="people-grid"><div class="field"><label for="qp">QP</label><input id="qp" name="qp" type="number" min="0" step="1" placeholder="—" inputmode="numeric"></div><div class="field"><label for="qa">QA</label><input id="qa" name="qa" type="number" min="0" step="1" placeholder="—" inputmode="numeric"></div><div class="field"><label for="abs">ABS</label><input id="abs" name="abs" type="number" min="0" step="1" placeholder="—" inputmode="numeric"></div></div>
+          <p class="small-help">Campos não preenchidos são omitidos no WhatsApp. QP, QA e ABS seguem o padrão interno.</p>
+        </div></section>
+        <section class="panel" aria-labelledby="h-deviations"><div class="panel-body">
+          <div class="panel-head"><span class="number">03</span><div><h2 id="h-deviations">Desvios e pendências</h2><p class="sub">Só abre campos adicionais quando necessário</p></div></div>
+          <div class="minor-head">Desvios operacionais</div>
+          <div class="segmented" id="issuesChoices" role="group" aria-label="Desvios operacionais"><button class="choice" type="button" data-value="none" aria-pressed="true">Sem desvios</button><button class="choice" type="button" data-value="yes" aria-pressed="false">Registrar desvio</button></div>
+          <input type="hidden" id="issueMode" name="issueMode" value="none">
+          <div class="reveal" id="issueFields" hidden><div class="field"><label for="issues">O que aconteceu? <span class="req">*</span></label><textarea id="issues" name="issues" maxlength="700" placeholder="Ex.: atraso de carregamento por indisponibilidade de doca"></textarea></div><div class="field"><label for="impact">Impacto (opcional)</label><textarea id="impact" name="impact" maxlength="500" placeholder="Ex.: 2 veículos aguardando"></textarea></div><div class="field"><label for="actionTaken">Ação tomada (opcional)</label><textarea id="actionTaken" name="actionTaken" maxlength="500" placeholder="Ex.: redistribuição das docas"></textarea></div></div>
+          <div class="split-divider"></div>
+          <div class="minor-head">Pendências para o próximo turno</div>
+          <div class="segmented" id="pendingChoices" role="group" aria-label="Pendências"><button class="choice" type="button" data-value="none" aria-pressed="true">Sem pendências</button><button class="choice" type="button" data-value="yes" aria-pressed="false">Registrar pendência</button></div>
+          <input type="hidden" id="pendingMode" name="pendingMode" value="none">
+          <div class="reveal" id="pendingFields" hidden><div class="field"><label for="pending">Pendência / Próxima ação <span class="req">*</span></label><textarea id="pending" name="pending" maxlength="700" placeholder="Ex.: finalizar carga do veículo 1234 no próximo turno"></textarea></div></div>
+        </div></section>
+        <section class="panel" aria-labelledby="h-close"><div class="panel-body">
+          <div class="panel-head"><span class="number">04</span><div><h2 id="h-close">Fechamento</h2><p class="sub">Situação geral do turno</p></div></div>
+          <div class="minor-head">Status operacional</div>
+          <div class="status-bar" id="statusChoices" role="group" aria-label="Status do turno"><button type="button" class="choice" data-value="Normal" aria-pressed="true">Normal</button><button type="button" class="choice" data-value="Com ressalvas" aria-pressed="false">Com ressalvas</button><button type="button" class="choice" data-value="Crítico" aria-pressed="false">Crítico</button></div>
+          <input type="hidden" id="turnStatus" name="turnStatus" value="Normal">
+          <div class="field"><label for="observation">Observação complementar (opcional)</label><textarea id="observation" name="observation" maxlength="700" placeholder="Informação relevante não mencionada acima"></textarea></div>
+        </div></section>
+      </form>
+      <aside id="previewSection" class="preview-sticky" aria-label="Prévia do relatório">
+        <section class="panel"><div class="preview-heading"><div><h2>Mensagem pronta</h2><p class="sub">Prévia para o grupo de WhatsApp</p></div><span class="live">Ao vivo</span></div>
+          <div class="chat-bg"><div class="chat-bubble"><pre id="preview" aria-live="polite"></pre></div></div>
+          <div class="preview-actions"><button type="button" class="btn btn-wa" data-send><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8A8.5 8.5 0 0 1 12.5 20a8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 12.5 3a8.5 8.5 0 0 1 8.5 8.5Z"/><path d="M8.6 9.1c.3 2.8 3 5.4 5.7 5.8l1.5-1.4"/></svg> Enviar pelo WhatsApp</button>
+          <div class="btn-flex"><button type="button" id="copyBtn" class="btn btn-copy">Copiar mensagem</button><button type="button" id="resetBtn" class="btn btn-plain" title="Iniciar outro relatório, mantendo responsável e CR">Novo report</button></div>
+          <p class="notice">Abre o WhatsApp para escolher o grupo e confirmar o envio. Nenhuma mensagem é enviada automaticamente.</p></div>
+        </section>
+      </aside>
+    </div>
+    <footer class="footer">In-Haus · Report Operacional | Ferramenta de comunicação interna</footer>
+  </main>
+  <div class="mobile-actions"><button type="button" class="btn btn-preview" id="showPreview">Prévia</button><button type="button" class="btn btn-wa" data-send>Enviar pelo WhatsApp</button></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script>
+    (()=>{
+      'use strict';
+      const STAFF={
+        'Coordenador':['ALISSON OSMAIR ZULZKE','DANILO RAFAEL VICTOR COSTA','PAULO JUNIOR DE MELO RIBEIRO'],
+        'Supervisor':['LINCOLN LIMA DA CUNHA','ADRIANO BEZERRA DE SOUZA','ALLAN DA TRINDADE ALVES','RAFAEL RODRIGUES ZARATINI','DIEGO FLORIN DA SILVA','ALEXANDRE FERNANDO BARBOSA','SANDRO ALEXANDRE DA SILVA','DIEGO MORAES DA CONCEICAO','PAULO JUNIOR DE MELO RIBEIRO','ALEF AUGUSTO FRANCA','GABRIELLE PAES JANUARIO DA SILVA'],
+        'Engenheiro SSMA':['MATHEUS LUCIO SOUSA SILVA']
+      };
+      const CRS=[
+        ['27299','Whirlpool Rio Claro'],['64399','Arcelor HUB'],['65496','Arcelor Trefila'],['66003','Arcelor Transporte'],['66655','Arcelor Belgo'],['74590','Arcelor CDB AE'],['77850','Arcelor CDB III'],['85080','Arcelor Inspeções IRC'],['85082','Arcelor Inspeções PIR'],['97478','Whirlpool Jundiai'],['97487','Arcelor Peação']
+      ];
+      const key='inhaus-report-operacional-v2';
+      const form=document.getElementById('reportForm'),preview=document.getElementById('preview'),toast=document.getElementById('toast');
+      const $=id=>document.getElementById(id),val=id=>String($(id).value||'').trim();
+      let timer;
+      function today(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+      function dateBr(iso){if(!/^\d{4}-\d{2}-\d{2}$/.test(iso))return '—';const[y,m,d]=iso.split('-');return `${d}/${m}/${y}`}
+      function fmt(s){return s.replace(/\r/g,'').trim().replace(/\n{3,}/g,'\n\n')}
+      function opt(parent,value,text){const el=document.createElement('option');el.value=value;el.textContent=text;parent.appendChild(el)}
+      function populateNames(role,previous=''){
+        const select=$('responsible');select.replaceChildren();opt(select,'',role?'Selecione o responsável':'Selecione a função primeiro');
+        for(const name of(STAFF[role]||[]))opt(select,name,name);
+        select.disabled=!role;select.value=(STAFF[role]||[]).includes(previous)?previous:'';
+        if(role==='Engenheiro SSMA')select.value=STAFF[role][0];
+      }
+      function setChoice(groupId,hiddenId,v,render=true){
+        $(hiddenId).value=v;
+        for(const button of document.querySelectorAll(`#${groupId} button`))button.setAttribute('aria-pressed',String(button.dataset.value===v));
+        if(hiddenId==='role')populateNames(v,val('responsible'));
+        if(hiddenId==='issueMode')$('issueFields').hidden=(v!=='yes');
+        if(hiddenId==='pendingMode')$('pendingFields').hidden=(v!=='yes');
+        if(render)update();
+      }
+      function percent(a,b){const x=Number(String(a).replace(',','.')),y=Number(String(b).replace(',','.'));if(a===''||b===''||!Number.isFinite(x)||!Number.isFinite(y)||x<=0)return '';let n=(y/x)*100;return ` (${n.toLocaleString('pt-BR',{maximumFractionDigits:1})}%)`}
+      function message(){
+        const crOption=$('cr').selectedOptions[0],unit=val('volumeUnit'),vp=val('vehiclesPlan'),va=val('vehiclesActual'),volp=val('volumePlan'),vola=val('volumeActual');
+        const lines=['*IN-HAUS | REPORT OPERACIONAL*','',`*CR:* ${crOption&&val('cr')?crOption.textContent:'—'}`,`*Data:* ${dateBr(val('date'))} | *Turno:* ${val('shift')||'—'}`,`*Responsável:* ${val('responsible')||'—'}`,`*Função:* ${val('role')||'—'}`];
+        if(vp||va||volp||vola){
+          lines.push('','*PROGRAMAÇÃO / REALIZADO*');
+          if(vp||va)lines.push(`• Veículos: ${vp||'—'} / ${va||'—'}${percent(vp,va)}`);
+          if(volp||vola)lines.push(`• Volume: ${volp||'—'} / ${vola||'—'}${unit?' '+unit:''}${percent(volp,vola)}`);
+        }
+        if(val('qp')||val('qa')||val('abs')){
+          lines.push('','*QUADRO DE PESSOAL*');
+          lines.push(['QP','QA','ABS'].filter(x=>val(x.toLowerCase())).map(x=>`${x}: ${val(x.toLowerCase())}`).join(' | '));
+        }
+        lines.push('','*DESVIOS:*');
+        if(val('issueMode')==='yes'){
+          lines.push(`• ${fmt(val('issues'))||'A descrever'}`);
+          if(val('impact'))lines.push(`• Impacto: ${fmt(val('impact'))}`);
+          if(val('actionTaken'))lines.push(`• Ação: ${fmt(val('actionTaken'))}`);
+        }else lines.push('• Sem desvios registrados.');
+        lines.push('','*PENDÊNCIAS:*');
+        if(val('pendingMode')==='yes')lines.push(`• ${fmt(val('pending'))||'A descrever'}`);else lines.push('• Sem pendências.');
+        if(val('observation'))lines.push('','*OBSERVAÇÃO:*',fmt(val('observation')));
+        lines.push('',`*STATUS DO TURNO:* ${val('turnStatus')||'—'}`);
+        return lines.join('\n');
+      }
+      function save(){try{const d=Object.fromEntries(new FormData(form).entries());localStorage.setItem(key,JSON.stringify(d))}catch(e){}}
+      function renderPreview(text){
+        preview.replaceChildren();
+        const pattern=/\*([^*\n]+)\*/g;let last=0,match;
+        while((match=pattern.exec(text))!==null){
+          if(match.index>last)preview.appendChild(document.createTextNode(text.slice(last,match.index)));
+          const bold=document.createElement('strong');bold.textContent=match[1];preview.appendChild(bold);
+          last=pattern.lastIndex;
+        }
+        if(last<text.length)preview.appendChild(document.createTextNode(text.slice(last)));
+      }
+      function update(){renderPreview(message());save()}
+      function notify(text){clearTimeout(timer);toast.textContent=text;toast.classList.add('show');timer=setTimeout(()=>toast.classList.remove('show'),3400)}
+      function focusError(id,msg){notify(msg);$(id).scrollIntoView({behavior:'smooth',block:'center'});$(id).focus({preventScroll:true});return false}
+      function validate(){
+        if(!val('role'))return focusError('roleChoices','Selecione a função.');
+        if(!val('responsible'))return focusError('responsible','Selecione o responsável.');
+        if(!val('cr'))return focusError('cr','Selecione o CR da operação.');
+        if(!val('date'))return focusError('date','Informe a data do turno.');
+        if(!val('shift'))return focusError('shift','Selecione o turno.');
+        for(const id of ['vehiclesPlan','vehiclesActual','qp','qa','abs'])if($(id).value!==''&&!$(id).validity.valid)return focusError(id,'Informe números inteiros iguais ou maiores que zero.');
+        for(const id of ['volumePlan','volumeActual'])if(val(id)&&(!/^\d+(?:[,.]\d+)?$/.test(val(id))))return focusError(id,'Informe o volume usando números, ex.: 125 ou 125,5.');
+        if(val('issueMode')==='yes'&&!val('issues'))return focusError('issues','Descreva o desvio identificado.');
+        if(val('pendingMode')==='yes'&&!val('pending'))return focusError('pending','Descreva a pendência para o próximo turno.');
+        return true;
+      }
+      for(const [code,name] of CRS)opt($('cr'),code,`${code} - ${name}`);
+      for(const [group,id] of [['roleChoices','role'],['issuesChoices','issueMode'],['pendingChoices','pendingMode'],['statusChoices','turnStatus']]){
+        $(group).addEventListener('click',e=>{const b=e.target.closest('button[data-value]');if(b)setChoice(group,id,b.dataset.value)});
+      }
+      form.addEventListener('submit',e=>e.preventDefault());
+      form.addEventListener('input',update);form.addEventListener('change',update);
+      document.querySelectorAll('[data-send]').forEach(btn=>btn.addEventListener('click',()=>{
+        if(!validate())return;
+        update();
+        window.location.assign('https://api.whatsapp.com/send?text='+encodeURIComponent(message()));
+      }));
+      $('copyBtn').addEventListener('click',async()=>{
+        if(!validate())return;
+        const txt=message();try{
+          if(navigator.clipboard&&navigator.clipboard.writeText)await navigator.clipboard.writeText(txt);
+          else{const t=document.createElement('textarea');t.value=txt;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.select();const ok=document.execCommand('copy');t.remove();if(!ok)throw Error('clipboard')}
+          notify('Mensagem copiada.');
+        }catch(e){notify('Não foi possível copiar neste navegador.');}
+      });
+      $('showPreview').addEventListener('click',()=>$('previewSection').scrollIntoView({behavior:'smooth',block:'start'}));
+      function newReport(){const keep={role:val('role'),responsible:val('responsible'),cr:val('cr'),volumeUnit:val('volumeUnit'),shift:val('shift')};form.reset();for(const [id,v]of Object.entries(keep))if(id!=='role')$(id).value=v;
+        setChoice('roleChoices','role',keep.role,false);$('responsible').value=keep.responsible;
+        setChoice('issuesChoices','issueMode','none',false);setChoice('pendingChoices','pendingMode','none',false);setChoice('statusChoices','turnStatus','Normal',false);
+        $('date').value=today();update();window.scrollTo({top:0,behavior:'smooth'});notify('Novo report iniciado. Identificação mantida.');
+      }
+      $('resetBtn').addEventListener('click',()=>{if(confirm('Iniciar novo report? Os indicadores, desvios e pendências serão apagados.'))newReport()});
+      function restore(){
+        let saved={};try{saved=JSON.parse(localStorage.getItem(key)||'{}')||{}}catch(e){}
+        const sameDay=saved.date===today();
+        const identityKeys=new Set(['role','responsible','cr','volumeUnit','shift']);
+        for(const [id,v]of Object.entries(saved)){
+          if(!sameDay&&!identityKeys.has(id))continue;
+          const item=form.elements.namedItem(id);if(item&&typeof v==='string')item.value=v;
+        }
+        setChoice('roleChoices','role',saved.role||'',false);
+        $('responsible').value=(STAFF[val('role')]||[]).includes(saved.responsible)?saved.responsible:'';
+        setChoice('issuesChoices','issueMode',sameDay&&saved.issueMode==='yes'?'yes':'none',false);
+        setChoice('pendingChoices','pendingMode',sameDay&&saved.pendingMode==='yes'?'yes':'none',false);
+        setChoice('statusChoices','turnStatus',sameDay&&['Normal','Com ressalvas','Crítico'].includes(saved.turnStatus)?saved.turnStatus:'Normal',false);
+        $('date').value=sameDay&&saved.date?saved.date:today();
+        update();
+      }
+      restore();
+    })();
+  </script>
+</body>
+</html>
