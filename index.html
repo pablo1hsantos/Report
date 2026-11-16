@@ -297,6 +297,37 @@
     }
     @media(max-width:360px){.cr-toolbar{gap:7px}.cr-control{padding:8px 5px;font-size:11px;gap:5px}}
     @media(max-width:420px){.mobile-actions .btn-wa{font-size:11px;gap:5px;padding:9px 9px}.mobile-actions .btn-wa .ui-icon{width:15px;height:15px}.mobile-actions .btn-preview{padding:9px 10px}}
+
+    /* Seleção rápida dentro do formulário: evita o seletor nativo com botão Concluir. */
+    .logic-select{display:none!important}
+    .quick-picker{position:relative;min-width:0}
+    .picker-trigger{width:100%;min-height:51px;display:flex;align-items:center;justify-content:space-between;text-align:left;gap:12px;background:#fff;border:1px solid #cadde8;border-radius:12px;padding:12px 14px;color:var(--navy);font-size:14px;font-weight:740;box-shadow:0 1px 3px rgba(23,55,82,.045);transition:border-color .15s,box-shadow .15s}
+    .picker-trigger:hover,.picker-trigger[aria-expanded="true"]{border-color:#79b9db;background:#f9fdff}
+    .picker-trigger:focus-visible{outline:3px solid #9bd5f0;outline-offset:2px}
+    .picker-placeholder{color:#70899b;font-weight:600}
+    .picker-chevron{height:19px;width:19px;flex:none;color:#087bb5;transition:transform .15s}
+    .picker-trigger[aria-expanded="true"] .picker-chevron{transform:rotate(180deg)}
+    .picker-menu{margin-top:7px;border:1px solid #c9dfea;background:white;border-radius:14px;padding:8px;box-shadow:0 8px 24px rgba(29,75,108,.10)}
+    .picker-menu[hidden],.picker-empty[hidden]{display:none!important}
+    .picker-search-box{display:flex;align-items:center;gap:8px;padding:0 11px;margin-bottom:8px;background:#f2f8fc;border:1px solid #d9e9f2;border-radius:10px}
+    .picker-search-box .ui-icon{width:18px;height:18px;color:#6e91a8;flex:none}
+    .picker-search-box input{width:100%;min-height:43px;border:0;background:transparent;padding:9px 0;box-shadow:none!important;outline:none;font-size:16px}
+    .picker-options{max-height:min(305px,48vh);overflow-y:auto;overscroll-behavior:contain;display:grid;gap:3px;scrollbar-width:thin}
+    .picker-option{width:100%;border:1px solid transparent;border-radius:10px;background:transparent;min-height:49px;padding:10px 11px;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;color:#23475f;font-weight:690;font-size:12.5px;line-height:1.3}
+    .picker-option span{overflow-wrap:anywhere}
+    .picker-option[hidden]{display:none!important}
+    .picker-option:hover,.picker-option:focus-visible{background:#ecf7fd;border-color:#c3e3f4;outline:none}
+    .picker-option[aria-selected="true"]{background:#edf8fe;color:#006da5;border-color:#b9ddf0}
+    .picker-option .ui-icon{width:17px;height:17px;flex:none;color:#007eb7;visibility:hidden}
+    .picker-option[aria-selected="true"] .ui-icon{visibility:visible}
+    .picker-empty{padding:14px;text-align:center;margin:0;color:#698394;font-size:12px}
+    .shift-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+    .shift-button{min-height:51px;padding:9px 5px;border-radius:11px;background:#fff;border:1px solid #d3e2eb;color:#527185;font-size:12px;font-weight:730;white-space:nowrap;transition:border-color .15s,background .15s,color .15s}
+    .shift-button:hover{border-color:#91cce7;background:#f3faff}
+    .shift-button[aria-pressed="true"]{background:#e8f6fd;border-color:#52acdc;color:#006c9f;box-shadow:inset 0 0 0 1px #b0dff4}
+    .shift-button:focus-visible{outline:3px solid #9bd5f0;outline-offset:2px}
+    @media(max-width:767px){.shift-field{grid-column:1/-1}.picker-trigger{min-height:54px;font-size:14px}.picker-option{min-height:54px;font-size:13px;padding:10px 12px}.shift-button{min-height:52px;font-size:12px}.picker-options{max-height:min(325px,47vh)}}
+    @media(max-width:380px){.shift-buttons{grid-template-columns:repeat(2,minmax(0,1fr))}.picker-option{font-size:12px}}
   </style>
 </head>
 <body>
@@ -304,6 +335,8 @@
     <symbol id="ico-expand" viewBox="0 0 24 24"><path d="m6 5 6 5 6-5M6 14l6 5 6-5"/></symbol>
     <symbol id="ico-collapse" viewBox="0 0 24 24"><path d="m6 10 6-5 6 5M6 19l6-5 6 5"/></symbol>
     <symbol id="ico-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="ico-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.7"/><path d="m16 16 5 5"/></symbol>
+    <symbol id="ico-selected" viewBox="0 0 24 24"><path d="m5 12 4 4 10-10"/></symbol>
     <symbol id="ico-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="2.75"/></symbol>
     <symbol id="ico-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
     <symbol id="ico-reset" viewBox="0 0 24 24"><path d="M3 11a9 9 0 1 1 2.5 6.4M3 4v7h7"/></symbol>
@@ -331,9 +364,31 @@
         <section class="panel" aria-labelledby="h-ident"><div class="panel-body">
           <div class="panel-head"><span class="number">01</span><div><h2 id="h-ident">Identificação</h2><p class="sub">Seu nome carrega automaticamente todas as operações vinculadas</p></div></div>
           <div class="fields">
-            <div class="field full"><label for="responsible">Supervisor <span class="req">*</span></label><select id="responsible" name="responsible" required><option value="">Selecione seu nome</option></select><input type="hidden" id="role" name="role" value=""></div>
+            <div class="field full"><label id="supervisorLabel" for="supervisorTrigger">Supervisor <span class="req">*</span></label>
+              <div class="quick-picker" id="supervisorPicker">
+                <button type="button" class="picker-trigger" id="supervisorTrigger" aria-haspopup="listbox" aria-expanded="false" aria-controls="supervisorOptions" aria-labelledby="supervisorLabel supervisorSelected">
+                  <span id="supervisorSelected" class="picker-placeholder">Selecione seu nome</span>
+                  <svg class="ui-icon picker-chevron" aria-hidden="true"><use href="#ico-chevron"/></svg>
+                </button>
+                <div class="picker-menu" id="supervisorMenu" hidden>
+                  <div class="picker-search-box">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#ico-search"/></svg>
+                    <input type="search" id="supervisorSearch" placeholder="Buscar supervisor..." autocomplete="off" aria-label="Buscar supervisor" spellcheck="false">
+                  </div>
+                  <div id="supervisorOptions" class="picker-options" role="listbox" aria-label="Lista de supervisores"></div>
+                  <p class="picker-empty" id="supervisorNoResults" hidden>Nenhum supervisor encontrado.</p>
+                </div>
+              </div>
+              <select class="logic-select" id="responsible" name="responsible" required aria-hidden="true" tabindex="-1"><option value="">Selecione seu nome</option></select><input type="hidden" id="role" name="role" value=""></div>
             <div class="field"><label for="date">Data</label><input id="date" name="date" type="date"></div>
-            <div class="field"><label for="shift">Turno <span class="req" aria-hidden="true">*</span></label><select id="shift" name="shift" required aria-required="true"><option value="">Selecione</option><option value="1º turno">1º turno</option><option value="2º turno">2º turno</option><option value="3º turno">3º turno</option><option value="Administrativo">Administrativo</option></select></div>
+            <div class="field shift-field"><label id="shiftLabel">Turno <span class="req" aria-hidden="true">*</span></label>
+              <div class="shift-buttons" id="shiftButtons" role="group" aria-labelledby="shiftLabel">
+                <button type="button" class="shift-button" data-shift="1º turno" aria-pressed="false">1º turno</button>
+                <button type="button" class="shift-button" data-shift="2º turno" aria-pressed="false">2º turno</button>
+                <button type="button" class="shift-button" data-shift="3º turno" aria-pressed="false">3º turno</button>
+                <button type="button" class="shift-button" data-shift="Administrativo" aria-pressed="false">Administrativo</button>
+              </div>
+              <select class="logic-select" id="shift" name="shift" required aria-required="true" aria-hidden="true" tabindex="-1"><option value="">Selecione</option><option value="1º turno">1º turno</option><option value="2º turno">2º turno</option><option value="3º turno">3º turno</option><option value="Administrativo">Administrativo</option></select></div>
           </div>
         </div></section>
         <section class="panel" aria-labelledby="h-numbers"><div class="panel-body">
@@ -469,6 +524,34 @@
       }
       function dataOf(code){const obj={};for(const f of fields)obj[f]=String(crInput(code,f)?.value||'').trim();return obj}
       function hasData(code){return Object.values(dataOf(code)).some(v=>v!=='')}
+      function filterText(s){return String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()}
+      function renderSupervisorChoice(){
+        const current=val('responsible'),label=$('supervisorSelected');
+        label.textContent=current||'Selecione seu nome';
+        label.classList.toggle('picker-placeholder',!current);
+        $('supervisorOptions').querySelectorAll('[data-supervisor]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.supervisor===current)));
+      }
+      function filterSupervisorChoices(){
+        const query=filterText($('supervisorSearch').value.trim());let shown=0;
+        $('supervisorOptions').querySelectorAll('[data-supervisor]').forEach(b=>{
+          const matches=filterText(b.dataset.supervisor).includes(query);
+          b.hidden=!matches;if(matches)shown++;
+        });
+        $('supervisorNoResults').hidden=shown!==0;
+      }
+      function openSupervisorPicker(){
+        $('supervisorMenu').hidden=false;
+        $('supervisorTrigger').setAttribute('aria-expanded','true');
+        $('supervisorSearch').value='';filterSupervisorChoices();
+      }
+      function closeSupervisorPicker(){
+        $('supervisorMenu').hidden=true;
+        $('supervisorTrigger').setAttribute('aria-expanded','false');
+      }
+      function renderShiftChoices(){
+        const selected=val('shift');
+        $('shiftButtons').querySelectorAll('[data-shift]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.shift===selected)));
+      }
       function syncShift(name){
         const configured=FIXED_SHIFTS[name]||'';
         const shift=$('shift');
@@ -477,6 +560,7 @@
         shift.value=configured;
         shift.title='';
         shift.setAttribute('aria-label',configured?'Turno sugerido para o supervisor, editável':'Turno');
+        renderShiftChoices();
       }
       function captureCurrent(){
         if(!activeSupervisor||!draft.records)return;
@@ -567,7 +651,9 @@
       function focusError(el,msg){
         notify(msg);
         const card=el.closest('.cr-card');if(card)setCardExpanded(card,true);
-        el.scrollIntoView({behavior:'smooth',block:'center'});el.focus({preventScroll:true});return false;
+        const visibleEl=el.id==='responsible' ? $('supervisorTrigger') : el.id==='shift' ? $('shiftButtons').querySelector('[data-shift]') : el;
+        if(el.id==='responsible')openSupervisorPicker();
+        visibleEl.scrollIntoView({behavior:'smooth',block:'center'});visibleEl.focus({preventScroll:true});return false;
       }
       function validate(){
         if(!SUPERVISOR_CRS[val('responsible')])return focusError($('responsible'),'Selecione o supervisor.');
@@ -597,17 +683,51 @@
           // A escolha do supervisor é sempre manual, mesmo havendo rascunho salvo.
           draft={date:today(),responsible:'',shift:'',turnStatus:'',records:sameDay&&previous.records&&typeof previous.records==='object'?previous.records:{}};
         }
-        $('date').value=draft.date||today();$('responsible').value='';syncShift('');
+        $('date').value=draft.date||today();$('responsible').value='';syncShift('');closeSupervisorPicker();renderSupervisorChoice();
         renderCRs('');setStatus('');
       }
       function newReport(){
         draft={date:today(),responsible:'',shift:'',turnStatus:'',records:{}};
         $('date').value=today();$('responsible').value='';$('shift').value='';
-        syncShift('');renderCRs('');setStatus('');window.scrollTo({top:0,behavior:'smooth'});notify('Novo report iniciado. Selecione o supervisor.');
+        syncShift('');closeSupervisorPicker();renderSupervisorChoice();renderCRs('');setStatus('');window.scrollTo({top:0,behavior:'smooth'});notify('Novo report iniciado. Selecione o supervisor.');
       }
       const names=$('responsible');names.replaceChildren();opt(names,'','Selecione seu nome');for(const name of Object.keys(SUPERVISOR_CRS))opt(names,name,name);
+      // Lista de seleção com toque único, busca rápida e sem modal do sistema.
+      for(const name of Object.keys(SUPERVISOR_CRS)){
+        const item=document.createElement('button');item.type='button';item.className='picker-option';
+        item.dataset.supervisor=name;item.setAttribute('role','option');item.setAttribute('aria-selected','false');
+        const label=document.createElement('span');label.textContent=name;
+        item.appendChild(label);
+        const check=document.createElementNS('http://www.w3.org/2000/svg','svg');check.setAttribute('class','ui-icon');check.setAttribute('aria-hidden','true');
+        const use=document.createElementNS('http://www.w3.org/2000/svg','use');use.setAttribute('href','#ico-selected');check.appendChild(use);item.appendChild(check);
+        $('supervisorOptions').appendChild(item);
+      }
       restore();
-      $('responsible').addEventListener('change',()=>{captureCurrent();syncShift(val('responsible'));renderCRs(val('responsible'));update()});
+      $('supervisorTrigger').addEventListener('click',()=>{
+        if($('supervisorMenu').hidden)openSupervisorPicker();else closeSupervisorPicker();
+      });
+      $('supervisorSearch').addEventListener('input',filterSupervisorChoices);
+      $('supervisorOptions').addEventListener('click',e=>{
+        const item=e.target.closest('[data-supervisor]');if(!item)return;
+        $('responsible').value=item.dataset.supervisor;
+        closeSupervisorPicker();renderSupervisorChoice();
+        $('responsible').dispatchEvent(new Event('change',{bubbles:true}));
+        $('supervisorTrigger').focus({preventScroll:true});
+      });
+      $('supervisorOptions').addEventListener('keydown',e=>{
+        if(!['ArrowUp','ArrowDown'].includes(e.key))return;
+        e.preventDefault();const items=[...$('supervisorOptions').querySelectorAll('[data-supervisor]:not([hidden])')];
+        const i=items.indexOf(document.activeElement);const next=items[i+(e.key==='ArrowDown'?1:-1)]||items[e.key==='ArrowDown'?0:items.length-1];
+        next?.focus();
+      });
+      document.addEventListener('pointerdown',e=>{if(!$('supervisorPicker').contains(e.target))closeSupervisorPicker()});
+      document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('supervisorMenu').hidden){closeSupervisorPicker();$('supervisorTrigger').focus()}});
+      $('shiftButtons').addEventListener('click',e=>{
+        const item=e.target.closest('[data-shift]');if(!item)return;
+        $('shift').value=item.dataset.shift;renderShiftChoices();
+        $('shift').dispatchEvent(new Event('change',{bubbles:true}));
+      });
+      $('responsible').addEventListener('change',()=>{captureCurrent();renderSupervisorChoice();syncShift(val('responsible'));renderCRs(val('responsible'));update()});
       $('crList').addEventListener('input',e=>{const card=e.target.closest('[data-cr]');if(card){const field=e.target.dataset.field;if((field==='volumePlan'||field==='volumeActual')&&volumeUnit(card.dataset.cr)==='toneladas'&&e.target.value.includes(',')){const pos=e.target.selectionStart;e.target.value=e.target.value.replace(/,/g,'.');if(pos!==null)e.target.setSelectionRange(pos,pos)}if(field==='qp'||field==='qa')updateAbs(card.dataset.cr);update()}});
       $('crList').addEventListener('change',update);
       $('crList').addEventListener('click',e=>{

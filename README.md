@@ -1,19 +1,19 @@
-# Report Operacional In-Haus — versão 16
+# Report Operacional In-Haus — versão 17
 
-Aplicação estática, arquivo principal: `index.html`. Pronta para a raiz de `pablo1hsantos/Report` e publicação na Vercel.
+Projeto estático para publicar na Vercel. O arquivo principal é `index.html`.
 
-## Enviar pelo WhatsApp
+## Atualização desta versão
 
-O botão **Enviar pelo WhatsApp** valida supervisor e turno e abre o compartilhamento do WhatsApp com o relatório preenchido.
+- Supervisor: lista própria dentro do formulário, pesquisa por nome e seleção com um toque. Não usa o seletor nativo do Android que exige "Próximo" / "Concluir".
+- Turno: botões de seleção direta com toque único.
+- Alef Augusto França: 3º turno sugerido automaticamente.
+- Alexandre Fernando Barbosa: Administrativo sugerido automaticamente.
+- Supervisor inicia sem pré-seleção.
+- Indicadores por CR, preenchimento parcial, volumes em toneladas para Arcelor e produtos para Whirlpool, somente veículos em Peação e Inspeções, e ABS = Quadro Ativo − Quadro Planejado permanecem inalterados.
+- Compartilhamento via WhatsApp permanece com seleção do grupo no próprio aplicativo.
 
-- **Celular:** abre o aplicativo WhatsApp com a mensagem pronta (protocolo `whatsapp://send?text=`). O supervisor escolhe o grupo **GPS - Supervisão Jonathan** e confirma o envio.
-- **Computador:** usa o compartilhamento oficial `https://wa.me/?text=...`, que mostra o texto pronto e permite selecionar o grupo no WhatsApp Web ou aplicativo.
-- **Copiar mensagem:** copia o texto, sem abrir o WhatsApp.
+## Publicar no GitHub e Vercel
 
-**Limitação do WhatsApp:** um link de convite `https://chat.whatsapp.com/...` abre o grupo, mas não aceita mensagem pré-preenchida. Não é possível, por um link público, abrir diretamente um grupo específico e já deixar seu relatório no campo de mensagem. Por isso a versão 16 prioriza a mensagem pronta, solicitando a escolha do grupo. O envio final exige confirmação do usuário.
+No repositório `pablo1hsantos/Report`, substitua o `index.html` na raiz e confirme o commit. Se a Vercel estiver conectada à branch de produção, ela fará um novo deploy automaticamente.
 
-O link de convite do grupo não está exposto no código desta versão.
-
-## Publicação
-
-Substitua `index.html` na raiz do repositório GitHub vinculado à Vercel. Não requer compilação.
+Sem dependências de instalação ou compilação.
