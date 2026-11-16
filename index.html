@@ -175,9 +175,124 @@
       .mobile-actions{padding-top:6px;padding-bottom:calc(6px + env(safe-area-inset-bottom,0px))}
       .mobile-actions .btn{min-height:43px}
     }
+
+    /* Identidade visual refinada e componentes de ação consistentes. */
+    :root{--bg:#f1f5f8;--border:#dde7ee;--shadow:0 5px 22px rgba(18,50,74,.055);--navy:#173950}
+    body{font-size:14px;-webkit-tap-highlight-color:transparent}
+    .icon-sprite{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
+    .ui-icon{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle}
+    .panel{border-radius:18px}
+    .panel-head{margin-bottom:19px}
+    .number{width:36px;height:36px;border-radius:12px;box-shadow:inset 0 0 0 1px #d1eaf7;background:linear-gradient(150deg,#eff9fe,#e5f3fb);font-weight:850}
+    h1{letter-spacing:-.046em}
+    h2{font-size:16px}
+    .field{gap:7px}
+    select,input,textarea{border-radius:11px;border-color:#d6e2ea;background:#fbfdff;min-height:47px}
+    input:focus,textarea:focus,select:focus{box-shadow:0 0 0 4px rgba(0,134,200,.12)}
+    .btn,.cr-control,.cr-toggle,.choice{font-family:inherit;align-items:center;justify-content:center;gap:8px;display:inline-flex;transition:background .15s,border-color .15s,box-shadow .15s,color .15s,transform .15s}
+    .btn .ui-icon,.cr-control .ui-icon,.cr-toggle .ui-icon,.choice .ui-icon{width:17px;height:17px}
+    .btn{min-height:49px;padding:11px 16px;border-radius:12px;letter-spacing:-.005em;box-shadow:none;font-size:13px;line-height:1.25}
+    .btn-wa{background:linear-gradient(180deg,#159a70,#10815e);border:1px solid #0b7655;color:#fff;box-shadow:0 3px 9px rgba(17,128,91,.16)}
+    .btn-wa:hover{background:linear-gradient(180deg,#15916a,#0b704f);filter:none;box-shadow:0 5px 13px rgba(17,128,91,.23)}
+    .btn-copy,.btn-preview{color:#086eaa;background:#ebf6fc;border:1px solid #cfe9f8}
+    .btn-copy:hover,.btn-preview:hover{background:#def1fc;filter:none}
+    .btn-plain{border:1px solid #e0e8ee;background:#fff;color:#536c7d;min-height:45px;font-size:12px;padding:9px 12px}
+    .btn-plain:hover{background:#f6fafc;filter:none}
+    .btn:focus-visible,.cr-toggle:focus-visible,.cr-control:focus-visible,.choice:focus-visible,summary:focus-visible{outline:3px solid rgba(0,134,200,.45);outline-offset:2px}
+    .btn:active,.cr-toggle:active,.cr-control:active,.choice:active{transform:translateY(1px)}
+    button[disabled]{cursor:not-allowed;opacity:.6}
+    .cr-list{gap:12px}
+    .cr-card{border-color:#d6e5ef;border-radius:15px;box-shadow:0 2px 7px rgba(30,70,93,.025)}
+    .cr-card-head{padding:13px 14px;background:linear-gradient(180deg,#f6fbfe,#f0f8fc);gap:12px}
+    .cr-identity{display:flex;align-items:center;gap:11px;min-width:0;flex:1}
+    .cr-mark{flex:none;display:grid;place-items:center;width:38px;height:38px;color:#0878b2;background:#e1f2fb;border:1px solid #cce7f6;border-radius:11px}
+    .cr-mark .ui-icon{width:20px;height:20px}
+    .cr-titles{min-width:0}
+    .cr-card-title{font-size:14px;line-height:1.2;letter-spacing:-.016em}
+    .cr-name{font-size:12px;margin-top:4px;line-height:1.33;overflow-wrap:anywhere}
+    .cr-meta{gap:9px}
+    .cr-progress{display:inline-flex;align-items:center;gap:6px;border:1px solid #efdfc5;background:#fff9ef;color:#94672d;padding:6px 9px;line-height:1.1;font-size:10px}
+    .cr-progress::before{content:"";width:6px;height:6px;border-radius:50%;background:#d6a252;flex:none}
+    .cr-progress.ready{color:#137655;border-color:#c9e7d8;background:#effbf5}
+    .cr-progress.ready::before{background:#20a36d}
+    .cr-toggle{min-height:40px;border-radius:10px;border:1px solid #b7d9eb;background:#fff;color:#0876ac;padding:8px 12px;font-size:11px;font-weight:790;box-shadow:0 1px 2px #164d6910}
+    .cr-toggle:hover{background:#eaf6fd;border-color:#88c1df}
+    .cr-toggle .ui-icon{width:17px;height:17px;transform:rotate(180deg)}
+    .cr-toggle[aria-expanded="false"] .ui-icon{transform:rotate(0)}
+    .cr-control{border:1px solid #d5e7f1;background:#f5fafe;color:#116b99;border-radius:10px;min-height:40px;padding:9px 12px;font-size:11px;font-weight:760}
+    .cr-control:hover{background:#e7f4fb;border-color:#abcfe4}
+    .cr-toolbar{gap:8px;margin-top:3px;margin-bottom:14px}
+    .cr-card-body{padding:19px 17px 17px}
+    .metric-grid input{min-height:47px;height:47px}
+    .cr-card .people-grid input{min-height:47px}
+    .abs-inline{font-size:13px}
+    .abs-output{height:34px;min-width:60px;border-radius:9px;font-size:16px}
+    .cr-optional{margin-top:16px;padding-top:14px}
+    .cr-optional summary{display:flex;gap:9px;min-height:38px;color:#126e9e;font-size:12px}
+    .cr-optional summary::before{display:none}
+    .cr-optional summary>.ui-icon:first-child{width:17px;height:17px}
+    .cr-optional summary .optional-chevron{margin-left:auto;width:16px;height:16px;transition:transform .15s}
+    .cr-optional[open] summary .optional-chevron{transform:rotate(180deg)}
+    .cr-counter{margin-bottom:12px;line-height:1.4}
+    .cr-counter strong{background:#e9f5fc;border:1px solid #d2eaf7;border-radius:999px;padding:5px 10px;white-space:nowrap}
+    .status-bar{gap:9px}
+    .status-bar .choice{min-height:46px;padding:9px 11px;border:1px solid #d8e5ed;background:#fff;color:#61798b;border-radius:11px;font-size:12px;font-weight:760}
+    .status-bar .choice[aria-pressed="true"]{background:#edf8fd;border-color:#64b6e0;color:#096f9f;box-shadow:inset 0 0 0 1px #8accf0}
+    .status-bar .choice[data-value="Com ressalvas"][aria-pressed="true"]{background:#fff8ea;border-color:#eac987;color:#8c611d;box-shadow:inset 0 0 0 1px #f1d7aa}
+    .status-bar .choice[data-value="Crítico"][aria-pressed="true"]{background:#fff0f0;border-color:#e9a7a7;color:#a73a3a;box-shadow:inset 0 0 0 1px #f1bcbc}
+    .status-bar .choice:hover{background:#f1f8fb}
+    .preview-heading{padding:20px}
+    .chat-bubble{border-radius:5px 13px 13px 13px}
+    .preview-actions{padding:15px;gap:10px}
+    .btn-flex{grid-template-columns:minmax(0,1fr) auto;align-items:stretch}
+    .empty-state{padding:30px 15px;display:flex;flex-direction:column;align-items:center;gap:9px;border-radius:14px}
+    .empty-state .ui-icon{width:27px;height:27px;color:#68a6c7}
+    @media(min-width:768px) and (max-width:1100px){.cr-card-head{flex-wrap:wrap}.cr-meta{width:100%;justify-content:space-between}}
+    @media(max-width:767px){
+      .panel-body{padding:19px 16px 20px}
+      .cr-card-head{flex-wrap:wrap;gap:10px}
+      .cr-identity{flex:1 1 100%}
+      .cr-meta{width:100%;justify-content:space-between;gap:7px}
+      .cr-toggle{min-height:44px;padding:9px 12px}
+      .cr-control{min-height:44px}
+      .cr-card-body{padding:17px 14px}
+      .mobile-actions{box-shadow:0 -7px 30px rgba(17,51,71,.12);backdrop-filter:blur(12px);background:rgba(255,255,255,.96);gap:9px}
+      .mobile-actions .btn{min-height:53px;font-size:12px}
+      .mobile-actions .btn-wa{padding:9px 12px}
+      .mobile-actions .btn-wa .ui-icon{width:17px;height:17px}
+      .btn-preview{padding:10px 14px}
+      .status-bar .choice{min-height:47px}
+      .preview-actions .btn-flex .btn{min-height:48px}
+    }
+    @media(max-width:380px){
+      .cr-card-head{padding:12px}
+      .cr-mark{height:34px;width:34px;border-radius:9px}
+      .cr-control{flex:1 1 auto;padding:9px 7px}
+      .cr-toolbar{justify-content:stretch}
+      .cr-card-body{padding:15px 12px}
+      .status-bar .choice{flex:1 1 calc(50% - 9px)}
+      .mobile-actions{grid-template-columns:auto minmax(0,1fr)}
+      .mobile-actions .btn-wa{font-size:11.5px}
+    }
   </style>
 </head>
 <body>
+  <svg xmlns="http://www.w3.org/2000/svg" class="icon-sprite" aria-hidden="true" focusable="false">
+    <symbol id="ico-expand" viewBox="0 0 24 24"><path d="M7 10V4h6M17 14v6h-6M7 4l6 6M17 20l-6-6"/></symbol>
+    <symbol id="ico-collapse" viewBox="0 0 24 24"><path d="M13 4v6h6M11 20v-6H5M19 10l-6-6M5 14l6 6"/></symbol>
+    <symbol id="ico-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="ico-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="2.75"/></symbol>
+    <symbol id="ico-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+    <symbol id="ico-reset" viewBox="0 0 24 24"><path d="M3 11a9 9 0 1 1 2.5 6.4M3 4v7h7"/></symbol>
+    <symbol id="ico-send" viewBox="0 0 24 24"><path d="m21 3-7.5 18-4.2-7.3L2 9.5 21 3ZM21 3 9.3 13.7"/></symbol>
+    <symbol id="ico-building" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 7h.01M15 7h.01M9 11h.01M15 11h.01M9 15h6M11 21v-4h2v4"/></symbol>
+    <symbol id="ico-note" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L10 16l-4 1 1-4 9.5-9.5Z"/><path d="M12 4H6a3 3 0 0 0-3 3v11a3 3 0 0 0 3 3h5"/></symbol>
+    <symbol id="ico-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.5 2.5L16 9"/></symbol>
+    <symbol id="ico-warning" viewBox="0 0 24 24"><path d="m10.3 4.6-8 13.7A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-2.7l-8-13.7a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4m0 4h.01"/></symbol>
+    <symbol id="ico-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6m0 4h.01"/></symbol>
+    <symbol id="ico-clipboard" viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="18" rx="2"/><path d="M9 4.5V3h6v1.5M9 12h6M9 16h4"/></symbol>
+  </svg>
+
   <div class="topline"></div>
   <main class="shell">
     <header class="head">
@@ -201,28 +316,28 @@
         <section class="panel" aria-labelledby="h-numbers"><div class="panel-body">
           <div class="panel-head"><span class="number">02</span><div><h2 id="h-numbers">Indicadores por CR</h2><p class="sub">Preencha cada operação sob sua responsabilidade</p></div></div>
           <div class="cr-counter"><span id="crIntro">Selecione um supervisor para listar as operações.</span><strong id="crCount" aria-live="polite">0/0 CRs</strong></div>
-          <div class="cr-toolbar" id="crToolbar" hidden><button class="cr-control" id="expandAll" type="button">Expandir todos</button><button class="cr-control" id="collapseAll" type="button">Recolher todos</button></div>
-          <div class="cr-list" id="crList"><div class="empty-state">Os CRs aparecerão automaticamente após a seleção do supervisor.</div></div>
+          <div class="cr-toolbar" id="crToolbar" hidden><button class="cr-control" id="expandAll" type="button"><svg class="ui-icon" aria-hidden="true"><use href="#ico-expand"/></svg>Expandir todos</button><button class="cr-control" id="collapseAll" type="button"><svg class="ui-icon" aria-hidden="true"><use href="#ico-collapse"/></svg>Recolher todos</button></div>
+          <div class="cr-list" id="crList"><div class="empty-state"><svg class="ui-icon" aria-hidden="true"><use href="#ico-clipboard"/></svg><span>Selecione seu nome para visualizar os CRs.</span></div></div>
         </div></section>
         <section class="panel" aria-labelledby="h-close"><div class="panel-body">
           <div class="panel-head"><span class="number">03</span><div><h2 id="h-close">Fechamento geral</h2><p class="sub">Resumo final do turno, considerando todos os CRs</p></div></div>
           <div class="minor-head">Status operacional</div>
-          <div class="status-bar" id="statusChoices" role="group" aria-label="Status geral do turno"><button type="button" class="choice" data-value="Normal" aria-pressed="true">Normal</button><button type="button" class="choice" data-value="Com ressalvas" aria-pressed="false">Com ressalvas</button><button type="button" class="choice" data-value="Crítico" aria-pressed="false">Crítico</button></div>
+          <div class="status-bar" id="statusChoices" role="group" aria-label="Status geral do turno"><button type="button" class="choice" data-value="Normal" aria-pressed="true"><svg class="ui-icon" aria-hidden="true"><use href="#ico-check"/></svg>Normal</button><button type="button" class="choice" data-value="Com ressalvas" aria-pressed="false"><svg class="ui-icon" aria-hidden="true"><use href="#ico-warning"/></svg>Com ressalvas</button><button type="button" class="choice" data-value="Crítico" aria-pressed="false"><svg class="ui-icon" aria-hidden="true"><use href="#ico-alert"/></svg>Crítico</button></div>
           <input type="hidden" id="turnStatus" name="turnStatus" value="Normal">
         </div></section>
       </form>
       <aside id="previewSection" class="preview-sticky" aria-label="Prévia do relatório">
         <section class="panel"><div class="preview-heading"><div><h2>Mensagem pronta</h2><p class="sub">Prévia para o grupo de WhatsApp</p></div><span class="live">Ao vivo</span></div>
           <div class="chat-bg"><div class="chat-bubble"><pre id="preview" aria-live="polite"></pre></div></div>
-          <div class="preview-actions"><button type="button" class="btn btn-wa" data-send><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8A8.5 8.5 0 0 1 12.5 20a8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 12.5 3a8.5 8.5 0 0 1 8.5 8.5Z"/><path d="M8.6 9.1c.3 2.8 3 5.4 5.7 5.8l1.5-1.4"/></svg> Enviar pelo WhatsApp</button>
-          <div class="btn-flex"><button type="button" id="copyBtn" class="btn btn-copy">Copiar mensagem</button><button type="button" id="resetBtn" class="btn btn-plain" title="Iniciar novo report com supervisor em branco">Novo report</button></div>
+          <div class="preview-actions"><button type="button" class="btn btn-wa" data-send><svg class="ui-icon" aria-hidden="true"><use href="#ico-send"/></svg><span>Enviar pelo WhatsApp</span></button>
+          <div class="btn-flex"><button type="button" id="copyBtn" class="btn btn-copy"><svg class="ui-icon" aria-hidden="true"><use href="#ico-copy"/></svg>Copiar mensagem</button><button type="button" id="resetBtn" class="btn btn-plain" title="Iniciar novo report com supervisor em branco"><svg class="ui-icon" aria-hidden="true"><use href="#ico-reset"/></svg>Novo report</button></div>
 </div>
         </section>
       </aside>
     </div>
     <footer class="footer">In-Haus · Report Operacional | Ferramenta de comunicação interna</footer>
   </main>
-  <div class="mobile-actions"><button type="button" class="btn btn-preview" id="showPreview">Prévia</button><button type="button" class="btn btn-wa" data-send>Enviar pelo WhatsApp</button></div>
+  <div class="mobile-actions"><button type="button" class="btn btn-preview" id="showPreview"><svg class="ui-icon" aria-hidden="true"><use href="#ico-eye"/></svg><span>Prévia</span></button><button type="button" class="btn btn-wa" data-send><svg class="ui-icon" aria-hidden="true"><use href="#ico-send"/></svg><span>Enviar pelo WhatsApp</span></button></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script>
     (()=>{
@@ -253,7 +368,7 @@
       };
       const fields=['vehiclesPlan','vehiclesActual','volumePlan','volumeActual','qp','qa','issues','pending'];
       const volumeUnit=code=>CRS[code].startsWith('Whirlpool')?'produtos':'toneladas';
-      const key='inhaus-report-operacional-v8';
+      const key='inhaus-report-operacional-v9';
       const form=document.getElementById('reportForm'),preview=document.getElementById('preview'),toast=document.getElementById('toast');
       const $=id=>document.getElementById(id),val=id=>String($(id).value||'').trim();
       let activeSupervisor='',toastTimer;
@@ -273,9 +388,9 @@
       function crCard(code,index){
         const expanded=index===0;
         return `<article class="cr-card${expanded?'':' is-collapsed'}" data-cr="${code}">
-          <div class="cr-card-head"><div><h3 class="cr-card-title">CR ${code}</h3><p class="cr-name">${escapeHtml(CRS[code])}</p></div>
+          <div class="cr-card-head"><div class="cr-identity"><span class="cr-mark"><svg class="ui-icon" aria-hidden="true"><use href="#ico-building"/></svg></span><div class="cr-titles"><h3 class="cr-card-title">CR ${code}</h3><p class="cr-name">${escapeHtml(CRS[code])}</p></div></div>
           <div class="cr-meta"><span class="cr-progress" data-progress>QP e QA pendentes</span>
-          <button type="button" class="cr-toggle" data-cr-toggle aria-controls="cr-${code}-body" aria-expanded="${expanded}"><span>${expanded?'Recolher':'Expandir'}</span><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button></div></div>
+          <button type="button" class="cr-toggle" data-cr-toggle aria-label="${expanded?'Recolher':'Expandir'} CR ${code}" aria-controls="cr-${code}-body" aria-expanded="${expanded}"><span>${expanded?'Recolher':'Expandir'}</span><svg class="ui-icon" aria-hidden="true"><use href="#ico-chevron"/></svg></button></div></div>
           <div class="cr-card-body" id="cr-${code}-body" ${expanded?'':'hidden'}>
             <div class="metrics-head">Programação x realizado</div>
             <div class="metric-grid"><div></div><div class="col-label">Programado</div><div class="col-label">Realizado</div>
@@ -287,7 +402,7 @@
               <div class="field"><label for="cr-${code}-qa">Quadro Ativo <span class="small-asterisk">*</span></label>${inputHtml(code,'qa','Quadro Ativo','number')}</div>
             </div>
             <div class="abs-inline"><span>ABS</span><output id="cr-${code}-abs" class="abs-output" aria-live="polite" for="cr-${code}-qp cr-${code}-qa">—</output></div>
-            <details class="cr-optional"><summary>Registrar desvios ou pendências deste CR</summary>
+            <details class="cr-optional"><summary><svg class="ui-icon" aria-hidden="true"><use href="#ico-note"/></svg><span>Desvios e pendências</span><svg class="ui-icon optional-chevron" aria-hidden="true"><use href="#ico-chevron"/></svg></summary>
               <div class="fields"><div class="field full"><label for="cr-${code}-issues">Desvios operacionais (opcional)</label><textarea id="cr-${code}-issues" data-field="issues" maxlength="700" placeholder="O que aconteceu? Impacto e ação tomada."></textarea></div>
               <div class="field full"><label for="cr-${code}-pending">Pendências do próximo turno (opcional)</label><textarea id="cr-${code}-pending" data-field="pending" maxlength="700" placeholder="O que ainda precisa ser concluído?"></textarea></div></div>
             </details>
@@ -299,6 +414,7 @@
         body.hidden=!expanded;
         control.setAttribute('aria-expanded',String(expanded));
         control.querySelector('span').textContent=expanded?'Recolher':'Expandir';
+        control.setAttribute('aria-label',`${expanded?'Recolher':'Expandir'} CR ${card.dataset.cr}`);
         card.classList.toggle('is-collapsed',!expanded);
       }
       function setAllExpanded(expanded){document.querySelectorAll('#crList .cr-card').forEach(card=>setCardExpanded(card,expanded))}
@@ -312,7 +428,7 @@
       function renderCRs(name){
         const list=$('crList'),codes=linked(name);activeSupervisor=name;
         $('role').value=codes.length?'Supervisor':'';
-        list.innerHTML=codes.length?codes.map((code,index)=>crCard(code,index)).join(''):'<div class="empty-state">Os CRs aparecerão automaticamente após a seleção do supervisor.</div>';
+        list.innerHTML=codes.length?codes.map((code,index)=>crCard(code,index)).join(''):'<div class="empty-state"><svg class="ui-icon" aria-hidden="true"><use href="#ico-clipboard"/></svg><span>Selecione seu nome para visualizar os CRs.</span></div>';
         $('crToolbar').hidden=codes.length<2;
         $('crIntro').textContent=codes.length===0?'Selecione um supervisor para listar as operações.':codes.length===1?'1 operação vinculada. Informe QP e QA.':`${codes.length} operações vinculadas. Preencha uma a uma.`;
         const saved=draft.records?.[name]||{};
@@ -393,7 +509,7 @@
       }
       function setStatus(v){$('turnStatus').value=v;for(const b of $('statusChoices').querySelectorAll('button'))b.setAttribute('aria-pressed',String(b.dataset.value===v));update()}
       function restore(){
-        let previous={};try{previous=JSON.parse(localStorage.getItem(key)||localStorage.getItem('inhaus-report-operacional-v7')||localStorage.getItem('inhaus-report-operacional-v6')||localStorage.getItem('inhaus-report-operacional-v5')||localStorage.getItem('inhaus-report-operacional-v4')||'{}')||{}}catch(e){}
+        let previous={};try{previous=JSON.parse(localStorage.getItem(key)||localStorage.getItem('inhaus-report-operacional-v8')||localStorage.getItem('inhaus-report-operacional-v7')||localStorage.getItem('inhaus-report-operacional-v6')||localStorage.getItem('inhaus-report-operacional-v5')||localStorage.getItem('inhaus-report-operacional-v4')||'{}')||{}}catch(e){}
         if(previous&&typeof previous==='object'){
           const sameDay=previous.date===today();
           // A escolha do supervisor é sempre manual, mesmo havendo rascunho salvo.
