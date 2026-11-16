@@ -331,7 +331,7 @@
           <div class="fields">
             <div class="field full"><label for="responsible">Supervisor <span class="req">*</span></label><select id="responsible" name="responsible" required><option value="">Selecione seu nome</option></select><input type="hidden" id="role" name="role" value=""></div>
             <div class="field"><label for="date">Data</label><input id="date" name="date" type="date"></div>
-            <div class="field"><label for="shift">Turno</label><select id="shift" name="shift"><option value="">Selecione</option><option value="1º turno">1º turno</option><option value="2º turno">2º turno</option><option value="3º turno">3º turno</option><option value="Administrativo">Administrativo</option></select></div>
+            <div class="field"><label for="shift">Turno <span class="req" aria-hidden="true">*</span></label><select id="shift" name="shift" required aria-required="true"><option value="">Selecione</option><option value="1º turno">1º turno</option><option value="2º turno">2º turno</option><option value="3º turno">3º turno</option><option value="Administrativo">Administrativo</option></select></div>
           </div>
         </div></section>
         <section class="panel" aria-labelledby="h-numbers"><div class="panel-body">
@@ -398,7 +398,7 @@
       };
       const vehicleOnly=code=>VEHICLES_ONLY.has(code);
       const volumeUnit=code=>CRS[code].startsWith('Whirlpool')?'produtos':'toneladas';
-      const key='inhaus-report-operacional-v11';
+      const key='inhaus-report-operacional-v12';
       const form=document.getElementById('reportForm'),preview=document.getElementById('preview'),toast=document.getElementById('toast');
       const $=id=>document.getElementById(id),val=id=>String($(id).value||'').trim();
       let activeSupervisor='',toastTimer;
@@ -413,11 +413,13 @@
       function inputHtml(code,field,label,type='number',step='1'){
         const ident=`cr-${code}-${field}`;
         const props=type==='number'?'min="0" step="'+step+'" inputmode="numeric"':'inputmode="decimal" maxlength="20"';
-        return `<input id="${ident}" data-field="${field}" type="${type}" ${props} placeholder="—" aria-label="${label} do CR ${code}">`;
+        const placeholder=type==='text'?'0.0':'—';
+        return `<input id="${ident}" data-field="${field}" type="${type}" ${props} placeholder="${placeholder}" aria-label="${label} do CR ${code}">`;
       }
       function crCard(code,index){
         const expanded=index===0;
-        const volumeRow=vehicleOnly(code)?'':`<span class="metric-label">Volume (${volumeUnit(code)})</span>${inputHtml(code,'volumePlan','Volume programado','text')}${inputHtml(code,'volumeActual','Volume realizado','text')}`;
+        const volumeType=volumeUnit(code)==='produtos'?'number':'text';
+        const volumeRow=vehicleOnly(code)?'':`<span class="metric-label">Volume (${volumeUnit(code)})</span>${inputHtml(code,'volumePlan','Volume programado',volumeType)}${inputHtml(code,'volumeActual','Volume realizado',volumeType)}`;
         return `<article class="cr-card${expanded?'':' is-collapsed'}" data-cr="${code}">
           <div class="cr-card-head"><div class="cr-identity"><span class="cr-mark"><svg class="ui-icon" aria-hidden="true"><use href="#ico-building"/></svg></span><div class="cr-titles"><h3 class="cr-card-title">CR ${code}</h3><p class="cr-name">${escapeHtml(CRS[code])}</p></div></div>
           <div class="cr-meta"><span class="cr-progress" data-progress>Sem dados</span>
@@ -485,7 +487,7 @@
         const saved=draft.records?.[name]||{};
         for(const code of codes){
           const row=saved[code]||{};
-          for(const field of fields){const el=crInput(code,field);if(el&&typeof row[field]==='string')el.value=row[field]}
+          for(const field of fields){const el=crInput(code,field);if(el&&typeof row[field]==='string'){const raw=row[field];el.value=(volumeUnit(code)==='toneladas'&&(field==='volumePlan'||field==='volumeActual'))?raw.replace(/,/g,'.'):raw}}
           if(row.issues||row.pending){const details=document.querySelector(`[data-cr="${code}"] details`);if(details)details.open=true}
         }
         for(const code of codes)updateAbs(code);
@@ -507,9 +509,9 @@
       function updateCount(){const codes=linked();const done=codes.filter(code=>{updateAbs(code);return hasData(code)}).length;$('crCount').textContent=`${done}/${codes.length} CRs informados`}
       function perc(a,b){
         if(a===''||b==='')return '';
-        const n=Number(a.replace(',','.')),d=Number(b.replace(',','.'));
+        const n=Number(a),d=Number(b);
         if(!Number.isFinite(n)||!Number.isFinite(d)||n<=0)return '';
-        return ` (${(d/n*100).toLocaleString('pt-BR',{maximumFractionDigits:1})}%)`;
+        return ` (${(d/n*100).toLocaleString('en-US',{maximumFractionDigits:1,useGrouping:false})}%)`;
       }
       function pairLine(label,plan,actual,planLabel='Programado',actualLabel='Realizado',showPercentage=true){
         const parts=[];
@@ -563,20 +565,27 @@
       }
       function validate(){
         if(!SUPERVISOR_CRS[val('responsible')])return focusError($('responsible'),'Selecione o supervisor.');
+        if(!val('shift'))return focusError($('shift'),'Selecione o turno para continuar.');
         for(const code of linked()){
           for(const f of ['qp','qa','vehiclesPlan','vehiclesActual']){
             const el=crInput(code,f);
             if(el?.value.trim()!==''&&numberVal(el.value.trim())===null)return focusError(el,`Informe um número inteiro válido no CR ${code}.`);
           }
           if(!vehicleOnly(code))for(const f of ['volumePlan','volumeActual']){
-            const el=crInput(code,f);if(el?.value.trim()!==''&&!/^\d+(?:[,.]\d+)?$/.test(el.value.trim()))return focusError(el,`Informe um volume válido no CR ${code}.`);
+            const el=crInput(code,f),raw=el?.value.trim()||'';
+            if(raw==='')continue;
+            if(volumeUnit(code)==='toneladas'){
+              if(!/^\d+(?:\.\d+)?$/.test(raw))return focusError(el,`Informe um volume válido no CR ${code}, usando ponto (.) como separador decimal.`);
+            }else if(numberVal(raw)===null){
+              return focusError(el,`Informe uma quantidade inteira de produtos no CR ${code}.`);
+            }
           }
         }
         return true;
       }
       function setStatus(v){$('turnStatus').value=v;for(const b of $('statusChoices').querySelectorAll('button'))b.setAttribute('aria-pressed',String(b.dataset.value===v));update()}
       function restore(){
-        let previous={};try{previous=JSON.parse(localStorage.getItem(key)||localStorage.getItem('inhaus-report-operacional-v10')||localStorage.getItem('inhaus-report-operacional-v9')||localStorage.getItem('inhaus-report-operacional-v8')||localStorage.getItem('inhaus-report-operacional-v7')||localStorage.getItem('inhaus-report-operacional-v6')||localStorage.getItem('inhaus-report-operacional-v5')||localStorage.getItem('inhaus-report-operacional-v4')||'{}')||{}}catch(e){}
+        let previous={};try{previous=JSON.parse(localStorage.getItem(key)||localStorage.getItem('inhaus-report-operacional-v11')||localStorage.getItem('inhaus-report-operacional-v10')||localStorage.getItem('inhaus-report-operacional-v9')||localStorage.getItem('inhaus-report-operacional-v8')||localStorage.getItem('inhaus-report-operacional-v7')||localStorage.getItem('inhaus-report-operacional-v6')||localStorage.getItem('inhaus-report-operacional-v5')||localStorage.getItem('inhaus-report-operacional-v4')||'{}')||{}}catch(e){}
         if(previous&&typeof previous==='object'){
           const sameDay=previous.date===today();
           // A escolha do supervisor é sempre manual, mesmo havendo rascunho salvo.
@@ -593,7 +602,7 @@
       const names=$('responsible');names.replaceChildren();opt(names,'','Selecione seu nome');for(const name of Object.keys(SUPERVISOR_CRS))opt(names,name,name);
       restore();
       $('responsible').addEventListener('change',()=>{captureCurrent();syncShift(val('responsible'));renderCRs(val('responsible'));update()});
-      $('crList').addEventListener('input',e=>{const card=e.target.closest('[data-cr]');if(card){if(e.target.dataset.field==='qp'||e.target.dataset.field==='qa')updateAbs(card.dataset.cr);update()}});
+      $('crList').addEventListener('input',e=>{const card=e.target.closest('[data-cr]');if(card){const field=e.target.dataset.field;if((field==='volumePlan'||field==='volumeActual')&&volumeUnit(card.dataset.cr)==='toneladas'&&e.target.value.includes(',')){const pos=e.target.selectionStart;e.target.value=e.target.value.replace(/,/g,'.');if(pos!==null)e.target.setSelectionRange(pos,pos)}if(field==='qp'||field==='qa')updateAbs(card.dataset.cr);update()}});
       $('crList').addEventListener('change',update);
       $('crList').addEventListener('click',e=>{
         const toggle=e.target.closest('[data-cr-toggle]');
