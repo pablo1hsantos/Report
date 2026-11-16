@@ -1,15 +1,19 @@
-# Report Operacional In-Haus • v15
+# Report Operacional In-Haus — versão 16
 
-Versão estática para publicação na Vercel.
+Aplicação estática, arquivo principal: `index.html`. Pronta para a raiz de `pablo1hsantos/Report` e publicação na Vercel.
 
-## Envio pelo WhatsApp
+## Enviar pelo WhatsApp
 
-- Ação principal única **Enviar pelo WhatsApp**: valida os campos obrigatórios, copia o relatório e abre o link de convite do grupo informado.
-- **Copiar mensagem**: copia o texto sem abrir o WhatsApp.
-- O WhatsApp não permite pré-preencher uma mensagem diretamente numa conversa de grupo pelo link de convite. O usuário deve colar a mensagem e confirmar o envio.
-- O formulário mostra a ação principal na prévia do desktop e no rodapé fixo do celular, conforme o tamanho da tela. Não são dois envios diferentes.
-- Nenhum relatório é disparado automaticamente.
+O botão **Enviar pelo WhatsApp** valida supervisor e turno e abre o compartilhamento do WhatsApp com o relatório preenchido.
+
+- **Celular:** abre o aplicativo WhatsApp com a mensagem pronta (protocolo `whatsapp://send?text=`). O supervisor escolhe o grupo **GPS - Supervisão Jonathan** e confirma o envio.
+- **Computador:** usa o compartilhamento oficial `https://wa.me/?text=...`, que mostra o texto pronto e permite selecionar o grupo no WhatsApp Web ou aplicativo.
+- **Copiar mensagem:** copia o texto, sem abrir o WhatsApp.
+
+**Limitação do WhatsApp:** um link de convite `https://chat.whatsapp.com/...` abre o grupo, mas não aceita mensagem pré-preenchida. Não é possível, por um link público, abrir diretamente um grupo específico e já deixar seu relatório no campo de mensagem. Por isso a versão 16 prioriza a mensagem pronta, solicitando a escolha do grupo. O envio final exige confirmação do usuário.
+
+O link de convite do grupo não está exposto no código desta versão.
 
 ## Publicação
 
-Enviar `index.html` para a raiz do repositório `pablo1hsantos/Report` e criar um commit. Quando o projeto Vercel estiver ligado ao repositório, a implantação pode ser automática.
+Substitua `index.html` na raiz do repositório GitHub vinculado à Vercel. Não requer compilação.

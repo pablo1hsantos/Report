@@ -366,7 +366,7 @@
   </main>
   <div class="mobile-actions">
     <button type="button" class="btn btn-preview" id="showPreview"><svg class="ui-icon" aria-hidden="true"><use href="#ico-eye"/></svg><span>Prévia</span></button>
-    <button type="button" class="btn btn-wa" data-send aria-label="Copiar relatório e abrir o grupo no WhatsApp para colar e enviar"><svg class="ui-icon" aria-hidden="true"><use href="#ico-send"/></svg><span>Enviar pelo WhatsApp</span></button>
+    <button type="button" class="btn btn-wa" data-send aria-label="Abrir o WhatsApp com o relatório preenchido para selecionar o grupo e enviar"><svg class="ui-icon" aria-hidden="true"><use href="#ico-send"/></svg><span>Enviar pelo WhatsApp</span></button>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script>
@@ -620,7 +620,13 @@
       form.addEventListener('change',e=>{if(!e.target.closest('#crList')&&e.target.id!=='responsible')update()});
       $('statusChoices').addEventListener('click',e=>{const b=e.target.closest('button[data-value]');if(b)setStatus(val('turnStatus')===b.dataset.value?'':b.dataset.value)});
       form.addEventListener('submit',e=>e.preventDefault());
-      const GROUP_INVITE_URL='https://web.whatsapp.com/accept?code=DGK7Ust26nBCKnOYGC89V3';
+      // O link oficial de compartilhamento permite enviar o texto para um grupo,
+      // mas a escolha do grupo é feita no próprio WhatsApp.
+      function whatsappUrl(text){
+        const encoded=encodeURIComponent(text);
+        const mobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        return mobile?'whatsapp://send?text='+encoded:'https://wa.me/?text='+encoded;
+      }
       async function copyMessage(text){
         try {
           if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(text);return true}
@@ -633,13 +639,13 @@
         ta.remove();
         return copied;
       }
-      document.querySelectorAll('[data-send]').forEach(b=>b.addEventListener('click',async()=>{
+      document.querySelectorAll('[data-send]').forEach(b=>b.addEventListener('click',()=>{
         if(!validate())return;
         update();
-        const copied=await copyMessage(message());
-        if(!copied){notify('Não foi possível copiar o relatório. Use Copiar mensagem.');return}
-        // Convite do WhatsApp: abre o grupo, mas não envia a mensagem automaticamente.
-        window.location.assign(GROUP_INVITE_URL);
+        const url=whatsappUrl(message());
+        // Celular: abre o aplicativo instalado com a mensagem pronta.
+        // Computador: abre o compartilhamento oficial com o texto pronto.
+        window.location.assign(url);
       }));
       $('copyBtn').addEventListener('click',async()=>{
         if(!validate())return;
