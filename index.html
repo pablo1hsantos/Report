@@ -356,7 +356,7 @@
         <section class="panel"><div class="preview-heading"><div><h2>Mensagem pronta</h2><p class="sub">Prévia para compartilhar no WhatsApp</p></div><span class="live">Ao vivo</span></div>
           <div class="chat-bg"><div class="chat-bubble"><pre id="preview" aria-live="polite"></pre></div></div>
           <div class="preview-actions">
-            <button type="button" class="btn btn-wa" data-send><svg class="ui-icon" aria-hidden="true"><use href="#ico-send"/></svg><span>Copiar e abrir grupo</span></button>
+            <button type="button" class="btn btn-wa" data-send><svg class="ui-icon" aria-hidden="true"><use href="#ico-send"/></svg><span>Enviar pelo WhatsApp</span></button>
           <div class="btn-flex"><button type="button" id="copyBtn" class="btn btn-copy"><svg class="ui-icon" aria-hidden="true"><use href="#ico-copy"/></svg>Copiar mensagem</button><button type="button" id="resetBtn" class="btn btn-plain" title="Iniciar novo report com supervisor em branco"><svg class="ui-icon" aria-hidden="true"><use href="#ico-reset"/></svg>Novo report</button></div>
 </div>
         </section>
@@ -366,7 +366,7 @@
   </main>
   <div class="mobile-actions">
     <button type="button" class="btn btn-preview" id="showPreview"><svg class="ui-icon" aria-hidden="true"><use href="#ico-eye"/></svg><span>Prévia</span></button>
-    <button type="button" class="btn btn-wa" data-send aria-label="Copiar relatório e abrir link do grupo no WhatsApp"><svg class="ui-icon" aria-hidden="true"><use href="#ico-send"/></svg><span>Copiar e abrir grupo</span></button>
+    <button type="button" class="btn btn-wa" data-send aria-label="Copiar relatório e abrir o grupo no WhatsApp para colar e enviar"><svg class="ui-icon" aria-hidden="true"><use href="#ico-send"/></svg><span>Enviar pelo WhatsApp</span></button>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script>
@@ -637,7 +637,7 @@
         if(!validate())return;
         update();
         const copied=await copyMessage(message());
-        if(!copied){notify('Não foi possível copiar. Use o botão Copiar mensagem antes de abrir o grupo.');return}
+        if(!copied){notify('Não foi possível copiar o relatório. Use Copiar mensagem.');return}
         // Convite do WhatsApp: abre o grupo, mas não envia a mensagem automaticamente.
         window.location.assign(GROUP_INVITE_URL);
       }));

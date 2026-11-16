@@ -1,12 +1,15 @@
-# Report Operacional In-Haus • v14
+# Report Operacional In-Haus • v15
 
-Versão HTML estática pronta para Vercel.
+Versão estática para publicação na Vercel.
 
-- Removido o quadro “Grupo de destino” da tela e do rodapé no celular.
-- Botão **Copiar e abrir grupo** valida o turno, copia o texto do relatório e abre o convite do grupo do WhatsApp fornecido.
-- O convite do WhatsApp **não permite enviar mensagens automaticamente**: no WhatsApp, abra/acesse o grupo e cole o relatório para confirmar o envio.
-- O botão **Copiar mensagem** continua disponível.
-- Nenhum dado do formulário é enviado para servidor; o rascunho permanece no navegador.
+## Envio pelo WhatsApp
+
+- Ação principal única **Enviar pelo WhatsApp**: valida os campos obrigatórios, copia o relatório e abre o link de convite do grupo informado.
+- **Copiar mensagem**: copia o texto sem abrir o WhatsApp.
+- O WhatsApp não permite pré-preencher uma mensagem diretamente numa conversa de grupo pelo link de convite. O usuário deve colar a mensagem e confirmar o envio.
+- O formulário mostra a ação principal na prévia do desktop e no rodapé fixo do celular, conforme o tamanho da tela. Não são dois envios diferentes.
+- Nenhum relatório é disparado automaticamente.
 
 ## Publicação
-Envie `index.html` para a raiz do repositório `pablo1hsantos/Report` e faça um commit. A Vercel, quando conectada à branch de produção, publicará a nova versão.
+
+Enviar `index.html` para a raiz do repositório `pablo1hsantos/Report` e criar um commit. Quando o projeto Vercel estiver ligado ao repositório, a implantação pode ser automática.
