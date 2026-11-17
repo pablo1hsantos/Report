@@ -8,7 +8,7 @@
 </head>
 <body><div class="top"></div><div class="wrap"><header class="header"><div class="brand"><div class="diamond"></div><div>In·Haus<small>LOGÍSTICA</small></div></div><nav class="head-links"><a href="/">Voltar ao report</a><button type="button" id="logout" class="btn outline hidden">Sair</button></nav></header>
 <h1 class="h">Administração do Report</h1><p class="sub">Gerencie os cadastros e as regras dos relatórios operacionais.</p>
-<section class="box login" id="loginPanel"><h2>Acesso administrativo</h2><p>Digite a senha para alterar os cadastros. O acesso é validado no servidor.</p><form id="loginForm"><div class="field"><label for="password">Senha</label><input id="password" type="password" required autocomplete="current-password" inputmode="numeric"></div><p id="loginMsg" role="status"></p><button class="btn primary" type="submit" id="loginBtn" style="width:100%">Entrar na administração</button></form></section>
+<section class="box login" id="loginPanel"><h2>Acesso administrativo</h2><p>Digite a senha para alterar os cadastros. O acesso é validado no servidor.</p><form id="loginForm"><div class="field"><label for="password">Senha</label><input id="password" type="password" required autocomplete="current-password" inputmode="numeric"></div><p id="loginMsg" role="status"></p><button class="btn primary" type="submit" id="loginBtn" style="width:100%">Entrar na administração</button><div style="margin-top:12px;text-align:center"><button type="button" id="testApi" class="btn outline" style="font-size:12px;min-height:34px">Verificar conexão do servidor</button></div></form></section>
 <section id="workspace" class="hidden"><div class="topbar"><div><strong>Cadastros centralizados</strong><p>Alterações salvas são aplicadas ao report de todos os usuários ao recarregar a página.</p></div><span id="lastSaved" class="pill">Sem alterações</span></div><div class="tabs" id="tabs" role="tablist"><button class="tab" data-tab="supervisors" aria-selected="true">Supervisores</button><button class="tab" data-tab="crs" aria-selected="false">CRs</button><button class="tab" data-tab="shifts" aria-selected="false">Turnos</button><button class="tab" data-tab="units" aria-selected="false">Unidades</button><button class="tab" data-tab="general" aria-selected="false">Geral</button></div><div class="box content" id="editor" role="tabpanel"></div><div class="sticky-save"><span id="saveStatus">Revise as alterações antes de salvar.</span><button id="saveBtn" class="btn primary" type="button">Salvar alterações</button></div></section>
 </div>
 <script>
@@ -16,7 +16,31 @@
 const $=id=>document.getElementById(id),escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let cfg=null,revision='',tab='supervisors',dirty=false,busy=false;
 function notify(msg,type='error',login=false){const id=login?'loginMsg':'saveStatus';const el=$(id);el.textContent=msg;el.className=type==='success'?'success':type==='error'?'invalid':'muted';}
-async function api(action,more={}){const res=await fetch('/api/admin',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({action,...more})});let data={};try{data=await res.json()}catch{}if(!res.ok)throw new Error(data.error||'Erro de comunicação.');return data;}
+function explainApiFailure(res){
+  if(res.status===404) return 'API administrativa não publicada (404). Envie as pastas api e lib para o GitHub e publique novamente na Vercel.';
+  if(res.status===401) return 'Sessão expirada ou acesso não autorizado. Entre novamente.';
+  if(res.status===403) return 'Acesso bloqueado pela origem do site. Confirme o domínio publicado na Vercel.';
+  if(res.status===500 || res.status===502 || res.status===504) return `Falha no servidor (${res.status}). Verifique as funções em Vercel → Logs.`;
+  return `Falha de comunicação com a API (HTTP ${res.status}).`;
+}
+async function readJson(res){
+  const type=(res.headers.get('content-type')||'').toLowerCase();
+  const raw=await res.text();
+  let data=null;
+  if(type.includes('application/json')){try{data=JSON.parse(raw)}catch{}}
+  if(!data || typeof data!=='object'){
+    throw new Error(explainApiFailure(res)+(res.status===200?' A API retornou uma página em vez de JSON. Confira a configuração de rotas.':''));
+  }
+  if(!res.ok)throw new Error(data.error||explainApiFailure(res));
+  return data;
+}
+async function api(action,more={}){
+  let res;
+  try{res=await fetch('/api/admin',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({action,...more})});}
+  catch{throw new Error('Não foi possível conectar ao servidor. Verifique sua conexão ou o deploy da Vercel.');}
+  return readJson(res);
+}
+
 function markDirty(){dirty=true;$('lastSaved').textContent='Alterações pendentes';$('lastSaved').style.background='#fff5e4';notify('Alterações ainda não salvas.','info');}
 function section(title,subtitle,button=''){return `<div class="section-head"><div><h2>${title}</h2><p>${subtitle}</p></div>${button}</div>`;}
 function input(value,field,i,placeholder=''){return `<input data-field="${field}" data-index="${i}" value="${escape(value)}" placeholder="${escape(placeholder)}">`;}
@@ -44,7 +68,24 @@ if(tab==='general'){
 }
 e.innerHTML=html;}
 async function load(){const data=await api('load');cfg=data.config;revision=cfg.revision;dirty=false;$('lastSaved').textContent='Configuração carregada';$('lastSaved').style.background='';$('workspace').classList.remove('hidden');$('loginPanel').classList.add('hidden');$('logout').classList.remove('hidden');$('password').value='';notify('Cadastros carregados.','info');render();}
-async function checkSession(){try{const r=await fetch('/api/admin',{cache:'no-store',credentials:'same-origin'}),d=await r.json();if(!r.ok)throw new Error(d.error||'Servidor indisponível');if(d.authenticated)await load();}catch(e){notify(e.message,'error',true);}}
+async function checkSession(){
+  try{
+    const r=await fetch('/api/admin',{cache:'no-store',credentials:'same-origin'});
+    const d=await readJson(r);
+    if(d.authenticated)await load();
+  }catch(e){notify(e.message,'error',true);}
+}
+
+$('testApi').addEventListener('click',async()=>{
+  notify('Verificando servidor...','info',true);
+  try{
+    const resp=await fetch('/api/health',{cache:'no-store'});
+    const health=await readJson(resp);
+    if(!health.adminConfigured || !health.databaseConfigured){
+      notify(`API online. ${!health.adminConfigured?'Configure ADMIN_PASSWORD e SESSION_SECRET. ':''}${!health.databaseConfigured?'Configure UPSTASH_REDIS_REST_URL e UPSTASH_REDIS_REST_TOKEN.':''}`,'error',true);
+    }else{notify('API online e variáveis configuradas. Entre com a senha.','success',true);}
+  }catch(e){notify(e.message,'error',true);}
+});
 $('loginForm').addEventListener('submit',async e=>{e.preventDefault();const b=$('loginBtn');b.disabled=true;notify('Validando acesso...','info',true);try{await api('login',{password:$('password').value});await load();}catch(ex){notify(ex.message,'error',true);}finally{b.disabled=false;}});
 $('logout').addEventListener('click',async()=>{if(dirty&&!confirm('Há alterações não salvas. Deseja sair?'))return;try{await api('logout');}catch{}location.reload();});
 $('tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;tab=b.dataset.tab;render();});

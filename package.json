@@ -1,1 +1,9 @@
-{"name":"report-operacional-inhaus","version":"19.0.0","private":true,"type":"module","scripts":{"check":"node --check api/admin.mjs && node --check api/config.mjs && node --check lib/defaults.mjs && node --check lib/storage.mjs && node --check lib/auth.mjs"}}
+{
+  "name": "report-operacional-inhaus",
+  "version": "20.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check api/admin.js && node --check api/config.js && node --check api/health.js && node --check lib/defaults.mjs && node --check lib/storage.mjs && node --check lib/auth.mjs"
+  }
+}
