@@ -1,19 +1,12 @@
-# Report Operacional In-Haus — versão 17
+# Report Operacional In-Haus | versão 18
 
-Projeto estático para publicar na Vercel. O arquivo principal é `index.html`.
+Projeto estático para GitHub/Vercel. Publique o arquivo `index.html` na raiz do repositório `pablo1hsantos/Report`.
 
-## Atualização desta versão
+## Ajustes da versão 18
+- Uma linha em branco imediatamente após `IN-HAUS | REPORT OPERACIONAL` no texto do WhatsApp.
+- Campo **Itens (quantidades)** com **Programado** e **Realizado** logo após **Volume**, somente nos CRs 64399 (HUB), 74590 (CDB AE), 77850 (CDB III).
+- Dados opcionais; campos não preenchidos não aparecem no WhatsApp.
+- Itens aceitam somente quantidades inteiras.
+- Todas as demais regras preservadas.
 
-- Supervisor: lista própria dentro do formulário, pesquisa por nome e seleção com um toque. Não usa o seletor nativo do Android que exige "Próximo" / "Concluir".
-- Turno: botões de seleção direta com toque único.
-- Alef Augusto França: 3º turno sugerido automaticamente.
-- Alexandre Fernando Barbosa: Administrativo sugerido automaticamente.
-- Supervisor inicia sem pré-seleção.
-- Indicadores por CR, preenchimento parcial, volumes em toneladas para Arcelor e produtos para Whirlpool, somente veículos em Peação e Inspeções, e ABS = Quadro Ativo − Quadro Planejado permanecem inalterados.
-- Compartilhamento via WhatsApp permanece com seleção do grupo no próprio aplicativo.
-
-## Publicar no GitHub e Vercel
-
-No repositório `pablo1hsantos/Report`, substitua o `index.html` na raiz e confirme o commit. Se a Vercel estiver conectada à branch de produção, ela fará um novo deploy automaticamente.
-
-Sem dependências de instalação ou compilação.
+Publicação: na Vercel, configure Framework = Other, Root Directory = ./, sem comando de build.

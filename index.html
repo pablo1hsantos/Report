@@ -451,8 +451,9 @@
         '97478':'Whirlpool Jundiai',
         '97487':'Arcelor Peação'
       };
-      const fields=['vehiclesPlan','vehiclesActual','volumePlan','volumeActual','qp','qa','issues','pending'];
+      const fields=['vehiclesPlan','vehiclesActual','volumePlan','volumeActual','itemsPlan','itemsActual','qp','qa','issues','pending'];
       const VEHICLES_ONLY=new Set(['85080','85082','97487']);
+      const ITEMS_CRS=new Set(['64399','74590','77850']);
       const FIXED_SHIFTS={
         'ALEXANDRE FERNANDO BARBOSA':'Administrativo',
         'ALEF AUGUSTO FRANCA':'3º turno'
@@ -481,6 +482,7 @@
         const expanded=index===0;
         const volumeType=volumeUnit(code)==='produtos'?'number':'text';
         const volumeRow=vehicleOnly(code)?'':`<span class="metric-label">Volume (${volumeUnit(code)})</span>${inputHtml(code,'volumePlan','Volume programado',volumeType)}${inputHtml(code,'volumeActual','Volume realizado',volumeType)}`;
+        const itemsRow=ITEMS_CRS.has(code)?`<span class="metric-label">Itens (quantidades)</span>${inputHtml(code,'itemsPlan','Itens programados')}${inputHtml(code,'itemsActual','Itens realizados')}`:'';
         return `<article class="cr-card${expanded?'':' is-collapsed'}" data-cr="${code}">
           <div class="cr-card-head"><div class="cr-identity"><span class="cr-mark"><svg class="ui-icon" aria-hidden="true"><use href="#ico-building"/></svg></span><div class="cr-titles"><h3 class="cr-card-title">CR ${code}</h3><p class="cr-name">${escapeHtml(CRS[code])}</p></div></div>
           <div class="cr-meta"><span class="cr-progress" data-progress>Sem dados</span>
@@ -490,6 +492,7 @@
             <div class="metric-grid"><div></div><div class="col-label">Programado</div><div class="col-label">Realizado</div>
               <span class="metric-label">Veículos</span>${inputHtml(code,'vehiclesPlan','Veículos programados')}${inputHtml(code,'vehiclesActual','Veículos realizados')}
               ${volumeRow}
+              ${itemsRow}
             </div>
             <div class="metrics-head">Quadro de pessoal</div>
             <div class="people-grid"><div class="field"><label for="cr-${code}-qp">Quadro Planejado</label>${inputHtml(code,'qp','Quadro Planejado','number')}</div>
@@ -612,20 +615,24 @@
       }
       function message(){
         const name=val('responsible'),codes=linked(name);
-        const lines=['*IN-HAUS | REPORT OPERACIONAL*'];
+        const lines=['*IN-HAUS | REPORT OPERACIONAL*',''];
         if(val('date'))lines.push(`*Data:* ${dateBr(val('date'))}`);
         if(val('shift'))lines.push(`*Turno:* ${val('shift')}`);
         if(name)lines.push(`*Supervisor:* ${name}`);
         for(const code of codes){
           const d=dataOf(code);
           if(!Object.values(d).some(v=>v!==''))continue;
-          const {vehiclesPlan:vp,vehiclesActual:va,volumePlan:mp,volumeActual:ma,qp,qa,issues,pending}=d;
+          const {vehiclesPlan:vp,vehiclesActual:va,volumePlan:mp,volumeActual:ma,itemsPlan:ip,itemsActual:ia,qp,qa,issues,pending}=d;
           lines.push('',`*CR ${code} | ${CRS[code]}*`);
           const vehicleLine=pairLine('Veículos',vp,va);
           if(vehicleLine)lines.push(vehicleLine);
           if(!vehicleOnly(code)){
             const volumeLine=pairLine(`Volume (${volumeUnit(code)})`,mp,ma);
             if(volumeLine)lines.push(volumeLine);
+          }
+          if(ITEMS_CRS.has(code)){
+            const itemsLine=pairLine('Itens (quantidades)',ip,ia);
+            if(itemsLine)lines.push(itemsLine);
           }
           const peopleLine=pairLine('Quadro de pessoal',qp,qa,'Planejado','Ativo',false);
           if(peopleLine)lines.push(peopleLine);
@@ -659,7 +666,7 @@
         if(!SUPERVISOR_CRS[val('responsible')])return focusError($('responsible'),'Selecione o supervisor.');
         if(!val('shift'))return focusError($('shift'),'Selecione o turno para continuar.');
         for(const code of linked()){
-          for(const f of ['qp','qa','vehiclesPlan','vehiclesActual']){
+          for(const f of ['qp','qa','vehiclesPlan','vehiclesActual',...(ITEMS_CRS.has(code)?['itemsPlan','itemsActual']:[])]){
             const el=crInput(code,f);
             if(el?.value.trim()!==''&&numberVal(el.value.trim())===null)return focusError(el,`Informe um número inteiro válido no CR ${code}.`);
           }
