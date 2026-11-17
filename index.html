@@ -417,7 +417,7 @@
         </section>
       </aside>
     </div>
-    <footer class="footer">In-Haus · Report Operacional | Ferramenta de comunicação interna</footer>
+    <footer class="footer">In-Haus · Report Operacional | Ferramenta de comunicação interna · <a href="/admin.html" style="color:inherit;text-decoration:underline">Administração</a></footer>
   </main>
   <div class="mobile-actions">
     <button type="button" class="btn btn-preview" id="showPreview"><svg class="ui-icon" aria-hidden="true"><use href="#ico-eye"/></svg><span>Prévia</span></button>
@@ -427,39 +427,40 @@
   <script>
     (()=>{
       'use strict';
-      const SUPERVISOR_CRS={
-        'LINCOLN LIMA DA CUNHA':['97478'],
-        'ADRIANO BEZERRA DE SOUZA':['66655'],
-        'ALLAN DA TRINDADE ALVES':['66655'],
-        'RAFAEL RODRIGUES ZARATINI':['85080','85082'],
-        'DIEGO FLORIN DA SILVA':['27299'],
-        'ALEXANDRE FERNANDO BARBOSA':['64399','74590','77850','97487'],
-        'SANDRO ALEXANDRE DA SILVA':['66003','65496'],
-        'ALEF AUGUSTO FRANCA':['64399','74590','77850','97487'],
-        'GABRIELLE PAES JANUARIO DA SILVA':['97478']
-      };
-      const CRS={
-        '27299':'Whirlpool Rio Claro',
-        '64399':'Arcelor HUB',
-        '65496':'Arcelor Trefila',
-        '66003':'Arcelor Transporte',
-        '66655':'Arcelor Belgo',
-        '74590':'Arcelor CDB AE',
-        '77850':'Arcelor CDB III',
-        '85080':'Arcelor Inspeções IRC',
-        '85082':'Arcelor Inspeções PIR',
-        '97478':'Whirlpool Jundiai',
-        '97487':'Arcelor Peação'
-      };
+      const DEFAULT_CONFIG={"revision":"inicial","reportTitle":"IN-HAUS | REPORT OPERACIONAL","shifts":["1º turno","2º turno","3º turno","Administrativo"],"units":[{"name":"toneladas","decimals":true},{"name":"produtos","decimals":false}],"crs":[{"code":"27299","name":"Whirlpool Rio Claro","unit":"produtos","vehiclesOnly":false,"itemsEnabled":false},{"code":"64399","name":"Arcelor HUB","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":true},{"code":"65496","name":"Arcelor Trefila","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":false},{"code":"66003","name":"Arcelor Transporte","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":false},{"code":"66655","name":"Arcelor Belgo","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":false},{"code":"74590","name":"Arcelor CDB AE","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":true},{"code":"77850","name":"Arcelor CDB III","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":true},{"code":"85080","name":"Arcelor Inspeções IRC","unit":"","vehiclesOnly":true,"itemsEnabled":false},{"code":"85082","name":"Arcelor Inspeções PIR","unit":"","vehiclesOnly":true,"itemsEnabled":false},{"code":"97478","name":"Whirlpool Jundiai","unit":"produtos","vehiclesOnly":false,"itemsEnabled":false},{"code":"97487","name":"Arcelor Peação","unit":"","vehiclesOnly":true,"itemsEnabled":false}],"supervisors":[{"name":"LINCOLN LIMA DA CUNHA","defaultShift":"","crs":["97478"]},{"name":"ADRIANO BEZERRA DE SOUZA","defaultShift":"","crs":["66655"]},{"name":"ALLAN DA TRINDADE ALVES","defaultShift":"","crs":["66655"]},{"name":"RAFAEL RODRIGUES ZARATINI","defaultShift":"","crs":["85080","85082"]},{"name":"DIEGO FLORIN DA SILVA","defaultShift":"","crs":["27299"]},{"name":"ALEXANDRE FERNANDO BARBOSA","defaultShift":"Administrativo","crs":["64399","74590","77850","97487"]},{"name":"SANDRO ALEXANDRE DA SILVA","defaultShift":"","crs":["66003","65496"]},{"name":"ALEF AUGUSTO FRANCA","defaultShift":"3º turno","crs":["64399","74590","77850","97487"]},{"name":"GABRIELLE PAES JANUARIO DA SILVA","defaultShift":"","crs":["97478"]}]};
+      let SUPERVISOR_CRS={},CRS={},VEHICLES_ONLY=new Set(),ITEMS_CRS=new Set(),FIXED_SHIFTS={},UNITS={},REPORT_TITLE='IN-HAUS | REPORT OPERACIONAL';
       const fields=['vehiclesPlan','vehiclesActual','volumePlan','volumeActual','itemsPlan','itemsActual','qp','qa','issues','pending'];
-      const VEHICLES_ONLY=new Set(['85080','85082','97487']);
-      const ITEMS_CRS=new Set(['64399','74590','77850']);
-      const FIXED_SHIFTS={
-        'ALEXANDRE FERNANDO BARBOSA':'Administrativo',
-        'ALEF AUGUSTO FRANCA':'3º turno'
-      };
+      function applyConfig(config){
+        const c=config&&Array.isArray(config.supervisors)&&Array.isArray(config.crs)?config:DEFAULT_CONFIG;
+        SUPERVISOR_CRS=Object.fromEntries(c.supervisors.map(s=>[s.name,s.crs]));
+        CRS=Object.fromEntries(c.crs.map(x=>[x.code,x.name]));
+        VEHICLES_ONLY=new Set(c.crs.filter(x=>x.vehiclesOnly).map(x=>x.code));
+        ITEMS_CRS=new Set(c.crs.filter(x=>x.itemsEnabled&&!x.vehiclesOnly).map(x=>x.code));
+        FIXED_SHIFTS=Object.fromEntries(c.supervisors.filter(x=>x.defaultShift).map(x=>[x.name,x.defaultShift]));
+        UNITS=Object.fromEntries(c.units.map(u=>[u.name,{decimals:!!u.decimals}]));
+        window.__INHAUS_CR_META__=Object.fromEntries(c.crs.map(x=>[x.code,x]));
+        REPORT_TITLE=String(c.reportTitle||DEFAULT_CONFIG.reportTitle);
+        const buttons=$('shiftButtons'),shift=$('shift');
+        buttons.replaceChildren();shift.replaceChildren();opt(shift,'','Selecione');
+        for(const value of c.shifts){
+          const b=document.createElement('button');b.type='button';b.className='shift-button';b.dataset.shift=value;b.setAttribute('aria-pressed','false');b.textContent=value;buttons.appendChild(b);
+          opt(shift,value,value);
+        }
+        const names=$('responsible');names.replaceChildren();opt(names,'','Selecione seu nome');
+        const options=$('supervisorOptions');options.replaceChildren();
+        for(const name of Object.keys(SUPERVISOR_CRS)){
+          opt(names,name,name);
+          const item=document.createElement('button');item.type='button';item.className='picker-option';
+          item.dataset.supervisor=name;item.setAttribute('role','option');item.setAttribute('aria-selected','false');
+          const label=document.createElement('span');label.textContent=name;item.appendChild(label);
+          const check=document.createElementNS('http://www.w3.org/2000/svg','svg');check.setAttribute('class','ui-icon');check.setAttribute('aria-hidden','true');
+          const use=document.createElementNS('http://www.w3.org/2000/svg','use');use.setAttribute('href','#ico-selected');check.appendChild(use);item.appendChild(check);
+          options.appendChild(item);
+        }
+      }
       const vehicleOnly=code=>VEHICLES_ONLY.has(code);
-      const volumeUnit=code=>CRS[code].startsWith('Whirlpool')?'produtos':'toneladas';
+      const volumeUnit=code=>window.__INHAUS_CR_META__?.[code]?.unit||'toneladas';
+      const volumeDecimals=code=>!!UNITS[volumeUnit(code)]?.decimals;
       const key='inhaus-report-operacional-v12';
       const form=document.getElementById('reportForm'),preview=document.getElementById('preview'),toast=document.getElementById('toast');
       const $=id=>document.getElementById(id),val=id=>String($(id).value||'').trim();
@@ -480,7 +481,7 @@
       }
       function crCard(code,index){
         const expanded=index===0;
-        const volumeType=volumeUnit(code)==='produtos'?'number':'text';
+        const volumeType=volumeDecimals(code)?'text':'number';
         const volumeRow=vehicleOnly(code)?'':`<span class="metric-label">Volume (${volumeUnit(code)})</span>${inputHtml(code,'volumePlan','Volume programado',volumeType)}${inputHtml(code,'volumeActual','Volume realizado',volumeType)}`;
         const itemsRow=ITEMS_CRS.has(code)?`<span class="metric-label">Itens (quantidades)</span>${inputHtml(code,'itemsPlan','Itens programados')}${inputHtml(code,'itemsActual','Itens realizados')}`:'';
         return `<article class="cr-card${expanded?'':' is-collapsed'}" data-cr="${code}">
@@ -580,7 +581,7 @@
         const saved=draft.records?.[name]||{};
         for(const code of codes){
           const row=saved[code]||{};
-          for(const field of fields){const el=crInput(code,field);if(el&&typeof row[field]==='string'){const raw=row[field];el.value=(volumeUnit(code)==='toneladas'&&(field==='volumePlan'||field==='volumeActual'))?raw.replace(/,/g,'.'):raw}}
+          for(const field of fields){const el=crInput(code,field);if(el&&typeof row[field]==='string'){const raw=row[field];el.value=(volumeDecimals(code)&&(field==='volumePlan'||field==='volumeActual'))?raw.replace(/,/g,'.'):raw}}
           if(row.issues||row.pending){const details=document.querySelector(`[data-cr="${code}"] details`);if(details)details.open=true}
         }
         for(const code of codes)updateAbs(code);
@@ -615,7 +616,7 @@
       }
       function message(){
         const name=val('responsible'),codes=linked(name);
-        const lines=['*IN-HAUS | REPORT OPERACIONAL*',''];
+        const lines=[`*${REPORT_TITLE}*`,''];
         if(val('date'))lines.push(`*Data:* ${dateBr(val('date'))}`);
         if(val('shift'))lines.push(`*Turno:* ${val('shift')}`);
         if(name)lines.push(`*Supervisor:* ${name}`);
@@ -673,7 +674,7 @@
           if(!vehicleOnly(code))for(const f of ['volumePlan','volumeActual']){
             const el=crInput(code,f),raw=el?.value.trim()||'';
             if(raw==='')continue;
-            if(volumeUnit(code)==='toneladas'){
+            if(volumeDecimals(code)){
               if(!/^\d+(?:\.\d+)?$/.test(raw))return focusError(el,`Informe um volume válido no CR ${code}, usando ponto (.) como separador decimal.`);
             }else if(numberVal(raw)===null){
               return focusError(el,`Informe uma quantidade inteira de produtos no CR ${code}.`);
@@ -698,18 +699,19 @@
         $('date').value=today();$('responsible').value='';$('shift').value='';
         syncShift('');closeSupervisorPicker();renderSupervisorChoice();renderCRs('');setStatus('');window.scrollTo({top:0,behavior:'smooth'});notify('Novo report iniciado. Selecione o supervisor.');
       }
-      const names=$('responsible');names.replaceChildren();opt(names,'','Selecione seu nome');for(const name of Object.keys(SUPERVISOR_CRS))opt(names,name,name);
-      // Lista de seleção com toque único, busca rápida e sem modal do sistema.
-      for(const name of Object.keys(SUPERVISOR_CRS)){
-        const item=document.createElement('button');item.type='button';item.className='picker-option';
-        item.dataset.supervisor=name;item.setAttribute('role','option');item.setAttribute('aria-selected','false');
-        const label=document.createElement('span');label.textContent=name;
-        item.appendChild(label);
-        const check=document.createElementNS('http://www.w3.org/2000/svg','svg');check.setAttribute('class','ui-icon');check.setAttribute('aria-hidden','true');
-        const use=document.createElementNS('http://www.w3.org/2000/svg','use');use.setAttribute('href','#ico-selected');check.appendChild(use);item.appendChild(check);
-        $('supervisorOptions').appendChild(item);
+      // Cadastros centralizados são carregados antes de montar o formulário.
+      async function initialize(){
+        try{
+          const result=await fetch('/api/config',{cache:'no-store'});
+          if(!result.ok)throw new Error('API indisponível');
+          const data=await result.json();applyConfig(data.config);
+        }catch(e){
+          applyConfig(DEFAULT_CONFIG);
+          notify('Não foi possível atualizar os cadastros. Exibindo configuração inicial.');
+        }
+        restore();
       }
-      restore();
+      initialize();
       $('supervisorTrigger').addEventListener('click',()=>{
         if($('supervisorMenu').hidden)openSupervisorPicker();else closeSupervisorPicker();
       });
@@ -735,7 +737,7 @@
         $('shift').dispatchEvent(new Event('change',{bubbles:true}));
       });
       $('responsible').addEventListener('change',()=>{captureCurrent();renderSupervisorChoice();syncShift(val('responsible'));renderCRs(val('responsible'));update()});
-      $('crList').addEventListener('input',e=>{const card=e.target.closest('[data-cr]');if(card){const field=e.target.dataset.field;if((field==='volumePlan'||field==='volumeActual')&&volumeUnit(card.dataset.cr)==='toneladas'&&e.target.value.includes(',')){const pos=e.target.selectionStart;e.target.value=e.target.value.replace(/,/g,'.');if(pos!==null)e.target.setSelectionRange(pos,pos)}if(field==='qp'||field==='qa')updateAbs(card.dataset.cr);update()}});
+      $('crList').addEventListener('input',e=>{const card=e.target.closest('[data-cr]');if(card){const field=e.target.dataset.field;if((field==='volumePlan'||field==='volumeActual')&&volumeDecimals(card.dataset.cr)&&e.target.value.includes(',')){const pos=e.target.selectionStart;e.target.value=e.target.value.replace(/,/g,'.');if(pos!==null)e.target.setSelectionRange(pos,pos)}if(field==='qp'||field==='qa')updateAbs(card.dataset.cr);update()}});
       $('crList').addEventListener('change',update);
       $('crList').addEventListener('click',e=>{
         const toggle=e.target.closest('[data-cr-toggle]');
