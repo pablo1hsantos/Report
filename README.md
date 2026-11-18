@@ -1,3 +1,38 @@
+# Report Operacional In-Haus v21 – Ausências e vagas abertas
+
+Atualização da versão 20 com painel administrativo e API protegida.
+
+## Mudança no formulário, por CR
+
+- **QP (Quadro Planejado)** e **QA (Quadro Ativo)** continuam como antes.
+- **ABS (saldo do quadro)** permanece calculado automaticamente: `QA - QP` (por exemplo, 12 planejados e 10 ativos = -2).
+- **Ausências (absenteísmo)** é um novo campo opcional, numérico inteiro, preenchido pelo supervisor.
+- **Vagas abertas** é outro campo opcional, numérico inteiro, preenchido pelo supervisor.
+- Um saldo negativo **não é automaticamente classificado como absenteísmo**, nem como vaga aberta. A classificação é informada pelo responsável, mesmo quando a ausência foi coberta e o saldo do quadro ficou zero.
+- Campos não preenchidos são omitidos na mensagem. Zero digitado intencionalmente aparece como 0.
+- Exemplo WhatsApp:
+
+```
+*CR 64399 | Arcelor HUB*
+• Quadro de pessoal: Planejado: 12 | Ativo: 10
+• ABS (saldo do quadro): -2
+• Ausências (absenteísmo): 1
+• Vagas abertas: 1
+```
+
+Não houve alteração nos cadastros do painel administrativo nem nos dados existentes do Redis. O navegador continuará preservando os rascunhos na mesma chave da versão anterior.
+
+## Publicação
+
+1. Substitua todos os arquivos da versão anterior na raiz de `pablo1hsantos/Report`, preservando as pastas `api/` e `lib/`.
+2. Mantenha na Vercel as variáveis `ADMIN_PASSWORD`, `SESSION_SECRET`, `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`.
+3. Faça commit na branch de produção e confira o deploy da Vercel.
+4. Verifique `/api/health` e teste um relatório preenchido parcialmente com ausências e vagas abertas.
+
+Não coloque segredos no GitHub público.
+
+---
+
 # IN-HAUS | Report Operacional v20 (correção do ADM)
 
 ## O que foi corrigido
@@ -49,3 +84,12 @@ A senha não está no HTML nem no ZIP. A API usa cookie HttpOnly/Secure, assinat
 
 ### Observação
 Não foi possível acessar o ambiente Vercel do usuário diretamente daqui; a correção foi validada no código e em testes locais. O login real depende de as funções e as quatro variáveis estarem publicadas.
+
+## Ajustes de formato da mensagem (v22)
+
+- Uma linha em branco após o título e entre os CRs, sem espaços excedentes.
+- Indicadores longos usam uma quebra de linha intencional antes dos valores para leitura no celular.
+- Títulos, CRs e nomes de indicadores com negrito no WhatsApp.
+- Separador ` | ` padronizado entre Programado e Realizado.
+- Veículos, produtos, itens e quadro de pessoal são inteiros; volumes de unidades decimais exibem pelo menos duas casas com ponto, sem arredondar precisão adicional; percentuais mantêm até uma casa decimal.
+- A lógica de CRs, turnos, ausência/vaga, permissões ADM e API permanece inalterada.

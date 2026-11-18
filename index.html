@@ -328,6 +328,15 @@
     .shift-button:focus-visible{outline:3px solid #9bd5f0;outline-offset:2px}
     @media(max-width:767px){.shift-field{grid-column:1/-1}.picker-trigger{min-height:54px;font-size:14px}.picker-option{min-height:54px;font-size:13px;padding:10px 12px}.shift-button{min-height:52px;font-size:12px}.picker-options{max-height:min(325px,47vh)}}
     @media(max-width:380px){.shift-buttons{grid-template-columns:repeat(2,minmax(0,1fr))}.picker-option{font-size:12px}}
+  
+    /* Quadro de pessoal: saldo automático distinto de ausências e vagas abertas. */
+    .balance-caption{font-size:11px;font-weight:500;color:#718999;letter-spacing:0}
+    .personnel-breakdown{margin-top:14px;padding:13px 14px 14px;border:1px solid #dfebf3;background:#f8fbfd;border-radius:11px}
+    .personnel-breakdown .metrics-head{margin:0 0 10px!important;letter-spacing:.02em;text-transform:none;color:#365971}
+    .personnel-breakdown .metrics-head::after{display:none}
+    .personnel-breakdown .breakdown-optional{font-size:10px;color:#8999a5;font-weight:550}
+    .personnel-breakdown .people-grid input{background:#fff}
+    @media(max-width:400px){.balance-caption{font-size:10px}.personnel-breakdown{padding:12px 10px}.personnel-breakdown .people-grid{gap:8px}}
   </style>
 </head>
 <body>
@@ -429,7 +438,7 @@
       'use strict';
       const DEFAULT_CONFIG={"revision":"inicial","reportTitle":"IN-HAUS | REPORT OPERACIONAL","shifts":["1º turno","2º turno","3º turno","Administrativo"],"units":[{"name":"toneladas","decimals":true},{"name":"produtos","decimals":false}],"crs":[{"code":"27299","name":"Whirlpool Rio Claro","unit":"produtos","vehiclesOnly":false,"itemsEnabled":false},{"code":"64399","name":"Arcelor HUB","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":true},{"code":"65496","name":"Arcelor Trefila","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":false},{"code":"66003","name":"Arcelor Transporte","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":false},{"code":"66655","name":"Arcelor Belgo","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":false},{"code":"74590","name":"Arcelor CDB AE","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":true},{"code":"77850","name":"Arcelor CDB III","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":true},{"code":"85080","name":"Arcelor Inspeções IRC","unit":"","vehiclesOnly":true,"itemsEnabled":false},{"code":"85082","name":"Arcelor Inspeções PIR","unit":"","vehiclesOnly":true,"itemsEnabled":false},{"code":"97478","name":"Whirlpool Jundiai","unit":"produtos","vehiclesOnly":false,"itemsEnabled":false},{"code":"97487","name":"Arcelor Peação","unit":"","vehiclesOnly":true,"itemsEnabled":false}],"supervisors":[{"name":"LINCOLN LIMA DA CUNHA","defaultShift":"","crs":["97478"]},{"name":"ADRIANO BEZERRA DE SOUZA","defaultShift":"","crs":["66655"]},{"name":"ALLAN DA TRINDADE ALVES","defaultShift":"","crs":["66655"]},{"name":"RAFAEL RODRIGUES ZARATINI","defaultShift":"","crs":["85080","85082"]},{"name":"DIEGO FLORIN DA SILVA","defaultShift":"","crs":["27299"]},{"name":"ALEXANDRE FERNANDO BARBOSA","defaultShift":"Administrativo","crs":["64399","74590","77850","97487"]},{"name":"SANDRO ALEXANDRE DA SILVA","defaultShift":"","crs":["66003","65496"]},{"name":"ALEF AUGUSTO FRANCA","defaultShift":"3º turno","crs":["64399","74590","77850","97487"]},{"name":"GABRIELLE PAES JANUARIO DA SILVA","defaultShift":"","crs":["97478"]}]};
       let SUPERVISOR_CRS={},CRS={},VEHICLES_ONLY=new Set(),ITEMS_CRS=new Set(),FIXED_SHIFTS={},UNITS={},REPORT_TITLE='IN-HAUS | REPORT OPERACIONAL';
-      const fields=['vehiclesPlan','vehiclesActual','volumePlan','volumeActual','itemsPlan','itemsActual','qp','qa','issues','pending'];
+      const fields=['vehiclesPlan','vehiclesActual','volumePlan','volumeActual','itemsPlan','itemsActual','qp','qa','absences','openPositions','issues','pending'];
       function applyConfig(config){
         const c=config&&Array.isArray(config.supervisors)&&Array.isArray(config.crs)?config:DEFAULT_CONFIG;
         SUPERVISOR_CRS=Object.fromEntries(c.supervisors.map(s=>[s.name,s.crs]));
@@ -468,7 +477,7 @@
       let draft={date:'',responsible:'',shift:'',turnStatus:'',records:{}};
       function today(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
       function dateBr(iso){if(!/^\d{4}-\d{2}-\d{2}$/.test(iso))return '—';const[y,m,d]=iso.split('-');return `${d}/${m}/${y}`}
-      function fmt(s){return String(s||'').replace(/\r/g,'').trim().replace(/\n{3,}/g,'\n\n')}
+      function fmt(s){return String(s||'').replace(/\r/g,'').split('\n').map(line=>line.trim().replace(/[ \t]{2,}/g,' ')).join('\n').trim().replace(/\n{3,}/g,'\n\n')}
       function opt(parent,v,label){const el=document.createElement('option');el.value=v;el.textContent=label;parent.appendChild(el)}
       function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
       function linked(name=val('responsible')){return SUPERVISOR_CRS[name]||[]}
@@ -499,7 +508,14 @@
             <div class="people-grid"><div class="field"><label for="cr-${code}-qp">Quadro Planejado</label>${inputHtml(code,'qp','Quadro Planejado','number')}</div>
               <div class="field"><label for="cr-${code}-qa">Quadro Ativo</label>${inputHtml(code,'qa','Quadro Ativo','number')}</div>
             </div>
-            <div class="abs-inline"><span>ABS</span><output id="cr-${code}-abs" class="abs-output" aria-live="polite" for="cr-${code}-qp cr-${code}-qa">—</output></div>
+            <div class="abs-inline"><span>ABS <span class="balance-caption">(saldo do quadro: QA − QP)</span></span><output id="cr-${code}-abs" class="abs-output" aria-live="polite" for="cr-${code}-qp cr-${code}-qa">—</output></div>
+            <div class="personnel-breakdown">
+              <div class="metrics-head">Ocorrências de pessoal <span class="breakdown-optional">(opcional)</span></div>
+              <div class="people-grid">
+                <div class="field"><label for="cr-${code}-absences">Ausências (absenteísmo)</label>${inputHtml(code,'absences','Ausências por absenteísmo','number')}</div>
+                <div class="field"><label for="cr-${code}-openPositions">Vagas abertas</label>${inputHtml(code,'openPositions','Vagas abertas','number')}</div>
+              </div>
+            </div>
             <details class="cr-optional"><summary><svg class="ui-icon" aria-hidden="true"><use href="#ico-note"/></svg><span>Desvios e pendências</span><svg class="ui-icon optional-chevron" aria-hidden="true"><use href="#ico-chevron"/></svg></summary>
               <div class="fields"><div class="field full"><label for="cr-${code}-issues">Desvios operacionais (opcional)</label><textarea id="cr-${code}-issues" data-field="issues" maxlength="700" placeholder="O que aconteceu? Impacto e ação tomada."></textarea></div>
               <div class="field full"><label for="cr-${code}-pending">Pendências do próximo turno (opcional)</label><textarea id="cr-${code}-pending" data-field="pending" maxlength="700" placeholder="O que ainda precisa ser concluído?"></textarea></div></div>
@@ -595,7 +611,7 @@
         if(!el)return false;
         el.textContent=ready?String(qa-qp):'—';
         el.classList.toggle('negative',ready&&qa<qp);
-        el.title=ready?(qa<qp?'Déficit de pessoal: QA abaixo do QP.':'ABS = QA - QP'):'Informe QP e QA para calcular.';
+        el.title=ready?'Saldo do quadro (QA - QP). Não representa automaticamente ausências: informe ausências e vagas abertas nos campos separados.':'Informe QP e QA para calcular o saldo.';
         const badge=document.querySelector(`[data-cr="${code}"] [data-progress]`);
         const informed=hasData(code);badge.textContent=informed?'Com dados':'Sem dados';badge.classList.toggle('ready',informed);
         return ready;
@@ -607,28 +623,42 @@
         if(!Number.isFinite(n)||!Number.isFinite(d)||n<=0)return '';
         return ` (${(d/n*100).toLocaleString('en-US',{maximumFractionDigits:1,useGrouping:false})}%)`;
       }
-      function pairLine(label,plan,actual,planLabel='Programado',actualLabel='Realizado',showPercentage=true){
+      // Formatação exclusiva da mensagem. Mantém todos os dados e a ordem dos indicadores.
+      // Sem separador de milhares: o ponto fica reservado às casas decimais.
+      function displayNumber(raw,decimal=false){
+        const value=String(raw??'').trim().replace(',','.');
+        if(!/^\d+(?:\.\d+)?$/.test(value))return value;
+        const [whole,fraction='']=value.split('.');
+        const normalized=whole.replace(/^0+(?=\d)/,'');
+        if(!decimal)return normalized;
+        // Mínimo de 2 casas para toneladas, sem descartar casas informadas pelo usuário.
+        const fractionDigits=fraction.replace(/0+$/,'').padEnd(2,'0');
+        return `${normalized}.${fractionDigits}`;
+      }
+      function pairLine(label,plan,actual,planLabel='Programado',actualLabel='Realizado',showPercentage=true,decimal=false){
         const parts=[];
-        if(plan!=='')parts.push(`${planLabel}: ${plan}`);
-        if(actual!=='')parts.push(`${actualLabel}: ${actual}`);
+        if(plan!=='')parts.push(`${planLabel}: ${displayNumber(plan,decimal)}`);
+        if(actual!=='')parts.push(`${actualLabel}: ${displayNumber(actual,decimal)}`);
         if(!parts.length)return null;
-        return `• ${label}: ${parts.join(' | ')}${showPercentage?perc(plan,actual):''}`;
+        const values=`${parts.join(' | ')}${showPercentage?perc(plan,actual):''}`;
+        // Rótulos longos ficam intactos numa linha, seguidos dos valores agrupados.
+        return label.length>16?`• *${label}:*\n  ${values}`:`• *${label}:* ${values}`;
       }
       function message(){
         const name=val('responsible'),codes=linked(name);
-        const lines=[`*${REPORT_TITLE}*`,''];
+        const lines=[`*${String(REPORT_TITLE).replace(/\s+/g,' ').trim()}*`,''];
         if(val('date'))lines.push(`*Data:* ${dateBr(val('date'))}`);
         if(val('shift'))lines.push(`*Turno:* ${val('shift')}`);
         if(name)lines.push(`*Supervisor:* ${name}`);
         for(const code of codes){
           const d=dataOf(code);
           if(!Object.values(d).some(v=>v!==''))continue;
-          const {vehiclesPlan:vp,vehiclesActual:va,volumePlan:mp,volumeActual:ma,itemsPlan:ip,itemsActual:ia,qp,qa,issues,pending}=d;
+          const {vehiclesPlan:vp,vehiclesActual:va,volumePlan:mp,volumeActual:ma,itemsPlan:ip,itemsActual:ia,qp,qa,absences,openPositions,issues,pending}=d;
           lines.push('',`*CR ${code} | ${CRS[code]}*`);
           const vehicleLine=pairLine('Veículos',vp,va);
           if(vehicleLine)lines.push(vehicleLine);
           if(!vehicleOnly(code)){
-            const volumeLine=pairLine(`Volume (${volumeUnit(code)})`,mp,ma);
+            const volumeLine=pairLine(`Volume (${volumeUnit(code)})`,mp,ma,'Programado','Realizado',true,volumeDecimals(code));
             if(volumeLine)lines.push(volumeLine);
           }
           if(ITEMS_CRS.has(code)){
@@ -638,12 +668,14 @@
           const peopleLine=pairLine('Quadro de pessoal',qp,qa,'Planejado','Ativo',false);
           if(peopleLine)lines.push(peopleLine);
           const nqp=numberVal(qp),nqa=numberVal(qa);
-          if(nqp!==null&&nqa!==null)lines.push(`• ABS: ${nqa-nqp}`);
-          if(fmt(issues))lines.push(`• Desvios: ${fmt(issues)}`);
-          if(fmt(pending))lines.push(`• Pendências: ${fmt(pending)}`);
+          if(nqp!==null&&nqa!==null)lines.push(`• *ABS (saldo do quadro):* ${nqa-nqp}`);
+          if(absences!=='')lines.push(`• *Ausências (absenteísmo):* ${displayNumber(absences)}`);
+          if(openPositions!=='')lines.push(`• *Vagas abertas:* ${displayNumber(openPositions)}`);
+          if(fmt(issues))lines.push(`• *Desvios:* ${fmt(issues)}`);
+          if(fmt(pending))lines.push(`• *Pendências:* ${fmt(pending)}`);
         }
-        if(val('turnStatus'))lines.push('','*FECHAMENTO GERAL*',`• Status: ${val('turnStatus')}`);
-        return lines.join('\n');
+        if(val('turnStatus'))lines.push('','*FECHAMENTO GERAL*',`• *Status:* ${val('turnStatus')}`);
+        return lines.join('\n').replace(/[ \t]+$/gm,'').replace(/\n{3,}/g,'\n\n').trim();
       }
       function save(){
         captureCurrent();draft.date=val('date');draft.shift=val('shift');draft.responsible=val('responsible');draft.turnStatus=val('turnStatus');
@@ -667,7 +699,7 @@
         if(!SUPERVISOR_CRS[val('responsible')])return focusError($('responsible'),'Selecione o supervisor.');
         if(!val('shift'))return focusError($('shift'),'Selecione o turno para continuar.');
         for(const code of linked()){
-          for(const f of ['qp','qa','vehiclesPlan','vehiclesActual',...(ITEMS_CRS.has(code)?['itemsPlan','itemsActual']:[])]){
+          for(const f of ['qp','qa','absences','openPositions','vehiclesPlan','vehiclesActual',...(ITEMS_CRS.has(code)?['itemsPlan','itemsActual']:[])]){
             const el=crInput(code,f);
             if(el?.value.trim()!==''&&numberVal(el.value.trim())===null)return focusError(el,`Informe um número inteiro válido no CR ${code}.`);
           }
