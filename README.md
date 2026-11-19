@@ -1,4 +1,4 @@
-# IN-HAUS | REPORT OPERACIONAL — v25
+# IN-HAUS | REPORT OPERACIONAL — v26
 
 Projeto completo para **GitHub `pablo1hsantos/Report`** e **Vercel `reportwhatsapp.vercel.app`**.
 
@@ -39,7 +39,8 @@ As variáveis já configuradas podem ser mantidas. Realize novo deploy após o c
 - Transporte: `Contrato | Disponíveis`, diferença automática e justificativa obrigatória quando houver déficit.
 - `ABS = QA − QP`; ausências e vagas abertas em campos separados; campos e CRs vazios omitidos; turno obrigatório.
 - Apenas o rótulo `ABS` no formulário e WhatsApp, sem `(saldo do quadro)`.
-- Botão flutuante à esquerda: lua ativa tema escuro, sol volta ao tema claro. A escolha fica salva no dispositivo.
+- Botão flutuante junto ao rodapé da janela: ícones redesenhados de lua e sol, sempre visíveis durante a rolagem, sem cobrir o botão do WhatsApp no celular. A escolha fica salva no dispositivo.
+- Interface refinada no report e na administração: tipografia, paleta institucional, alinhamento, campos, cards e botões; sem alterações nas regras de negócio.
 - Removidos os comentários explicativos indicados do formulário. Prévia disponível, sem “Ao vivo”.
 - Painel administrativo preservado e ampliado com a configuração **Somente quadro de pessoal** por CR.
 
