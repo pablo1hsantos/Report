@@ -7,8 +7,6 @@
   <meta name="description" content="Relatório operacional In-Haus: preencha o turno e compartilhe pelo WhatsApp.">
   <title>Report Operacional | In-Haus</title>
   <style>
-    a.btn[data-send]{text-decoration:none;-webkit-tap-highlight-color:transparent;}
-
     :root{color-scheme:light;--blue:#0086c8;--blue-strong:#006ba6;--navy:#17344b;--text:#21394c;--muted:#6f8090;--grey:#87939e;--border:#dee6eb;--bg:#f4f7f9;--white:#fff;--soft:#edf7fc;--green:#137b56;--shadow:0 9px 28px rgba(18,51,75,.055)}
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
@@ -81,6 +79,16 @@
     .chat-bubble{background:white;border:1px solid #d7e2dd;border-radius:6px 11px 11px 11px;box-shadow:0 3px 8px rgba(17,64,43,.07);padding:17px 16px;max-width:470px}
     .chat-bubble pre{margin:0;white-space:pre-wrap;word-break:break-word;font:12px/1.68 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:#31413a}
     .preview-actions{padding:17px 19px 19px;display:grid;gap:9px}
+    .preview-tabs{display:flex;gap:6px;padding:12px 18px;border-bottom:1px solid var(--border)}
+    .preview-tab{border:1px solid #d4e4ec;background:#f6fafc;color:#496679;border-radius:9px;padding:8px 14px;font-size:12px;font-weight:780}
+    .preview-tab[aria-pressed="true"]{background:#e4f4fc;border-color:#86c3df;color:var(--blue-strong)}
+    .image-preview-wrap{background:#e7eef2;padding:14px;max-height:620px;overflow:auto;text-align:center;min-height:135px}
+    .image-preview-wrap img{display:block;width:100%;height:auto;max-width:540px;margin:0 auto;border-radius:6px;box-shadow:0 5px 22px rgba(22,55,76,.14)}
+    .image-preview-wrap p{color:#6c8090;font-size:12px;padding:30px 6px;margin:0}
+    .image-preview-wrap[hidden],.chat-bg[hidden]{display:none!important}
+    .btn-download{background:#f5f8fa;color:#375366;border:1px solid #dce7ed}
+    .preview-help{font-size:11px;color:#718797;line-height:1.5;margin:0;padding:2px 2px 0}
+    @media(max-width:560px){.image-preview-wrap{padding:9px;max-height:500px}.preview-tabs{padding:10px 14px}.preview-actions .btn-flex{grid-template-columns:1fr 1fr}.preview-actions .btn-flex .btn{font-size:12px}}
     .btn{border:0;border-radius:10px;min-height:47px;display:flex;justify-content:center;align-items:center;gap:10px;font-size:13px;font-weight:830;transition:filter .12s}
     .btn:hover{filter:brightness(.97)}
     .btn:active{transform:translateY(1px)}
@@ -349,178 +357,6 @@
     .fleet-reason[hidden]{display:none!important}
     .fleet-reason textarea{font-size:16px;background:white;min-height:82px}
     @media(max-width:400px){.fleet-panel{padding:12px 10px}.fleet-panel .people-grid{gap:8px}}
-
-    /* Botão flutuante de tema, fixo durante a rolagem. */
-    .theme-float{position:fixed;z-index:45;top:48%;left:16px;transform:translateY(-50%);width:46px;height:46px;display:grid;place-items:center;border-radius:50%;border:1px solid #cbdce7;background:#fff;color:#146f9e;box-shadow:0 5px 20px #17395025;cursor:pointer;transition:background .18s,color .18s,box-shadow .18s}
-    .theme-float svg{width:23px;height:23px;display:block}.theme-float svg[hidden]{display:none}.theme-float:hover{box-shadow:0 7px 24px #17395040}.theme-float:focus-visible{outline:3px solid #7cbbe1;outline-offset:3px}
-    @media(max-width:1280px){.theme-float{left:7px}}
-    @media(max-width:767px){.theme-float{top:auto;bottom:calc(82px + env(safe-area-inset-bottom,0px));left:12px;transform:none;width:44px;height:44px}}
-    html[data-theme="dark"]{color-scheme:dark;--bg:#0c1723;--white:#142636;--navy:#eaf4fa;--text:#e4eff7;--muted:#a6baca;--border:#31495a;--blue:#44b8ee;--blue-strong:#72c9f4;--soft:#20394d;--shadow:0 8px 24px #0003}
-    html[data-theme="dark"] body{background:var(--bg);color:var(--text)}
-    html[data-theme="dark"] .panel,html[data-theme="dark"] .cr-card,html[data-theme="dark"] .chat-bubble{background:var(--white);border-color:var(--border)}
-    html[data-theme="dark"] .cr-card-head{background:linear-gradient(180deg,#20394c,#1b3346)}
-    html[data-theme="dark"] .cr-card-title,html[data-theme="dark"] .metrics-head,html[data-theme="dark"] .minor-head,html[data-theme="dark"] .field-title,html[data-theme="dark"] .metric-label,html[data-theme="dark"] label,html[data-theme="dark"] .cr-name,html[data-theme="dark"] .abs-inline,html[data-theme="dark"] .cr-counter{color:#d7eafa}
-    html[data-theme="dark"] .sub,html[data-theme="dark"] .hint,html[data-theme="dark"] .cr-counter span,html[data-theme="dark"] .privacy-note,html[data-theme="dark"] .head-right,html[data-theme="dark"] .footer{color:#a7bac9}
-    html[data-theme="dark"] input,html[data-theme="dark"] select,html[data-theme="dark"] textarea{background:#0f2030;color:#f3f8fd;border-color:#3b5769}
-    html[data-theme="dark"] input:focus,html[data-theme="dark"] select:focus,html[data-theme="dark"] textarea:focus{background:#162e40}
-    html[data-theme="dark"] ::placeholder{color:#91a7b8}
-    html[data-theme="dark"] .choice,html[data-theme="dark"] .shift-button,html[data-theme="dark"] .cr-control,html[data-theme="dark"] .cr-toggle,html[data-theme="dark"] .btn-plain,html[data-theme="dark"] .picker-trigger{background:#1e3446;color:#d6edfc;border-color:#466175}
-    html[data-theme="dark"] .choice[aria-pressed="true"],html[data-theme="dark"] .shift-button[aria-pressed="true"]{background:#174f6e;color:#fff;border-color:#68bde9}
-    html[data-theme="dark"] .number,html[data-theme="dark"] .cr-mark,html[data-theme="dark"] .cr-counter strong{background:#1a415b;color:#a8e3ff;border-color:#3b6b84}
-    html[data-theme="dark"] .cr-progress{background:#3c3325;color:#f3dbb3;border-color:#72572d}
-    html[data-theme="dark"] .cr-progress.ready{background:#163d30;color:#9be7bd;border-color:#2b7659}
-    html[data-theme="dark"] .cr-card-body,html[data-theme="dark"] .personnel-breakdown,html[data-theme="dark"] .fleet-panel{background:#142636;border-color:#38576c}
-    html[data-theme="dark"] .fleet-panel .people-grid input,html[data-theme="dark"] .personnel-breakdown .people-grid input,html[data-theme="dark"] .fleet-reason textarea{background:#0f2030}
-    html[data-theme="dark"] .abs-output{background:#20485e;color:#bce9ff;border-color:#3b7695}
-    html[data-theme="dark"] .abs-output.negative{background:#543c24;color:#ffd3a2;border-color:#8b6734}
-    html[data-theme="dark"] .chat-bg{background-color:#0e211d;background-image:radial-gradient(#264239 .9px,transparent .9px)}
-    html[data-theme="dark"] .chat-bubble pre{color:#e7f5ed}
-    html[data-theme="dark"] .preview-heading{border-color:#31495a}
-    html[data-theme="dark"] .btn-copy,html[data-theme="dark"] .btn-preview{background:#17435a;color:#c1ebff;border-color:#3c6981}
-    html[data-theme="dark"] .mobile-actions{background:rgba(16,31,44,.97)}
-    html[data-theme="dark"] .picker-menu,html[data-theme="dark"] .picker-options,html[data-theme="dark"] .picker-search-box{background:#162a3a;color:#d9ebf7;border-color:#416176}
-    html[data-theme="dark"] .picker-option{background:#162a3a;color:#e3f3fd;border-color:#2f4a5e}
-    html[data-theme="dark"] .picker-option:hover,html[data-theme="dark"] .picker-option[aria-selected="true"]{background:#214e69;color:#fff}
-    html[data-theme="dark"] .theme-float{background:#223b4c;border-color:#557488;color:#ffd078}
-    html[data-theme="dark"] .cr-optional,html[data-theme="dark"] .split-divider,html[data-theme="dark"] .abs-inline,html[data-theme="dark"] .fleet-balance{border-color:#365165}
-    html[data-theme="dark"] .metrics-head:after{background:#365165}
-
-
-    /* v26 · refinamento visual institucional. Todas as regras de negócio são preservadas. */
-    :root{--bg:#f1f5f8;--white:#ffffff;--navy:#102e43;--text:#274455;--muted:#738a99;--border:#dce7ee;--shadow:0 7px 26px rgba(19,55,79,.055);--blue-strong:#0078b6}
-    body{background:radial-gradient(ellipse 75% 32% at 50% -10%,#e4f1f9 0%,transparent 85%),var(--bg);font-size:14px;letter-spacing:0}
-    .topline{height:4px;background:linear-gradient(90deg,#006a9f 0%,#0993d0 56%,#d2dde4 56%,#d2dde4 100%)}
-    .shell{max-width:1240px;padding:0 28px 44px}
-    .head{min-height:88px;border-bottom:1px solid #dce8ef;margin-bottom:3px}
-    .logo-icon{width:42px;height:42px}
-    .logo-word{font-size:25px;letter-spacing:-.06em}
-    .logo-word small{letter-spacing:.14em;font-size:8.3px;margin-top:6px}
-    .head-right{border:1px solid #dce9f1;background:#f9fcff;border-radius:999px;padding:9px 13px;font-size:10px;letter-spacing:.085em;color:#597587}
-    .title-row{margin:28px 0 25px;align-items:center}
-    .title-row h1{font-size:clamp(29px,3.15vw,38px);font-weight:800;letter-spacing:-.046em;margin:5px 0 0}
-    .eyebrow{font-size:10px;letter-spacing:.15em;color:#007fb9}
-    .privacy-note{display:none!important}
-    .layout{grid-template-columns:minmax(0,1.11fr) minmax(345px,.89fr);gap:22px}
-    .form-stack{gap:18px}
-    .panel{border:1px solid var(--border);border-radius:17px;box-shadow:var(--shadow)}
-    .panel-body{padding:25px 26px 26px}
-    .panel-head{gap:12px;margin-bottom:22px}
-    .panel-head h2{font-size:16px;letter-spacing:-.02em;font-weight:800}
-    .number{width:38px;height:38px;border-radius:11px;background:#e7f5fc;color:#006c9f;border:1px solid #cbe8f8;box-shadow:none;font-size:12px}
-    .sub{font-size:11.5px;margin-top:3px;line-height:1.4}
-    label,.field-title{font-size:12px;font-weight:760;color:#35576c}
-    .field{gap:8px}
-    .fields{gap:17px}
-    input,select,textarea{border-radius:11px;background:#fff;border-color:#cbdde8;min-height:49px;color:var(--text);box-shadow:0 1px 2px rgba(21,55,77,.025)}
-    input:focus,select:focus,textarea:focus{border-color:#259bd0;box-shadow:0 0 0 4px rgba(31,153,210,.13)}
-    .picker-trigger{min-height:54px;border-radius:12px;border-color:#bfd8e6;box-shadow:0 2px 4px rgba(18,62,91,.04)}
-    .shift-button{min-height:51px;border-radius:11px;border-color:#d3e3ec;font-size:12px}
-    .shift-button[aria-pressed="true"]{background:#e7f5fc;border-color:#43a0d2;box-shadow:inset 0 0 0 1px #43a0d2;font-weight:800}
-    .cr-counter{margin:0 0 14px;color:#627e90}
-    .cr-counter strong{color:#0077b2;border-color:#d4e9f4;background:#ecf7fd}
-    .cr-toolbar{margin-bottom:17px}
-    .cr-control{border-color:#cbdde8;background:#f7fbfe;box-shadow:none}
-    .cr-card{border-radius:14px;border-color:#d8e6ef;box-shadow:0 3px 12px rgba(29,68,91,.035)}
-    .cr-card-head{background:linear-gradient(90deg,#eff8fd,#f7fbfe);border-bottom-color:#deecf3;padding:15px 16px}
-    .cr-mark{width:40px;height:40px;border-color:#cee6f5;background:#e0f1fa;border-radius:11px}
-    .cr-card-title{font-size:14px;font-weight:810}
-    .cr-name{font-size:11.5px;color:#638092}
-    .cr-progress{font-size:10px}
-    .cr-toggle{border-color:#abd4e8;background:#fff;box-shadow:0 1px 3px rgba(16,58,89,.05)}
-    .cr-card-body{padding:21px 19px 19px;background:#fff}
-    .metrics-head{color:#597c91;letter-spacing:.085em;font-size:10.5px}
-    .metrics-head:after{background:#e2edf3}
-    .metric-grid{gap:9px 12px}
-    .metric-grid input{height:49px;min-height:49px}
-    .people-grid{gap:13px}
-    .personnel-breakdown{background:#f8fbfd;border:1px solid #e0edf4}
-    .fleet-panel{border-color:#cce5f2;background:#f4faff}
-    .status-bar{gap:9px}
-    .status-bar .choice{min-height:50px;border-radius:11px;background:#fff}
-    .preview-sticky{top:22px}
-    .preview-sticky .panel{border-color:#d6e4ec;box-shadow:0 10px 32px rgba(17,55,74,.08)}
-    .preview-heading{padding:19px 21px;display:flex;align-items:center;justify-content:flex-start;gap:12px;background:#fff}
-    .preview-heading h2{font-size:15px;font-weight:800}
-    .preview-heading:before{content:"";flex:none;width:31px;height:31px;border:1px solid #cfe9f8;border-radius:9px;background:#e9f7ff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230879b4' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 11.5a7.7 7.7 0 0 1-7.7 7.7H6l-3 2v-6.5a7.7 7.7 0 1 1 17-3.2Z'/%3E%3Cpath d='M7.5 10h9M7.5 13.5h6'/%3E%3C/svg%3E") center /19px no-repeat}
-    .chat-bg{padding:20px;background-color:#ebf3ef;background-image:radial-gradient(#d7e4de .75px,transparent .75px);background-size:20px 20px;max-height:520px}
-    .chat-bubble{max-width:none;border:1px solid #d5e2db;border-radius:6px 12px 12px 12px;box-shadow:0 3px 13px rgba(27,75,47,.06);padding:19px 18px}
-    .chat-bubble pre{font-size:12.4px;line-height:1.62;color:#2c433b}
-    .preview-actions{padding:18px 19px 20px;gap:11px;background:#fff}
-    .btn{min-height:49px;border-radius:11px;letter-spacing:0}
-    .btn-wa{background:#12865f;border:1px solid #0c7855;box-shadow:0 3px 10px rgba(16,127,88,.12)}
-    .btn-wa:hover{background:#0b7551;box-shadow:0 5px 12px rgba(16,127,88,.20)}
-    .btn-copy,.btn-preview{background:#edf7fc;border:1px solid #cce9f7;color:#056eaa}
-    .btn-plain{border-color:#dbe8ef;color:#61798a}
-    .footer{margin-top:33px;border-top:1px solid #dbe8ef;padding-top:21px;color:#8297a5;line-height:1.6;font-size:11px}
-    .footer a{font-weight:740;text-decoration:none!important;color:#587f98!important}
-    .footer a:hover{text-decoration:underline!important}
-    /* Alternador de aparência: fixo, elegante, junto ao rodapé da janela. */
-    .theme-float{position:fixed;top:auto;bottom:24px;left:20px;transform:none;width:52px;height:52px;z-index:35;display:flex;align-items:center;justify-content:center;border-radius:16px;border:1px solid #c1dbe9;background:linear-gradient(150deg,#fff,#eef7fd);color:#0877ad;box-shadow:0 0 0 5px rgba(230,242,250,.82),0 7px 22px rgba(23,69,95,.18);backdrop-filter:blur(10px);transition:background .18s,border-color .18s,box-shadow .18s,transform .18s}
-    .theme-float:before{content:"";position:absolute;inset:6px;border-radius:11px;background:#e1f2fb;opacity:.75;pointer-events:none}
-    .theme-float svg{position:relative;z-index:1;width:25px;height:25px;stroke-width:1.9;display:block;filter:drop-shadow(0 1px 0 rgba(255,255,255,.45))}
-    .theme-float svg[hidden]{display:none!important}
-    .theme-float:hover{background:#fff;border-color:#6eb6df;box-shadow:0 0 0 5px rgba(230,242,250,.95),0 9px 27px rgba(23,69,95,.22);transform:translateY(-2px)}
-    .theme-float:active{transform:scale(.97)}
-    .theme-float:focus-visible{outline:3px solid #48a9d6;outline-offset:6px}
-    .theme-tooltip{position:absolute;left:calc(100% + 15px);top:50%;transform:translateY(-50%);color:#fff;background:#1b435b;padding:7px 10px;white-space:nowrap;font-size:11px;font-weight:730;border-radius:8px;box-shadow:0 5px 14px #183d5522;opacity:0;pointer-events:none;transition:opacity .15s}
-    .theme-float:hover .theme-tooltip,.theme-float:focus-visible .theme-tooltip{opacity:1}
-    html[data-theme="dark"]{--bg:#101e2b;--white:#182d3c;--navy:#e8f3f9;--text:#dcebf3;--muted:#a8bfcd;--border:#344d5f;--shadow:0 9px 28px rgba(0,0,0,.21)}
-    html[data-theme="dark"] body{background:radial-gradient(ellipse 75% 32% at 50% -12%,#183a4f 0%,transparent 85%),var(--bg)}
-    html[data-theme="dark"] .head,html[data-theme="dark"] .footer{border-color:#2e4959}
-    html[data-theme="dark"] .head-right{background:#1b3547;border-color:#375469;color:#b1c8d5}
-    html[data-theme="dark"] .logo-word .haus{color:#a9c0cf}
-    html[data-theme="dark"] .panel,html[data-theme="dark"] .preview-sticky .panel,html[data-theme="dark"] .preview-heading,html[data-theme="dark"] .preview-actions{background:#182d3c;border-color:#355164}
-    html[data-theme="dark"] .panel-body,html[data-theme="dark"] .cr-card-body{background:#182d3c}
-    html[data-theme="dark"] .cr-card{border-color:#3a5769}
-    html[data-theme="dark"] .cr-card-head{background:linear-gradient(90deg,#203e52,#1d3546);border-color:#355164}
-    html[data-theme="dark"] .cr-name{color:#b1c9d8}
-    html[data-theme="dark"] .theme-float{background:linear-gradient(150deg,#263e4d,#1c3444);border-color:#527386;color:#ffd580;box-shadow:0 0 0 5px rgba(20,39,54,.75),0 7px 24px rgba(0,0,0,.29)}
-    html[data-theme="dark"] .theme-float:before{background:#415263;opacity:.48}
-    html[data-theme="dark"] .theme-float:hover{background:#2c4959;border-color:#799aaf}
-    html[data-theme="dark"] .theme-tooltip{background:#ddeef8;color:#1b3d51}
-    html[data-theme="dark"] .chat-bg{background-color:#102821;background-image:radial-gradient(#284336 .75px,transparent .75px)}
-    html[data-theme="dark"] .chat-bubble{background:#1c3746;border-color:#3b5b68}
-    html[data-theme="dark"] .chat-bubble pre{color:#edf6f2}
-    html[data-theme="dark"] .number{background:#1e4b63;color:#b6e7ff;border-color:#3b6a84}
-    html[data-theme="dark"] .metric-grid input,html[data-theme="dark"] .picker-trigger,html[data-theme="dark"] .shift-button,html[data-theme="dark"] .status-bar .choice{background:#152c3c;border-color:#456177;color:#e9f4fa}
-    html[data-theme="dark"] .footer a{color:#98d4f3!important}
-    @media(max-width:900px){
-      .shell{padding:0 20px 36px}
-      .layout{grid-template-columns:minmax(0,1fr)}
-      .head{min-height:75px}.title-row{margin:23px 0 20px}
-      .preview-sticky{position:static}
-    }
-    @media(max-width:767px){
-      .shell{padding:0 13px calc(123px + env(safe-area-inset-bottom,0px))}
-      .head{min-height:70px}
-      .head-right{display:none}
-      .title-row{margin:18px 2px 19px}
-      .title-row h1{font-size:30px}
-      .form-stack{gap:15px}
-      .panel{border-radius:16px}
-      .panel-body{padding:21px 18px 22px}
-      .panel-head{margin-bottom:18px}
-      .fields{gap:14px}
-      .cr-card-head{padding:13px 14px}
-      .cr-card-body{padding:17px 14px}
-      .chat-bg{padding:15px;max-height:none}
-      .chat-bubble{padding:16px 14px}
-      .preview-actions{padding:14px 16px}
-      .mobile-actions{z-index:26;background:rgba(255,255,255,.96);border-top-color:#d8e6ee;box-shadow:0 -7px 28px #1f466016;backdrop-filter:blur(15px)}
-      .theme-float{left:14px;bottom:calc(92px + env(safe-area-inset-bottom,0px));width:48px;height:48px;border-radius:15px;box-shadow:0 0 0 4px rgba(230,242,250,.8),0 7px 20px rgba(23,69,95,.17)}
-      .theme-float:before{inset:5px;border-radius:10px}
-      .theme-float svg{width:24px;height:24px}
-      .theme-tooltip{display:none}
-      html[data-theme="dark"] .mobile-actions{background:rgba(20,39,54,.96);border-color:#3b5767}
-    }
-    @media(max-width:380px){
-      .shell{padding-left:10px;padding-right:10px}
-      .panel-body{padding:18px 13px}
-      .title-row h1{font-size:27px}
-      .theme-float{left:13px;bottom:calc(86px + env(safe-area-inset-bottom,0px))}
-    }
-    @media(prefers-reduced-motion:reduce){.theme-float,.theme-tooltip{transition:none!important}}
-
   </style>
 </head>
 <body>
@@ -551,11 +387,11 @@
       </a>
       <div class="head-right"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M7 2v4m10-4v4M3 10h18"/></svg><span>COMUNICAÇÃO OPERACIONAL</span></div>
     </header>
-    <div class="title-row"><div><div class="eyebrow">Report diário</div><h1>Fechamento de turno</h1></div><span class="privacy-note">● Rascunho salvo neste dispositivo</span></div>
+    <div class="title-row"><div><div class="eyebrow">Report diário</div><h1>Fechamento de turno</h1><p class="lead">Informe os indicadores de cada CR e compartilhe o fechamento em uma única mensagem.</p></div><span class="privacy-note">● Rascunho salvo neste dispositivo</span></div>
     <div class="layout">
       <form id="reportForm" class="form-stack" novalidate>
         <section class="panel" aria-labelledby="h-ident"><div class="panel-body">
-          <div class="panel-head"><span class="number">01</span><div><h2 id="h-ident">Identificação</h2></div></div>
+          <div class="panel-head"><span class="number">01</span><div><h2 id="h-ident">Identificação</h2><p class="sub">Seu nome carrega automaticamente todas as operações vinculadas</p></div></div>
           <div class="fields">
             <div class="field full"><label id="supervisorLabel" for="supervisorTrigger">Supervisor <span class="req">*</span></label>
               <div class="quick-picker" id="supervisorPicker">
@@ -573,7 +409,7 @@
                 </div>
               </div>
               <select class="logic-select" id="responsible" name="responsible" required aria-hidden="true" tabindex="-1"><option value="">Selecione seu nome</option></select><input type="hidden" id="role" name="role" value=""></div>
-            
+            <div class="field"><label for="date">Data</label><input id="date" name="date" type="date"></div>
             <div class="field shift-field"><label id="shiftLabel">Turno <span class="req" aria-hidden="true">*</span></label>
               <div class="shift-buttons" id="shiftButtons" role="group" aria-labelledby="shiftLabel">
                 <button type="button" class="shift-button" data-shift="1º turno" aria-pressed="false">1º turno</button>
@@ -601,12 +437,20 @@
         </div></section>
       </form>
       <aside id="previewSection" class="preview-sticky" aria-label="Prévia do relatório">
-        <section class="panel"><div class="preview-heading"><div><h2>Mensagem pronta</h2></div></div>
-          <div class="chat-bg"><div class="chat-bubble"><pre id="preview" aria-live="polite"></pre></div></div>
+        <section class="panel">
+          <div class="preview-heading"><div><h2>Relatório pronto</h2><p class="sub">Imagem formatada para compartilhar no WhatsApp</p></div><span class="live">Ao vivo</span></div>
+          <div class="preview-tabs" role="group" aria-label="Formato de visualização">
+            <button type="button" class="preview-tab" id="imageTab" aria-pressed="true">Imagem</button>
+            <button type="button" class="preview-tab" id="textTab" aria-pressed="false">Texto</button>
+          </div>
+          <div class="image-preview-wrap" id="imagePreviewPanel"><p id="imageWaiting">Gerando prévia da imagem…</p><img id="imagePreview" alt="Imagem do relatório operacional gerada com os dados preenchidos" hidden></div>
+          <div class="chat-bg" id="textPreviewPanel" hidden><div class="chat-bubble"><pre id="preview" aria-live="polite"></pre></div></div>
           <div class="preview-actions">
-            <a class="btn btn-wa" data-send href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="Abrir WhatsApp com a mensagem pronta"><svg class="ui-icon" aria-hidden="true"><use href="#ico-send"/></svg><span>Enviar pelo WhatsApp</span></a>
-          <div class="btn-flex"><button type="button" id="copyBtn" class="btn btn-copy"><svg class="ui-icon" aria-hidden="true"><use href="#ico-copy"/></svg>Copiar mensagem</button><button type="button" id="resetBtn" class="btn btn-plain" title="Iniciar novo report com supervisor em branco"><svg class="ui-icon" aria-hidden="true"><use href="#ico-reset"/></svg>Novo report</button></div>
-</div>
+            <button type="button" class="btn btn-wa" data-send-image><svg class="ui-icon" aria-hidden="true"><use href="#ico-send"/></svg><span>Compartilhar imagem</span></button>
+            <p class="preview-help">No celular, escolha o WhatsApp e o grupo. No computador, copie a imagem e cole na conversa.</p>
+            <div class="btn-flex"><button type="button" id="copyImageBtn" class="btn btn-copy"><svg class="ui-icon" aria-hidden="true"><use href="#ico-copy"/></svg>Copiar imagem</button><button type="button" id="downloadImageBtn" class="btn btn-download">Baixar PNG</button></div>
+            <div class="btn-flex"><button type="button" id="copyBtn" class="btn btn-plain" title="Copiar versão em texto">Copiar texto</button><button type="button" id="resetBtn" class="btn btn-plain" title="Iniciar novo report">Novo report</button></div>
+          </div>
         </section>
       </aside>
     </div>
@@ -614,26 +458,20 @@
   </main>
   <div class="mobile-actions">
     <button type="button" class="btn btn-preview" id="showPreview"><svg class="ui-icon" aria-hidden="true"><use href="#ico-eye"/></svg><span>Prévia</span></button>
-    <a class="btn btn-wa" data-send href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="Abrir WhatsApp com a mensagem pronta para escolher o grupo e enviar"><svg class="ui-icon" aria-hidden="true"><use href="#ico-send"/></svg><span>Enviar pelo WhatsApp</span></a>
+    <button type="button" class="btn btn-wa" data-send-image aria-label="Compartilhar imagem do relatório para selecionar o WhatsApp e o grupo"><svg class="ui-icon" aria-hidden="true"><use href="#ico-send"/></svg><span>Compartilhar imagem</span></button>
   </div>
-  <button class="theme-float" type="button" id="themeToggle" aria-label="Ativar tema escuro" title="Ativar tema escuro">
-    <svg id="themeMoon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.9 14.5A8.9 8.9 0 0 1 9.5 3.1 8.9 8.9 0 1 0 20.9 14.5Z"/><path d="M17.4 2.2v3.5m-1.75-1.75h3.5M21 6.4v2.4m-1.2-1.2h2.4"/></svg>
-    <svg id="themeSun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><circle cx="12" cy="12" r="4.1"/><path d="M12 1.8v2.5m0 15.4v2.5M4.8 4.8l1.8 1.8m10.8 10.8 1.8 1.8M1.8 12h2.5m15.4 0h2.5M4.8 19.2l1.8-1.8M17.4 6.6l1.8-1.8"/></svg>
-    <span class="theme-tooltip" id="themeTooltip" aria-hidden="true">Tema escuro</span>
-  </button>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script>
     (()=>{
       'use strict';
-      const DEFAULT_CONFIG={"revision":"inicial","reportTitle":"IN-HAUS | REPORT OPERACIONAL","shifts":["1º turno","2º turno","3º turno","Administrativo"],"units":[{"name":"toneladas","decimals":true},{"name":"produtos","decimals":false}],"crs":[{"code":"27299","name":"Whirlpool Rio Claro","unit":"produtos","vehiclesOnly":false,"itemsEnabled":false},{"code":"64399","name":"Arcelor HUB","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":true},{"code":"65496","name":"Arcelor Trefila","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":false,"peopleOnly":true},{"code":"66003","name":"Arcelor Transporte","unit":"","vehiclesOnly":true,"itemsEnabled":false,"fleetAvailabilityEnabled":true},{"code":"66655","name":"Arcelor Belgo","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":false,"peopleOnly":true},{"code":"74590","name":"Arcelor CDB AE","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":true},{"code":"77850","name":"Arcelor CDB III","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":true},{"code":"85080","name":"Arcelor Inspeções IRC","unit":"","vehiclesOnly":true,"itemsEnabled":false},{"code":"85082","name":"Arcelor Inspeções PIR","unit":"","vehiclesOnly":true,"itemsEnabled":false},{"code":"97478","name":"Whirlpool Jundiai","unit":"produtos","vehiclesOnly":false,"itemsEnabled":false},{"code":"97487","name":"Arcelor Peação","unit":"","vehiclesOnly":true,"itemsEnabled":false}],"supervisors":[{"name":"LINCOLN LIMA DA CUNHA","defaultShift":"","crs":["97478"]},{"name":"ADRIANO BEZERRA DE SOUZA","defaultShift":"","crs":["66655"]},{"name":"ALLAN DA TRINDADE ALVES","defaultShift":"","crs":["66655"]},{"name":"RAFAEL RODRIGUES ZARATINI","defaultShift":"","crs":["85080","85082"]},{"name":"DIEGO FLORIN DA SILVA","defaultShift":"","crs":["27299"]},{"name":"ALEXANDRE FERNANDO BARBOSA","defaultShift":"Administrativo","crs":["64399","74590","77850","97487"]},{"name":"SANDRO ALEXANDRE DA SILVA","defaultShift":"","crs":["66003","65496"]},{"name":"ALEF AUGUSTO FRANCA","defaultShift":"3º turno","crs":["64399","74590","77850","97487"]},{"name":"GABRIELLE PAES JANUARIO DA SILVA","defaultShift":"","crs":["97478"]}],"schemaVersion":2};
-      let SUPERVISOR_CRS={},CRS={},VEHICLES_ONLY=new Set(),PEOPLE_ONLY=new Set(),ITEMS_CRS=new Set(),FLEET_CRS=new Set(),FIXED_SHIFTS={},UNITS={},REPORT_TITLE='IN-HAUS | REPORT OPERACIONAL';
+      const DEFAULT_CONFIG={"revision":"inicial","reportTitle":"IN-HAUS | REPORT OPERACIONAL","shifts":["1º turno","2º turno","3º turno","Administrativo"],"units":[{"name":"toneladas","decimals":true},{"name":"produtos","decimals":false}],"crs":[{"code":"27299","name":"Whirlpool Rio Claro","unit":"produtos","vehiclesOnly":false,"itemsEnabled":false},{"code":"64399","name":"Arcelor HUB","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":true},{"code":"65496","name":"Arcelor Trefila","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":false},{"code":"66003","name":"Arcelor Transporte","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":false,"fleetAvailabilityEnabled":true},{"code":"66655","name":"Arcelor Belgo","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":false},{"code":"74590","name":"Arcelor CDB AE","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":true},{"code":"77850","name":"Arcelor CDB III","unit":"toneladas","vehiclesOnly":false,"itemsEnabled":true},{"code":"85080","name":"Arcelor Inspeções IRC","unit":"","vehiclesOnly":true,"itemsEnabled":false},{"code":"85082","name":"Arcelor Inspeções PIR","unit":"","vehiclesOnly":true,"itemsEnabled":false},{"code":"97478","name":"Whirlpool Jundiai","unit":"produtos","vehiclesOnly":false,"itemsEnabled":false},{"code":"97487","name":"Arcelor Peação","unit":"","vehiclesOnly":true,"itemsEnabled":false}],"supervisors":[{"name":"LINCOLN LIMA DA CUNHA","defaultShift":"","crs":["97478"]},{"name":"ADRIANO BEZERRA DE SOUZA","defaultShift":"","crs":["66655"]},{"name":"ALLAN DA TRINDADE ALVES","defaultShift":"","crs":["66655"]},{"name":"RAFAEL RODRIGUES ZARATINI","defaultShift":"","crs":["85080","85082"]},{"name":"DIEGO FLORIN DA SILVA","defaultShift":"","crs":["27299"]},{"name":"ALEXANDRE FERNANDO BARBOSA","defaultShift":"Administrativo","crs":["64399","74590","77850","97487"]},{"name":"SANDRO ALEXANDRE DA SILVA","defaultShift":"","crs":["66003","65496"]},{"name":"ALEF AUGUSTO FRANCA","defaultShift":"3º turno","crs":["64399","74590","77850","97487"]},{"name":"GABRIELLE PAES JANUARIO DA SILVA","defaultShift":"","crs":["97478"]}]};
+      let SUPERVISOR_CRS={},CRS={},VEHICLES_ONLY=new Set(),ITEMS_CRS=new Set(),FLEET_CRS=new Set(),FIXED_SHIFTS={},UNITS={},REPORT_TITLE='IN-HAUS | REPORT OPERACIONAL';
       const fields=['vehiclesPlan','vehiclesActual','volumePlan','volumeActual','itemsPlan','itemsActual','fleetTotal','fleetAvailable','fleetReason','qp','qa','absences','openPositions','issues','pending'];
       function applyConfig(config){
         const c=config&&Array.isArray(config.supervisors)&&Array.isArray(config.crs)?config:DEFAULT_CONFIG;
         SUPERVISOR_CRS=Object.fromEntries(c.supervisors.map(s=>[s.name,s.crs]));
         CRS=Object.fromEntries(c.crs.map(x=>[x.code,x.name]));
         VEHICLES_ONLY=new Set(c.crs.filter(x=>x.vehiclesOnly).map(x=>x.code));
-        PEOPLE_ONLY=new Set(c.crs.filter(x=>x.peopleOnly).map(x=>x.code));
         ITEMS_CRS=new Set(c.crs.filter(x=>x.itemsEnabled&&!x.vehiclesOnly).map(x=>x.code));
         FLEET_CRS=new Set(c.crs.filter(x=>x.fleetAvailabilityEnabled===undefined ? x.code==='66003' : !!x.fleetAvailabilityEnabled).map(x=>x.code));
         FIXED_SHIFTS=Object.fromEntries(c.supervisors.filter(x=>x.defaultShift).map(x=>[x.name,x.defaultShift]));
@@ -648,7 +486,7 @@
         }
         const names=$('responsible');names.replaceChildren();opt(names,'','Selecione seu nome');
         const options=$('supervisorOptions');options.replaceChildren();
-        for(const name of Object.keys(SUPERVISOR_CRS).sort((a,b)=>a.localeCompare(b,'pt-BR',{sensitivity:'base'}))){
+        for(const name of Object.keys(SUPERVISOR_CRS)){
           opt(names,name,name);
           const item=document.createElement('button');item.type='button';item.className='picker-option';
           item.dataset.supervisor=name;item.setAttribute('role','option');item.setAttribute('aria-selected','false');
@@ -659,27 +497,9 @@
         }
       }
       const vehicleOnly=code=>VEHICLES_ONLY.has(code);
-      const peopleOnly=code=>PEOPLE_ONLY.has(code);
       const volumeUnit=code=>window.__INHAUS_CR_META__?.[code]?.unit||'toneladas';
       const volumeDecimals=code=>!!UNITS[volumeUnit(code)]?.decimals;
       const key='inhaus-report-operacional-v12';
-      const themeKey='inhaus-report-theme';
-      function applyTheme(theme){
-        const dark=theme==='dark';
-        document.documentElement.dataset.theme=dark?'dark':'light';
-        const toggle=document.getElementById('themeToggle');
-        const label=dark?'Ativar tema claro':'Ativar tema escuro';
-        toggle.title=label;toggle.setAttribute('aria-label',label);
-        document.getElementById('themeTooltip').textContent=dark?'Tema claro':'Tema escuro';
-        document.getElementById('themeMoon').toggleAttribute('hidden',dark);
-        document.getElementById('themeSun').toggleAttribute('hidden',!dark);
-        document.querySelector('meta[name="theme-color"]')?.setAttribute('content',dark?'#0c1723':'#006ba6');
-      }
-      try{applyTheme(localStorage.getItem(themeKey)==='dark'?'dark':'light')}catch(e){applyTheme('light')}
-      document.getElementById('themeToggle').addEventListener('click',()=>{
-        const newTheme=document.documentElement.dataset.theme==='dark'?'light':'dark';
-        applyTheme(newTheme);try{localStorage.setItem(themeKey,newTheme)}catch(e){}
-      });
       const form=document.getElementById('reportForm'),preview=document.getElementById('preview'),toast=document.getElementById('toast');
       const $=id=>document.getElementById(id),val=id=>String($(id).value||'').trim();
       let activeSupervisor='',toastTimer;
@@ -700,11 +520,11 @@
       function crCard(code,index){
         const expanded=index===0;
         const volumeType=volumeDecimals(code)?'text':'number';
-        const volumeRow=(vehicleOnly(code)||peopleOnly(code))?'':`<span class="metric-label">Volume (${volumeUnit(code)})</span>${inputHtml(code,'volumePlan','Volume programado',volumeType)}${inputHtml(code,'volumeActual','Volume realizado',volumeType)}`;
-        const itemsRow=ITEMS_CRS.has(code)&&!peopleOnly(code)?`<span class="metric-label">Itens (quantidades)</span>${inputHtml(code,'itemsPlan','Itens programados')}${inputHtml(code,'itemsActual','Itens realizados')}`:'';
-        const fleetBlock=FLEET_CRS.has(code)&&!peopleOnly(code)?`<section class="fleet-panel" aria-label="Disponibilidade da frota"><div class="metrics-head">Disponibilidade de veículos</div>
-          <div class="people-grid"><div class="field"><label for="cr-${code}-fleetTotal">Contrato</label>${inputHtml(code,'fleetTotal','Veículos em contrato')}</div>
-          <div class="field"><label for="cr-${code}-fleetAvailable">Disponíveis</label>${inputHtml(code,'fleetAvailable','Veículos disponíveis para a operação')}</div></div>
+        const volumeRow=vehicleOnly(code)?'':`<span class="metric-label">Volume (${volumeUnit(code)})</span>${inputHtml(code,'volumePlan','Volume programado',volumeType)}${inputHtml(code,'volumeActual','Volume realizado',volumeType)}`;
+        const itemsRow=ITEMS_CRS.has(code)?`<span class="metric-label">Itens (quantidades)</span>${inputHtml(code,'itemsPlan','Itens programados')}${inputHtml(code,'itemsActual','Itens realizados')}`:'';
+        const fleetBlock=FLEET_CRS.has(code)?`<section class="fleet-panel" aria-label="Disponibilidade da frota"><div class="metrics-head">Disponibilidade de veículos</div>
+          <div class="people-grid"><div class="field"><label for="cr-${code}-fleetTotal">Veículos previstos</label>${inputHtml(code,'fleetTotal','Veículos previstos para a operação')}</div>
+          <div class="field"><label for="cr-${code}-fleetAvailable">Veículos disponíveis</label>${inputHtml(code,'fleetAvailable','Veículos disponíveis para a operação')}</div></div>
           <div class="fleet-balance"><span>Veículos indisponíveis</span><output id="cr-${code}-fleet-unavailable" class="abs-output" aria-live="polite">—</output></div>
           <div class="field fleet-reason" id="cr-${code}-fleet-reason-wrapper" hidden><label for="cr-${code}-fleetReason">Justificativa da indisponibilidade <span class="req">*</span></label>
           <textarea id="cr-${code}-fleetReason" data-field="fleetReason" maxlength="700" rows="3" placeholder="Ex.: 2 veículos em manutenção e 1 aguardando liberação."></textarea></div>
@@ -714,18 +534,18 @@
           <div class="cr-meta"><span class="cr-progress" data-progress>Sem dados</span>
           <button type="button" class="cr-toggle" data-cr-toggle aria-label="${expanded?'Recolher':'Expandir'} CR ${code}" aria-controls="cr-${code}-body" aria-expanded="${expanded}"><span>${expanded?'Recolher':'Expandir'}</span><svg class="ui-icon" aria-hidden="true"><use href="#ico-chevron"/></svg></button></div></div>
           <div class="cr-card-body" id="cr-${code}-body" ${expanded?'':'hidden'}>
-            ${peopleOnly(code)?'':`<div class="metrics-head">Programação x realizado</div>
+            <div class="metrics-head">Programação x realizado</div>
             <div class="metric-grid"><div></div><div class="col-label">Programado</div><div class="col-label">Realizado</div>
               <span class="metric-label">Veículos</span>${inputHtml(code,'vehiclesPlan','Veículos programados')}${inputHtml(code,'vehiclesActual','Veículos realizados')}
               ${volumeRow}
               ${itemsRow}
-            </div>`}
+            </div>
             ${fleetBlock}
             <div class="metrics-head">Quadro de pessoal</div>
             <div class="people-grid"><div class="field"><label for="cr-${code}-qp">Quadro Planejado</label>${inputHtml(code,'qp','Quadro Planejado','number')}</div>
               <div class="field"><label for="cr-${code}-qa">Quadro Ativo</label>${inputHtml(code,'qa','Quadro Ativo','number')}</div>
             </div>
-            <div class="abs-inline"><span>ABS</span><output id="cr-${code}-abs" class="abs-output" aria-live="polite" for="cr-${code}-qp cr-${code}-qa">—</output></div>
+            <div class="abs-inline"><span>Variação do quadro <span class="balance-caption">(Ativo − Planejado)</span></span><output id="cr-${code}-abs" class="abs-output" aria-live="polite" for="cr-${code}-qp cr-${code}-qa">—</output></div>
             <div class="personnel-breakdown">
               <div class="metrics-head">Ocorrências de pessoal <span class="breakdown-optional">(opcional)</span></div>
               <div class="people-grid">
@@ -829,7 +649,7 @@
         if(!el)return false;
         el.textContent=ready?String(qa-qp):'—';
         el.classList.toggle('negative',ready&&qa<qp);
-        el.title=ready?'Saldo do quadro (QA - QP). Não representa automaticamente ausências: informe ausências e vagas abertas nos campos separados.':'Informe QP e QA para calcular o saldo.';
+        el.title=ready?'Variação do quadro (Ativo − Planejado). Ausências e vagas abertas são informadas separadamente.':'Informe Quadro Planejado e Quadro Ativo para calcular a variação.';
         const badge=document.querySelector(`[data-cr="${code}"] [data-progress]`);
         const informed=hasData(code);badge.textContent=informed?'Com dados':'Sem dados';badge.classList.toggle('ready',informed);
         return ready;
@@ -873,51 +693,54 @@
         return label.length>16?`• *${label}:*\n  ${values}`:`• *${label}:* ${values}`;
       }
       function message(){
-        const name=val('responsible'),codes=linked(name),shift=val('shift');
-        const now=new Date();
-        const time=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-        const reportDate=dateBr(today());
-        const lines=[`*${String(REPORT_TITLE).replace(/\s+/g,' ').trim()}  ${reportDate} ${time}*`,''];
-        if(name)lines.push(`*Supervisor:* ${name}${shift?` (${shift})`:''}`);
+        const name=val('responsible'),codes=linked(name);
+        const lines=[`*${String(REPORT_TITLE).replace(/\s+/g,' ').trim()}*`,''];
+        if(val('date'))lines.push(`*Data:* ${dateBr(val('date'))}`);
+        if(val('shift'))lines.push(`*Turno:* ${val('shift')}`);
+        if(name)lines.push(`*Supervisor:* ${name}`);
         for(const code of codes){
           const d=dataOf(code);
           if(!Object.values(d).some(v=>v!==''))continue;
           const {vehiclesPlan:vp,vehiclesActual:va,volumePlan:mp,volumeActual:ma,itemsPlan:ip,itemsActual:ia,fleetTotal,fleetAvailable,fleetReason,qp,qa,absences,openPositions,issues,pending}=d;
-          lines.push('','━━━━━━━━━━━━━━━━━━━━',`*CR ${code} | ${CRS[code]}*`);
-          const vehicleLine=peopleOnly(code)?null:pairLine('Veículos',vp,va);
+          lines.push('',`*CR ${code} | ${CRS[code]}*`);
+          const vehicleLine=pairLine('Veículos',vp,va);
           if(vehicleLine)lines.push(vehicleLine);
           if(FLEET_CRS.has(code)){
-            const fleetLine=pairLine('Disponibilidade de veículos',fleetTotal,fleetAvailable,'Contrato','Disponíveis',false);
+            const fleetLine=pairLine('Disponibilidade de veículos',fleetTotal,fleetAvailable,'Previstos','Disponíveis',false);
             if(fleetLine)lines.push(fleetLine);
             const total=numberVal(fleetTotal),available=numberVal(fleetAvailable);
             if(total!==null&&available!==null&&available<=total){
               const unavailable=total-available;
-              if(unavailable>0)lines.push(`• *Indisponíveis:* ${unavailable}`);
+              lines.push(`• *Veículos indisponíveis:* ${unavailable}`);
               if(unavailable>0&&fmt(fleetReason))lines.push(`• *Justificativa:* ${fmt(fleetReason)}`);
             }
           }
-          if(!vehicleOnly(code)&&!peopleOnly(code)){
+          if(!vehicleOnly(code)){
             const volumeLine=pairLine(`Volume (${volumeUnit(code)})`,mp,ma,'Programado','Realizado',true,volumeDecimals(code));
             if(volumeLine)lines.push(volumeLine);
           }
-          if(ITEMS_CRS.has(code)&&!peopleOnly(code)){
+          if(ITEMS_CRS.has(code)){
             const itemsLine=pairLine('Itens (quantidades)',ip,ia);
             if(itemsLine)lines.push(itemsLine);
           }
-          const peopleLine=pairLine('Quadro de pessoal',qp,qa,'Planejado','Ativo',false);
-          if(peopleLine)lines.push(peopleLine);
+          // Variação do quadro é saldo entre ativo e planejado, não ausências.
+          // Exibir no próprio bloco de quadro de pessoal, sem linha de ABS.
           const nqp=numberVal(qp),nqa=numberVal(qa);
-          if(nqp!==null&&nqa!==null)lines.push(`• *ABS:* ${nqa-nqp}`);
+          const personnelParts=[];
+          if(qp!=='')personnelParts.push(`Planejado: ${displayNumber(qp)}`);
+          if(qa!=='')personnelParts.push(`Ativo: ${displayNumber(qa)}`);
+          if(nqp!==null&&nqa!==null)personnelParts.push(`Variação: ${nqa-nqp}`);
+          if(personnelParts.length)lines.push(`• *Quadro de pessoal:*\n  ${personnelParts.join(' | ')}`);
           if(absences!=='')lines.push(`• *Ausências (absenteísmo):* ${displayNumber(absences)}`);
           if(openPositions!=='')lines.push(`• *Vagas abertas:* ${displayNumber(openPositions)}`);
           if(fmt(issues))lines.push(`• *Desvios:* ${fmt(issues)}`);
           if(fmt(pending))lines.push(`• *Pendências:* ${fmt(pending)}`);
         }
-        if(val('turnStatus'))lines.push('','━━━━━━━━━━━━━━━━━━━━','*FECHAMENTO GERAL*',`• *Status:* ${val('turnStatus')}`);
+        if(val('turnStatus'))lines.push('','*FECHAMENTO GERAL*',`• *Status:* ${val('turnStatus')}`);
         return lines.join('\n').replace(/[ \t]+$/gm,'').replace(/\n{3,}/g,'\n\n').trim();
       }
       function save(){
-        captureCurrent();draft.date=today();draft.shift=val('shift');draft.responsible=val('responsible');draft.turnStatus=val('turnStatus');
+        captureCurrent();draft.date=val('date');draft.shift=val('shift');draft.responsible=val('responsible');draft.turnStatus=val('turnStatus');
         try{localStorage.setItem(key,JSON.stringify(draft))}catch(e){}
       }
       function renderPreview(txt){
@@ -925,16 +748,7 @@
         while((match=regex.exec(txt))!==null){if(match.index>last)preview.appendChild(document.createTextNode(txt.slice(last,match.index)));const b=document.createElement('strong');b.textContent=match[1];preview.appendChild(b);last=regex.lastIndex}
         if(last<txt.length)preview.appendChild(document.createTextNode(txt.slice(last)));
       }
-      function update(){
-        updateCount();
-        const text=message();
-        renderPreview(text);
-        // Pré-calcular o link permite abrir em nova guia e preserva o formulário.
-        document.querySelectorAll('[data-send]').forEach(link=>{
-          link.href=whatsappUrl(text);
-        });
-        save();
-      }
+      function update(){updateCount();renderPreview(message());save()}
       function notify(text){clearTimeout(toastTimer);toast.textContent=text;toast.classList.add('show');toastTimer=setTimeout(()=>toast.classList.remove('show'),3600)}
       function focusError(el,msg){
         notify(msg);
@@ -949,13 +763,9 @@
         for(const code of linked()){
           for(const f of ['qp','qa','absences','openPositions','vehiclesPlan','vehiclesActual',...(ITEMS_CRS.has(code)?['itemsPlan','itemsActual']:[]),...(FLEET_CRS.has(code)?['fleetTotal','fleetAvailable']:[])]){
             const el=crInput(code,f);
-            // Alguns CRs não possuem certos indicadores (ex.: Trefila sem veículos).
-            // Não tente ler .value de campos que não existem no card.
-            if(!el)continue;
-            const raw=el.value.trim();
-            if(raw!==''&&numberVal(raw)===null)return focusError(el,`Informe um número inteiro válido no CR ${code}.`);
+            if(el?.value.trim()!==''&&numberVal(el.value.trim())===null)return focusError(el,`Informe um número inteiro válido no CR ${code}.`);
           }
-          if(FLEET_CRS.has(code)&&!peopleOnly(code)&&crInput(code,'fleetTotal')&&crInput(code,'fleetAvailable')){
+          if(FLEET_CRS.has(code)){
             const totalField=crInput(code,'fleetTotal'),availableField=crInput(code,'fleetAvailable');
             const total=totalField.value.trim(),available=availableField.value.trim();
             if((total==='')!== (available===''))return focusError(total===''?totalField:availableField,`Informe os veículos previstos e disponíveis no CR ${code}, ou deixe ambos vazios.`);
@@ -987,12 +797,12 @@
           // A escolha do supervisor é sempre manual, mesmo havendo rascunho salvo.
           draft={date:today(),responsible:'',shift:'',turnStatus:'',records:sameDay&&previous.records&&typeof previous.records==='object'?previous.records:{}};
         }
-        $('responsible').value='';syncShift('');closeSupervisorPicker();renderSupervisorChoice();
+        $('date').value=draft.date||today();$('responsible').value='';syncShift('');closeSupervisorPicker();renderSupervisorChoice();
         renderCRs('');setStatus('');
       }
       function newReport(){
         draft={date:today(),responsible:'',shift:'',turnStatus:'',records:{}};
-        $('responsible').value='';$('shift').value='';
+        $('date').value=today();$('responsible').value='';$('shift').value='';
         syncShift('');closeSupervisorPicker();renderSupervisorChoice();renderCRs('');setStatus('');window.scrollTo({top:0,behavior:'smooth'});notify('Novo report iniciado. Selecione o supervisor.');
       }
       // Cadastros centralizados são carregados antes de montar o formulário.
@@ -1045,42 +855,211 @@
       form.addEventListener('change',e=>{if(!e.target.closest('#crList')&&e.target.id!=='responsible')update()});
       $('statusChoices').addEventListener('click',e=>{const b=e.target.closest('button[data-value]');if(b)setStatus(val('turnStatus')===b.dataset.value?'':b.dataset.value)});
       form.addEventListener('submit',e=>e.preventDefault());
-      // O link oficial de compartilhamento permite enviar o texto para um grupo,
-      // mas a escolha do grupo é feita no próprio WhatsApp.
-      function whatsappUrl(text){
-        // Link universal oficial. No celular permite abrir o aplicativo instalado,
-        // com alternativa web, sem depender de um esquema customizado bloqueável.
-        return 'https://wa.me/?text='+encodeURIComponent(text);
+      // O relatório em imagem é gerado a partir da mensagem já validada.
+      // Assim, os campos omitidos e as regras dos CRs são idênticos às da versão em texto.
+      const imageCache={text:null,blob:null,promise:null,url:null};
+      let imageTimer=null;
+      function parseImageSections(raw){
+        const sections=[{type:'intro',title:'',lines:[]}];let current=sections[0];
+        for(const rawLine of raw.split('\n')){
+          const clean=rawLine.replace(/\*/g,'').trim();if(!clean)continue;
+          if(/^CR\s+\w+\s*\|/.test(clean)){
+            current={type:'cr',title:clean,lines:[]};sections.push(current);continue;
+          }
+          if(clean==='FECHAMENTO GERAL'){
+            current={type:'closing',title:clean,lines:[]};sections.push(current);continue;
+          }
+          if(current.type==='intro'&&!current.title){current.title=clean;continue;}
+          if(clean.startsWith('• ')){
+            const match=clean.slice(2).match(/^([^:]+):\s*(.*)$/);
+            current.lines.push(match?{label:match[1],value:match[2]}:{label:'',value:clean.slice(2)});
+          }else if(current.lines.length&&rawLine.match(/^\s+/)&&current.type!=='intro'){
+            current.lines[current.lines.length-1].value+=(current.lines[current.lines.length-1].value?' ':'')+clean;
+          }else if(current.type==='intro'){
+            const match=clean.match(/^([^:]+):\s*(.*)$/);
+            current.lines.push(match?{label:match[1],value:match[2]}:{label:'',value:clean});
+          }else if(current.lines.length){
+            current.lines[current.lines.length-1].value+=' '+clean;
+          }else current.lines.push({label:'',value:clean});
+        }
+        return sections;
+      }
+      function rounded(ctx,x,y,w,h,r,fill,stroke){
+        ctx.beginPath();ctx.roundRect(x,y,w,h,r);
+        if(fill){ctx.fillStyle=fill;ctx.fill()}
+        if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1.3;ctx.stroke()}
+      }
+      function wrapForImage(ctx,text,maxWidth,font){
+        ctx.font=font;const all=[];
+        for(const paragraph of String(text||'').split(/\n/)){
+          if(!paragraph){all.push('');continue}
+          let line='';
+          for(const word of paragraph.split(/\s+/).filter(Boolean)){
+            if(!line){line=word;continue}
+            const attempt=line+' '+word;
+            if(ctx.measureText(attempt).width<=maxWidth){line=attempt;continue}
+            all.push(line);line=word;
+            if(ctx.measureText(line).width>maxWidth){
+              let fragment='';
+              for(const ch of line){if(fragment&&ctx.measureText(fragment+ch).width>maxWidth){all.push(fragment);fragment=ch}else fragment+=ch}
+              line=fragment;
+            }
+          }
+          all.push(line);
+        }
+        return all;
+      }
+      function makeReportCanvas(raw){
+        const W=900,P=42,CW=W-P*2,ctx=document.createElement('canvas').getContext('2d');
+        const sections=parseImageSections(raw),intro=sections[0];
+        const font={title:'800 33px Arial, sans-serif',sub:'700 14px Arial, sans-serif',cr:'800 22px Arial, sans-serif',label:'700 16px Arial, sans-serif',value:'400 19px Arial, sans-serif',meta:'400 20px Arial, sans-serif'};
+        const valueMax=CW-54;
+        const layouts=[];let cursor=0;
+        const introTitle=wrapForImage(ctx,intro.title||'IN-HAUS | REPORT OPERACIONAL',CW-90,font.title);
+        const headerH=Math.max(158,75+introTitle.length*40);
+        cursor=headerH+26;
+        // Dados de identificação em um cartão leve, com linhas que se adaptam a nomes longos.
+        const metaRows=intro.lines.map(row=>({label:row.label,lines:wrapForImage(ctx,row.value,CW-52,font.meta)}));
+        let metaHeight=26;
+        for(const row of metaRows)metaHeight+=24+row.lines.length*26+7;
+        metaHeight+=10;
+        layouts.push({type:'meta',y:cursor,height:metaHeight,rows:metaRows});cursor+=metaHeight+22;
+        for(const sec of sections.slice(1)){
+          const rows=sec.lines.map(row=>({label:row.label,lines:wrapForImage(ctx,row.value,valueMax,font.value)}));
+          const headLines=wrapForImage(ctx,sec.title,CW-62,font.cr);
+          let height=25+headLines.length*30+14;
+          for(const row of rows)height+=(row.label?23:0)+Math.max(1,row.lines.length)*27+15;
+          height+=14;
+          layouts.push({type:sec.type,y:cursor,height,headLines,rows});cursor+=height+20;
+        }
+        const fullH=cursor+64;
+        // Criar somente após medir todo o texto: nada é cortado em relatórios longos.
+        const scale=1.5,canvas=document.createElement('canvas');
+        canvas.width=Math.round(W*scale);canvas.height=Math.ceil(fullH*scale);
+        const g=canvas.getContext('2d');g.scale(scale,scale);g.textBaseline='top';
+        g.fillStyle='#f1f6f9';g.fillRect(0,0,W,fullH);
+        g.fillStyle='#143d57';g.fillRect(0,0,W,headerH);
+        g.fillStyle='#0788c1';g.fillRect(0,0,11,headerH);
+        rounded(g,P,36,42,42,7,'#048bc6');
+        g.fillStyle='#fff';g.beginPath();g.moveTo(P+12,57);g.lineTo(P+22,46);g.lineTo(P+34,57);g.lineTo(P+22,68);g.closePath();g.fill();
+        g.fillStyle='#bce8fc';g.font=font.sub;g.fillText('IN-HAUS LOGÍSTICA',P+58,41);
+        g.fillStyle='#fff';g.font=font.title;
+        introTitle.forEach((line,i)=>g.fillText(line,P+58,73+i*40));
+        for(const sec of layouts){
+          const x=P,y=sec.y,w=CW;
+          rounded(g,x,y,w,sec.height,15,'#ffffff','#dce8ee');
+          if(sec.type==='meta'){
+            let ty=y+23;
+            for(const row of sec.rows){
+              if(row.label){g.font=font.sub;g.fillStyle='#698296';g.fillText(row.label.toUpperCase(),x+25,ty);ty+=24}
+              g.fillStyle='#1c3a50';g.font=font.meta;
+              for(const line of row.lines){g.fillText(line,x+25,ty);ty+=26}
+              ty+=7;
+            }
+          }else{
+            if(sec.type==='cr'){rounded(g,x+0,y+0,7,sec.height,0,'#0584bb')} // barra lateral
+            let ty=y+25;g.fillStyle='#163f57';g.font=font.cr;
+            for(const line of sec.headLines){g.fillText(line,x+28,ty);ty+=30}
+            ty+=13;
+            g.fillStyle='#d8e8ef';g.fillRect(x+28,ty,w-56,1);ty+=14;
+            for(const row of sec.rows){
+              if(row.label){g.fillStyle='#417288';g.font=font.label;g.fillText(row.label,x+28,ty);ty+=23}
+              g.fillStyle='#203c4d';g.font=font.value;
+              for(const line of row.lines.length?row.lines:['']){g.fillText(line,x+28,ty);ty+=27}
+              ty+=15;
+            }
+          }
+        }
+        g.fillStyle='#839baa';g.font='700 13px Arial, sans-serif';
+        g.fillText('REPORT OPERACIONAL  •  IN-HAUS LOGÍSTICA',P,fullH-38);
+        return canvas;
+      }
+      function getImageBlob(){
+        const text=message();
+        if(imageCache.text===text && imageCache.blob)return Promise.resolve(imageCache.blob);
+        if(imageCache.text===text && imageCache.promise)return imageCache.promise;
+        imageCache.text=text;imageCache.blob=null;
+        imageCache.promise=new Promise((resolve,reject)=>{
+          try{
+            const canvas=makeReportCanvas(text);
+            if(canvas.height>16000)throw new Error('Relatório longo demais para gerar uma única imagem.');
+            canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('Não foi possível converter o relatório em PNG.')),'image/png');
+          }catch(e){reject(e)}
+        }).then(blob=>{if(imageCache.text===text){imageCache.blob=blob}return blob}).finally(()=>{if(imageCache.text===text)imageCache.promise=null});
+        return imageCache.promise;
+      }
+      function scheduleImagePreview(){
+        clearTimeout(imageTimer);
+        imageTimer=setTimeout(async()=>{
+          try{
+            const text=message(),blob=await getImageBlob();if(text!==message())return;
+            if(imageCache.url)URL.revokeObjectURL(imageCache.url);
+            imageCache.url=URL.createObjectURL(blob);
+            const image=$('imagePreview');image.src=imageCache.url;image.hidden=false;$('imageWaiting').hidden=true;
+          }catch(e){$('imageWaiting').hidden=false;$('imageWaiting').textContent='Não foi possível gerar a prévia. '+e.message}
+        },300);
+      }
+      function setPreviewMode(mode){
+        $('imageTab').setAttribute('aria-pressed',String(mode==='image'));
+        $('textTab').setAttribute('aria-pressed',String(mode==='text'));
+        $('imagePreviewPanel').hidden=mode!=='image';
+        $('textPreviewPanel').hidden=mode!=='text';
+        if(mode==='image')scheduleImagePreview();
+      }
+      async function copyImage(blob){
+        if(!navigator.clipboard?.write||typeof ClipboardItem==='undefined')return false;
+        try{await navigator.clipboard.write([new ClipboardItem({'image/png':Promise.resolve(blob)})]);return true}
+        catch(e){return false}
+      }
+      function downloadImage(blob){
+        const objectUrl=URL.createObjectURL(blob),a=document.createElement('a');
+        a.href=objectUrl;a.download=`Report_InHaus_${val('date')||today()}.png`;
+        document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(objectUrl),20000);
       }
       async function copyMessage(text){
-        try {
-          if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(text);return true}
-        }catch(e){}
-        const ta=document.createElement('textarea');
-        ta.value=text;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;top:0;left:-9999px;opacity:0';
-        document.body.appendChild(ta);ta.select();
-        let copied=false;
+        try{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(text);return true}}catch(e){}
+        const ta=document.createElement('textarea');ta.value=text;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;top:0;left:-9999px;opacity:0';
+        document.body.appendChild(ta);ta.select();let copied=false;
         try{copied=document.execCommand('copy')}catch(e){}
-        ta.remove();
-        return copied;
+        ta.remove();return copied;
       }
-      document.querySelectorAll('[data-send]').forEach(link=>link.addEventListener('click',e=>{
-        if(!validate()){
-          e.preventDefault();
-          return;
-        }
-        // Atualiza data/hora exatamente no momento de compartilhar.
-        update();
-        link.href=whatsappUrl(message());
-        // O link universal abre em outra guia, preservando o rascunho caso o
-        // aplicativo não esteja instalado ou o navegador não o redirecione.
-        // A seleção do grupo e a confirmação são feitas no WhatsApp.
+      document.querySelectorAll('[data-send-image]').forEach(b=>b.addEventListener('click',async()=>{
+        if(!validate())return;
+        try{
+          const blob=await getImageBlob();
+          const file=new File([blob],`Report_InHaus_${val('date')||today()}.png`,{type:'image/png'});
+          const mobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+          if(mobile && navigator.share && navigator.canShare?.({files:[file]})){
+            try{await navigator.share({title:'IN-HAUS | REPORT OPERACIONAL',files:[file]});return}
+            catch(error){if(error?.name==='AbortError')return}
+          }
+          const copied=await copyImage(blob);
+          if(copied)notify('Imagem copiada. Abra o grupo no WhatsApp e cole.');
+          else{downloadImage(blob);notify('Imagem baixada. Anexe o PNG na conversa do WhatsApp.')}
+        }catch(e){notify('Não foi possível gerar a imagem: '+e.message)}
       }));
+      $('copyImageBtn').addEventListener('click',async()=>{
+        if(!validate())return;
+        try{
+          const blob=await getImageBlob();
+          if(await copyImage(blob))notify('Imagem copiada. Cole no WhatsApp com Ctrl+V ou Colar.');
+          else{downloadImage(blob);notify('Este navegador não permite copiar PNG. Imagem baixada para anexar.')}
+        }catch(e){notify('Erro ao copiar a imagem: '+e.message)}
+      });
+      $('downloadImageBtn').addEventListener('click',async()=>{
+        if(!validate())return;
+        try{downloadImage(await getImageBlob());notify('Imagem PNG pronta para anexar ou compartilhar.')}
+        catch(e){notify('Não foi possível baixar a imagem: '+e.message)}
+      });
+      $('imageTab').addEventListener('click',()=>setPreviewMode('image'));
+      $('textTab').addEventListener('click',()=>setPreviewMode('text'));
       $('copyBtn').addEventListener('click',async()=>{
         if(!validate())return;
-        const copied=await copyMessage(message());
-        notify(copied?'Mensagem copiada.':'Não foi possível copiar neste navegador.');
+        notify(await copyMessage(message())?'Texto copiado.':'Não foi possível copiar neste navegador.');
       });
+      // Acoplamento da prévia ao update original, mantendo o salvamento do rascunho.
+      const previousUpdate=update;
+      update=function(){previousUpdate();scheduleImagePreview()};
       $('resetBtn').addEventListener('click',()=>{if(confirm('Iniciar novo report? Todos os indicadores por CR e observações serão apagados.'))newReport()});
       $('showPreview').addEventListener('click',()=>$('previewSection').scrollIntoView({behavior:'smooth',block:'start'}));
     })();
