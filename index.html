@@ -527,7 +527,7 @@
             <div class="people-grid"><div class="field"><label for="cr-${code}-qp">Quadro Planejado</label>${inputHtml(code,'qp','Quadro Planejado','number')}</div>
               <div class="field"><label for="cr-${code}-qa">Quadro Ativo</label>${inputHtml(code,'qa','Quadro Ativo','number')}</div>
             </div>
-            <div class="abs-inline"><span>ABS <span class="balance-caption">(saldo do quadro: QA − QP)</span></span><output id="cr-${code}-abs" class="abs-output" aria-live="polite" for="cr-${code}-qp cr-${code}-qa">—</output></div>
+            <div class="abs-inline"><span>Variação do quadro <span class="balance-caption">(Ativo − Planejado)</span></span><output id="cr-${code}-abs" class="abs-output" aria-live="polite" for="cr-${code}-qp cr-${code}-qa">—</output></div>
             <div class="personnel-breakdown">
               <div class="metrics-head">Ocorrências de pessoal <span class="breakdown-optional">(opcional)</span></div>
               <div class="people-grid">
@@ -631,7 +631,7 @@
         if(!el)return false;
         el.textContent=ready?String(qa-qp):'—';
         el.classList.toggle('negative',ready&&qa<qp);
-        el.title=ready?'Saldo do quadro (QA - QP). Não representa automaticamente ausências: informe ausências e vagas abertas nos campos separados.':'Informe QP e QA para calcular o saldo.';
+        el.title=ready?'Variação do quadro: Ativo − Planejado. Ausências e vagas abertas são registradas separadamente.':'Informe o Quadro Planejado e o Quadro Ativo para calcular a variação.';
         const badge=document.querySelector(`[data-cr="${code}"] [data-progress]`);
         const informed=hasData(code);badge.textContent=informed?'Com dados':'Sem dados';badge.classList.toggle('ready',informed);
         return ready;
@@ -706,9 +706,12 @@
             if(itemsLine)lines.push(itemsLine);
           }
           const peopleLine=pairLine('Quadro de pessoal',qp,qa,'Planejado','Ativo',false);
-          if(peopleLine)lines.push(peopleLine);
-          const nqp=numberVal(qp),nqa=numberVal(qa);
-          if(nqp!==null&&nqa!==null)lines.push(`• *ABS (saldo do quadro):* ${nqa-nqp}`);
+          if(peopleLine){
+            const nqp=numberVal(qp),nqa=numberVal(qa);
+            const delta=nqp!==null&&nqa!==null?nqa-nqp:null;
+            const variation=delta===null?'':` | *Variação:* ${delta<0?'−'+Math.abs(delta):delta>0?'+'+delta:'0'}`;
+            lines.push(peopleLine+variation);
+          }
           if(absences!=='')lines.push(`• *Ausências (absenteísmo):* ${displayNumber(absences)}`);
           if(openPositions!=='')lines.push(`• *Vagas abertas:* ${displayNumber(openPositions)}`);
           if(fmt(issues))lines.push(`• *Desvios:* ${fmt(issues)}`);

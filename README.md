@@ -1,3 +1,23 @@
+# Report Operacional In-Haus v28 — Variação do quadro (aplicada sobre os arquivos v27)
+
+- No formulário, **ABS (saldo do quadro)** foi substituído por **Variação do quadro (Ativo − Planejado)**.
+- No texto do WhatsApp, os três valores aparecem **juntos na seção Quadro de pessoal**: Planejado, Ativo e Variação, apenas quando os dois números forem informados.
+- **Ausências (absenteísmo)** e **Vagas abertas** continuam campos independentes e opcionais. Zero preenchido é exibido; campos vazios são omitidos.
+- Exemplo com QP 16, QA 14, ausências 0 e 2 vagas abertas:
+
+```text
+• *Quadro de pessoal:*
+  Planejado: 16 | Ativo: 14 | *Variação:* −2
+• *Ausências (absenteísmo):* 0
+• *Vagas abertas:* 2
+```
+
+- Mantidos todos os cadastros do ADM, a API, a disponibilidade da frota, os indicadores de veículos/volume/itens, os turnos e as regras de preenchimento parcial.
+- **Importante:** o arquivo v27 anexado não contém gerador de PNG; esta atualização altera o formulário e a mensagem de texto disponíveis nele, sem acrescentar ou retirar funcionalidades externas ao pacote.
+- Para publicar, substitua os arquivos do repositório pelo conteúdo deste ZIP, incluindo as pastas `api/` e `lib/`. Não inclua senhas ou tokens no GitHub.
+
+---
+
 # Report Operacional In-Haus v23 — Disponibilidade da frota (Arcelor Transporte)
 
 Esta versão acrescenta **Disponibilidade de veículos** no **CR 66003 | Arcelor Transporte**, vinculado ao supervisor Sandro Alexandre da Silva. Os campos antigos de Veículos (Programado/Realizado), Volume, quadro de pessoal e demais indicadores **permanecem**.
@@ -31,7 +51,7 @@ Atualização da versão 20 com painel administrativo e API protegida.
 ## Mudança no formulário, por CR
 
 - **QP (Quadro Planejado)** e **QA (Quadro Ativo)** continuam como antes.
-- **ABS (saldo do quadro)** permanece calculado automaticamente: `QA - QP` (por exemplo, 12 planejados e 10 ativos = -2).
+- **ABS (saldo do quadro)** era o nome usado na versão 21; desde a v28 aparece como **Variação do quadro**, com o mesmo cálculo: `QA - QP` (por exemplo, 12 planejados e 10 ativos = -2).
 - **Ausências (absenteísmo)** é um novo campo opcional, numérico inteiro, preenchido pelo supervisor.
 - **Vagas abertas** é outro campo opcional, numérico inteiro, preenchido pelo supervisor.
 - Um saldo negativo **não é automaticamente classificado como absenteísmo**, nem como vaga aberta. A classificação é informada pelo responsável, mesmo quando a ausência foi coberta e o saldo do quadro ficou zero.
@@ -41,7 +61,7 @@ Atualização da versão 20 com painel administrativo e API protegida.
 ```
 *CR 64399 | Arcelor HUB*
 • Quadro de pessoal: Planejado: 12 | Ativo: 10
-• ABS (saldo do quadro): -2
+• Variação do quadro: -2
 • Ausências (absenteísmo): 1
 • Vagas abertas: 1
 ```
