@@ -79,16 +79,6 @@
     .chat-bubble{background:white;border:1px solid #d7e2dd;border-radius:6px 11px 11px 11px;box-shadow:0 3px 8px rgba(17,64,43,.07);padding:17px 16px;max-width:470px}
     .chat-bubble pre{margin:0;white-space:pre-wrap;word-break:break-word;font:12px/1.68 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:#31413a}
     .preview-actions{padding:17px 19px 19px;display:grid;gap:9px}
-    .preview-tabs{display:flex;gap:6px;padding:12px 18px;border-bottom:1px solid var(--border)}
-    .preview-tab{border:1px solid #d4e4ec;background:#f6fafc;color:#496679;border-radius:9px;padding:8px 14px;font-size:12px;font-weight:780}
-    .preview-tab[aria-pressed="true"]{background:#e4f4fc;border-color:#86c3df;color:var(--blue-strong)}
-    .image-preview-wrap{background:#e7eef2;padding:14px;max-height:620px;overflow:auto;text-align:center;min-height:135px}
-    .image-preview-wrap img{display:block;width:100%;height:auto;max-width:540px;margin:0 auto;border-radius:6px;box-shadow:0 5px 22px rgba(22,55,76,.14)}
-    .image-preview-wrap p{color:#6c8090;font-size:12px;padding:30px 6px;margin:0}
-    .image-preview-wrap[hidden],.chat-bg[hidden]{display:none!important}
-    .btn-download{background:#f5f8fa;color:#375366;border:1px solid #dce7ed}
-    .preview-help{font-size:11px;color:#718797;line-height:1.5;margin:0;padding:2px 2px 0}
-    @media(max-width:560px){.image-preview-wrap{padding:9px;max-height:500px}.preview-tabs{padding:10px 14px}.preview-actions .btn-flex{grid-template-columns:1fr 1fr}.preview-actions .btn-flex .btn{font-size:12px}}
     .btn{border:0;border-radius:10px;min-height:47px;display:flex;justify-content:center;align-items:center;gap:10px;font-size:13px;font-weight:830;transition:filter .12s}
     .btn:hover{filter:brightness(.97)}
     .btn:active{transform:translateY(1px)}
@@ -437,20 +427,12 @@
         </div></section>
       </form>
       <aside id="previewSection" class="preview-sticky" aria-label="Prévia do relatório">
-        <section class="panel">
-          <div class="preview-heading"><div><h2>Relatório pronto</h2><p class="sub">Imagem formatada para compartilhar no WhatsApp</p></div><span class="live">Ao vivo</span></div>
-          <div class="preview-tabs" role="group" aria-label="Formato de visualização">
-            <button type="button" class="preview-tab" id="imageTab" aria-pressed="true">Imagem</button>
-            <button type="button" class="preview-tab" id="textTab" aria-pressed="false">Texto</button>
-          </div>
-          <div class="image-preview-wrap" id="imagePreviewPanel"><p id="imageWaiting">Gerando prévia da imagem…</p><img id="imagePreview" alt="Imagem do relatório operacional gerada com os dados preenchidos" hidden></div>
-          <div class="chat-bg" id="textPreviewPanel" hidden><div class="chat-bubble"><pre id="preview" aria-live="polite"></pre></div></div>
+        <section class="panel"><div class="preview-heading"><div><h2>Mensagem pronta</h2><p class="sub">Prévia para compartilhar no WhatsApp</p></div><span class="live">Ao vivo</span></div>
+          <div class="chat-bg"><div class="chat-bubble"><pre id="preview" aria-live="polite"></pre></div></div>
           <div class="preview-actions">
-            <button type="button" class="btn btn-wa" data-send-image><svg class="ui-icon" aria-hidden="true"><use href="#ico-send"/></svg><span>Compartilhar imagem</span></button>
-            <p class="preview-help">No celular, escolha o WhatsApp e o grupo. No computador, copie a imagem e cole na conversa.</p>
-            <div class="btn-flex"><button type="button" id="copyImageBtn" class="btn btn-copy"><svg class="ui-icon" aria-hidden="true"><use href="#ico-copy"/></svg>Copiar imagem</button><button type="button" id="downloadImageBtn" class="btn btn-download">Baixar PNG</button></div>
-            <div class="btn-flex"><button type="button" id="copyBtn" class="btn btn-plain" title="Copiar versão em texto">Copiar texto</button><button type="button" id="resetBtn" class="btn btn-plain" title="Iniciar novo report">Novo report</button></div>
-          </div>
+            <button type="button" class="btn btn-wa" data-send><svg class="ui-icon" aria-hidden="true"><use href="#ico-send"/></svg><span>Enviar pelo WhatsApp</span></button>
+          <div class="btn-flex"><button type="button" id="copyBtn" class="btn btn-copy"><svg class="ui-icon" aria-hidden="true"><use href="#ico-copy"/></svg>Copiar mensagem</button><button type="button" id="resetBtn" class="btn btn-plain" title="Iniciar novo report com supervisor em branco"><svg class="ui-icon" aria-hidden="true"><use href="#ico-reset"/></svg>Novo report</button></div>
+</div>
         </section>
       </aside>
     </div>
@@ -458,7 +440,7 @@
   </main>
   <div class="mobile-actions">
     <button type="button" class="btn btn-preview" id="showPreview"><svg class="ui-icon" aria-hidden="true"><use href="#ico-eye"/></svg><span>Prévia</span></button>
-    <button type="button" class="btn btn-wa" data-send-image aria-label="Compartilhar imagem do relatório para selecionar o WhatsApp e o grupo"><svg class="ui-icon" aria-hidden="true"><use href="#ico-send"/></svg><span>Compartilhar imagem</span></button>
+    <button type="button" class="btn btn-wa" data-send aria-label="Abrir o WhatsApp com o relatório preenchido para selecionar o grupo e enviar"><svg class="ui-icon" aria-hidden="true"><use href="#ico-send"/></svg><span>Enviar pelo WhatsApp</span></button>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script>
@@ -545,7 +527,7 @@
             <div class="people-grid"><div class="field"><label for="cr-${code}-qp">Quadro Planejado</label>${inputHtml(code,'qp','Quadro Planejado','number')}</div>
               <div class="field"><label for="cr-${code}-qa">Quadro Ativo</label>${inputHtml(code,'qa','Quadro Ativo','number')}</div>
             </div>
-            <div class="abs-inline"><span>Variação do quadro <span class="balance-caption">(Ativo − Planejado)</span></span><output id="cr-${code}-abs" class="abs-output" aria-live="polite" for="cr-${code}-qp cr-${code}-qa">—</output></div>
+            <div class="abs-inline"><span>ABS <span class="balance-caption">(saldo do quadro: QA − QP)</span></span><output id="cr-${code}-abs" class="abs-output" aria-live="polite" for="cr-${code}-qp cr-${code}-qa">—</output></div>
             <div class="personnel-breakdown">
               <div class="metrics-head">Ocorrências de pessoal <span class="breakdown-optional">(opcional)</span></div>
               <div class="people-grid">
@@ -649,7 +631,7 @@
         if(!el)return false;
         el.textContent=ready?String(qa-qp):'—';
         el.classList.toggle('negative',ready&&qa<qp);
-        el.title=ready?'Variação do quadro (Ativo − Planejado). Ausências e vagas abertas são informadas separadamente.':'Informe Quadro Planejado e Quadro Ativo para calcular a variação.';
+        el.title=ready?'Saldo do quadro (QA - QP). Não representa automaticamente ausências: informe ausências e vagas abertas nos campos separados.':'Informe QP e QA para calcular o saldo.';
         const badge=document.querySelector(`[data-cr="${code}"] [data-progress]`);
         const informed=hasData(code);badge.textContent=informed?'Com dados':'Sem dados';badge.classList.toggle('ready',informed);
         return ready;
@@ -723,14 +705,10 @@
             const itemsLine=pairLine('Itens (quantidades)',ip,ia);
             if(itemsLine)lines.push(itemsLine);
           }
-          // Variação do quadro é saldo entre ativo e planejado, não ausências.
-          // Exibir no próprio bloco de quadro de pessoal, sem linha de ABS.
+          const peopleLine=pairLine('Quadro de pessoal',qp,qa,'Planejado','Ativo',false);
+          if(peopleLine)lines.push(peopleLine);
           const nqp=numberVal(qp),nqa=numberVal(qa);
-          const personnelParts=[];
-          if(qp!=='')personnelParts.push(`Planejado: ${displayNumber(qp)}`);
-          if(qa!=='')personnelParts.push(`Ativo: ${displayNumber(qa)}`);
-          if(nqp!==null&&nqa!==null)personnelParts.push(`Variação: ${nqa-nqp}`);
-          if(personnelParts.length)lines.push(`• *Quadro de pessoal:*\n  ${personnelParts.join(' | ')}`);
+          if(nqp!==null&&nqa!==null)lines.push(`• *ABS (saldo do quadro):* ${nqa-nqp}`);
           if(absences!=='')lines.push(`• *Ausências (absenteísmo):* ${displayNumber(absences)}`);
           if(openPositions!=='')lines.push(`• *Vagas abertas:* ${displayNumber(openPositions)}`);
           if(fmt(issues))lines.push(`• *Desvios:* ${fmt(issues)}`);
@@ -855,211 +833,38 @@
       form.addEventListener('change',e=>{if(!e.target.closest('#crList')&&e.target.id!=='responsible')update()});
       $('statusChoices').addEventListener('click',e=>{const b=e.target.closest('button[data-value]');if(b)setStatus(val('turnStatus')===b.dataset.value?'':b.dataset.value)});
       form.addEventListener('submit',e=>e.preventDefault());
-      // O relatório em imagem é gerado a partir da mensagem já validada.
-      // Assim, os campos omitidos e as regras dos CRs são idênticos às da versão em texto.
-      const imageCache={text:null,blob:null,promise:null,url:null};
-      let imageTimer=null;
-      function parseImageSections(raw){
-        const sections=[{type:'intro',title:'',lines:[]}];let current=sections[0];
-        for(const rawLine of raw.split('\n')){
-          const clean=rawLine.replace(/\*/g,'').trim();if(!clean)continue;
-          if(/^CR\s+\w+\s*\|/.test(clean)){
-            current={type:'cr',title:clean,lines:[]};sections.push(current);continue;
-          }
-          if(clean==='FECHAMENTO GERAL'){
-            current={type:'closing',title:clean,lines:[]};sections.push(current);continue;
-          }
-          if(current.type==='intro'&&!current.title){current.title=clean;continue;}
-          if(clean.startsWith('• ')){
-            const match=clean.slice(2).match(/^([^:]+):\s*(.*)$/);
-            current.lines.push(match?{label:match[1],value:match[2]}:{label:'',value:clean.slice(2)});
-          }else if(current.lines.length&&rawLine.match(/^\s+/)&&current.type!=='intro'){
-            current.lines[current.lines.length-1].value+=(current.lines[current.lines.length-1].value?' ':'')+clean;
-          }else if(current.type==='intro'){
-            const match=clean.match(/^([^:]+):\s*(.*)$/);
-            current.lines.push(match?{label:match[1],value:match[2]}:{label:'',value:clean});
-          }else if(current.lines.length){
-            current.lines[current.lines.length-1].value+=' '+clean;
-          }else current.lines.push({label:'',value:clean});
-        }
-        return sections;
-      }
-      function rounded(ctx,x,y,w,h,r,fill,stroke){
-        ctx.beginPath();ctx.roundRect(x,y,w,h,r);
-        if(fill){ctx.fillStyle=fill;ctx.fill()}
-        if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1.3;ctx.stroke()}
-      }
-      function wrapForImage(ctx,text,maxWidth,font){
-        ctx.font=font;const all=[];
-        for(const paragraph of String(text||'').split(/\n/)){
-          if(!paragraph){all.push('');continue}
-          let line='';
-          for(const word of paragraph.split(/\s+/).filter(Boolean)){
-            if(!line){line=word;continue}
-            const attempt=line+' '+word;
-            if(ctx.measureText(attempt).width<=maxWidth){line=attempt;continue}
-            all.push(line);line=word;
-            if(ctx.measureText(line).width>maxWidth){
-              let fragment='';
-              for(const ch of line){if(fragment&&ctx.measureText(fragment+ch).width>maxWidth){all.push(fragment);fragment=ch}else fragment+=ch}
-              line=fragment;
-            }
-          }
-          all.push(line);
-        }
-        return all;
-      }
-      function makeReportCanvas(raw){
-        const W=900,P=42,CW=W-P*2,ctx=document.createElement('canvas').getContext('2d');
-        const sections=parseImageSections(raw),intro=sections[0];
-        const font={title:'800 33px Arial, sans-serif',sub:'700 14px Arial, sans-serif',cr:'800 22px Arial, sans-serif',label:'700 16px Arial, sans-serif',value:'400 19px Arial, sans-serif',meta:'400 20px Arial, sans-serif'};
-        const valueMax=CW-54;
-        const layouts=[];let cursor=0;
-        const introTitle=wrapForImage(ctx,intro.title||'IN-HAUS | REPORT OPERACIONAL',CW-90,font.title);
-        const headerH=Math.max(158,75+introTitle.length*40);
-        cursor=headerH+26;
-        // Dados de identificação em um cartão leve, com linhas que se adaptam a nomes longos.
-        const metaRows=intro.lines.map(row=>({label:row.label,lines:wrapForImage(ctx,row.value,CW-52,font.meta)}));
-        let metaHeight=26;
-        for(const row of metaRows)metaHeight+=24+row.lines.length*26+7;
-        metaHeight+=10;
-        layouts.push({type:'meta',y:cursor,height:metaHeight,rows:metaRows});cursor+=metaHeight+22;
-        for(const sec of sections.slice(1)){
-          const rows=sec.lines.map(row=>({label:row.label,lines:wrapForImage(ctx,row.value,valueMax,font.value)}));
-          const headLines=wrapForImage(ctx,sec.title,CW-62,font.cr);
-          let height=25+headLines.length*30+14;
-          for(const row of rows)height+=(row.label?23:0)+Math.max(1,row.lines.length)*27+15;
-          height+=14;
-          layouts.push({type:sec.type,y:cursor,height,headLines,rows});cursor+=height+20;
-        }
-        const fullH=cursor+64;
-        // Criar somente após medir todo o texto: nada é cortado em relatórios longos.
-        const scale=1.5,canvas=document.createElement('canvas');
-        canvas.width=Math.round(W*scale);canvas.height=Math.ceil(fullH*scale);
-        const g=canvas.getContext('2d');g.scale(scale,scale);g.textBaseline='top';
-        g.fillStyle='#f1f6f9';g.fillRect(0,0,W,fullH);
-        g.fillStyle='#143d57';g.fillRect(0,0,W,headerH);
-        g.fillStyle='#0788c1';g.fillRect(0,0,11,headerH);
-        rounded(g,P,36,42,42,7,'#048bc6');
-        g.fillStyle='#fff';g.beginPath();g.moveTo(P+12,57);g.lineTo(P+22,46);g.lineTo(P+34,57);g.lineTo(P+22,68);g.closePath();g.fill();
-        g.fillStyle='#bce8fc';g.font=font.sub;g.fillText('IN-HAUS LOGÍSTICA',P+58,41);
-        g.fillStyle='#fff';g.font=font.title;
-        introTitle.forEach((line,i)=>g.fillText(line,P+58,73+i*40));
-        for(const sec of layouts){
-          const x=P,y=sec.y,w=CW;
-          rounded(g,x,y,w,sec.height,15,'#ffffff','#dce8ee');
-          if(sec.type==='meta'){
-            let ty=y+23;
-            for(const row of sec.rows){
-              if(row.label){g.font=font.sub;g.fillStyle='#698296';g.fillText(row.label.toUpperCase(),x+25,ty);ty+=24}
-              g.fillStyle='#1c3a50';g.font=font.meta;
-              for(const line of row.lines){g.fillText(line,x+25,ty);ty+=26}
-              ty+=7;
-            }
-          }else{
-            if(sec.type==='cr'){rounded(g,x+0,y+0,7,sec.height,0,'#0584bb')} // barra lateral
-            let ty=y+25;g.fillStyle='#163f57';g.font=font.cr;
-            for(const line of sec.headLines){g.fillText(line,x+28,ty);ty+=30}
-            ty+=13;
-            g.fillStyle='#d8e8ef';g.fillRect(x+28,ty,w-56,1);ty+=14;
-            for(const row of sec.rows){
-              if(row.label){g.fillStyle='#417288';g.font=font.label;g.fillText(row.label,x+28,ty);ty+=23}
-              g.fillStyle='#203c4d';g.font=font.value;
-              for(const line of row.lines.length?row.lines:['']){g.fillText(line,x+28,ty);ty+=27}
-              ty+=15;
-            }
-          }
-        }
-        g.fillStyle='#839baa';g.font='700 13px Arial, sans-serif';
-        g.fillText('REPORT OPERACIONAL  •  IN-HAUS LOGÍSTICA',P,fullH-38);
-        return canvas;
-      }
-      function getImageBlob(){
-        const text=message();
-        if(imageCache.text===text && imageCache.blob)return Promise.resolve(imageCache.blob);
-        if(imageCache.text===text && imageCache.promise)return imageCache.promise;
-        imageCache.text=text;imageCache.blob=null;
-        imageCache.promise=new Promise((resolve,reject)=>{
-          try{
-            const canvas=makeReportCanvas(text);
-            if(canvas.height>16000)throw new Error('Relatório longo demais para gerar uma única imagem.');
-            canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('Não foi possível converter o relatório em PNG.')),'image/png');
-          }catch(e){reject(e)}
-        }).then(blob=>{if(imageCache.text===text){imageCache.blob=blob}return blob}).finally(()=>{if(imageCache.text===text)imageCache.promise=null});
-        return imageCache.promise;
-      }
-      function scheduleImagePreview(){
-        clearTimeout(imageTimer);
-        imageTimer=setTimeout(async()=>{
-          try{
-            const text=message(),blob=await getImageBlob();if(text!==message())return;
-            if(imageCache.url)URL.revokeObjectURL(imageCache.url);
-            imageCache.url=URL.createObjectURL(blob);
-            const image=$('imagePreview');image.src=imageCache.url;image.hidden=false;$('imageWaiting').hidden=true;
-          }catch(e){$('imageWaiting').hidden=false;$('imageWaiting').textContent='Não foi possível gerar a prévia. '+e.message}
-        },300);
-      }
-      function setPreviewMode(mode){
-        $('imageTab').setAttribute('aria-pressed',String(mode==='image'));
-        $('textTab').setAttribute('aria-pressed',String(mode==='text'));
-        $('imagePreviewPanel').hidden=mode!=='image';
-        $('textPreviewPanel').hidden=mode!=='text';
-        if(mode==='image')scheduleImagePreview();
-      }
-      async function copyImage(blob){
-        if(!navigator.clipboard?.write||typeof ClipboardItem==='undefined')return false;
-        try{await navigator.clipboard.write([new ClipboardItem({'image/png':Promise.resolve(blob)})]);return true}
-        catch(e){return false}
-      }
-      function downloadImage(blob){
-        const objectUrl=URL.createObjectURL(blob),a=document.createElement('a');
-        a.href=objectUrl;a.download=`Report_InHaus_${val('date')||today()}.png`;
-        document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(objectUrl),20000);
+      // O link oficial de compartilhamento permite enviar o texto para um grupo,
+      // mas a escolha do grupo é feita no próprio WhatsApp.
+      function whatsappUrl(text){
+        const encoded=encodeURIComponent(text);
+        const mobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        return mobile?'whatsapp://send?text='+encoded:'https://wa.me/?text='+encoded;
       }
       async function copyMessage(text){
-        try{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(text);return true}}catch(e){}
-        const ta=document.createElement('textarea');ta.value=text;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;top:0;left:-9999px;opacity:0';
-        document.body.appendChild(ta);ta.select();let copied=false;
+        try {
+          if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(text);return true}
+        }catch(e){}
+        const ta=document.createElement('textarea');
+        ta.value=text;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;top:0;left:-9999px;opacity:0';
+        document.body.appendChild(ta);ta.select();
+        let copied=false;
         try{copied=document.execCommand('copy')}catch(e){}
-        ta.remove();return copied;
+        ta.remove();
+        return copied;
       }
-      document.querySelectorAll('[data-send-image]').forEach(b=>b.addEventListener('click',async()=>{
+      document.querySelectorAll('[data-send]').forEach(b=>b.addEventListener('click',()=>{
         if(!validate())return;
-        try{
-          const blob=await getImageBlob();
-          const file=new File([blob],`Report_InHaus_${val('date')||today()}.png`,{type:'image/png'});
-          const mobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-          if(mobile && navigator.share && navigator.canShare?.({files:[file]})){
-            try{await navigator.share({title:'IN-HAUS | REPORT OPERACIONAL',files:[file]});return}
-            catch(error){if(error?.name==='AbortError')return}
-          }
-          const copied=await copyImage(blob);
-          if(copied)notify('Imagem copiada. Abra o grupo no WhatsApp e cole.');
-          else{downloadImage(blob);notify('Imagem baixada. Anexe o PNG na conversa do WhatsApp.')}
-        }catch(e){notify('Não foi possível gerar a imagem: '+e.message)}
+        update();
+        const url=whatsappUrl(message());
+        // Celular: abre o aplicativo instalado com a mensagem pronta.
+        // Computador: abre o compartilhamento oficial com o texto pronto.
+        window.location.assign(url);
       }));
-      $('copyImageBtn').addEventListener('click',async()=>{
-        if(!validate())return;
-        try{
-          const blob=await getImageBlob();
-          if(await copyImage(blob))notify('Imagem copiada. Cole no WhatsApp com Ctrl+V ou Colar.');
-          else{downloadImage(blob);notify('Este navegador não permite copiar PNG. Imagem baixada para anexar.')}
-        }catch(e){notify('Erro ao copiar a imagem: '+e.message)}
-      });
-      $('downloadImageBtn').addEventListener('click',async()=>{
-        if(!validate())return;
-        try{downloadImage(await getImageBlob());notify('Imagem PNG pronta para anexar ou compartilhar.')}
-        catch(e){notify('Não foi possível baixar a imagem: '+e.message)}
-      });
-      $('imageTab').addEventListener('click',()=>setPreviewMode('image'));
-      $('textTab').addEventListener('click',()=>setPreviewMode('text'));
       $('copyBtn').addEventListener('click',async()=>{
         if(!validate())return;
-        notify(await copyMessage(message())?'Texto copiado.':'Não foi possível copiar neste navegador.');
+        const copied=await copyMessage(message());
+        notify(copied?'Mensagem copiada.':'Não foi possível copiar neste navegador.');
       });
-      // Acoplamento da prévia ao update original, mantendo o salvamento do rascunho.
-      const previousUpdate=update;
-      update=function(){previousUpdate();scheduleImagePreview()};
       $('resetBtn').addEventListener('click',()=>{if(confirm('Iniciar novo report? Todos os indicadores por CR e observações serão apagados.'))newReport()});
       $('showPreview').addEventListener('click',()=>$('previewSection').scrollIntoView({behavior:'smooth',block:'start'}));
     })();

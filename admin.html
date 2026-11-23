@@ -64,7 +64,7 @@ if(tab==='units'){
 }
 if(tab==='general'){
  html+=section('Configurações gerais','Personalize a identificação do relatório no WhatsApp.');
- html+=`<div class="field"><label>Título da mensagem</label><input id="reportTitle" maxlength="85" value="${escape(cfg.reportTitle)}" placeholder="IN-HAUS | REPORT OPERACIONAL"><div class="small">Uma linha em branco é mantida após o título da mensagem.</div></div><p class="footer-note">A variação do quadro é Ativo − Planejado; ausências e vagas abertas são indicadores diferentes. Os campos vazios continuam ocultos da mensagem. Os dados de preenchimento dos supervisores ficam no dispositivo deles; este painel controla apenas cadastros e regras.</p>`;
+ html+=`<div class="field"><label>Título da mensagem</label><input id="reportTitle" maxlength="85" value="${escape(cfg.reportTitle)}" placeholder="IN-HAUS | REPORT OPERACIONAL"><div class="small">Uma linha em branco é mantida após o título da mensagem.</div></div><p class="footer-note">O cálculo ABS continua QA − QP. Os campos vazios continuam ocultos da mensagem. Os dados de preenchimento dos supervisores ficam no dispositivo deles; este painel controla apenas cadastros e regras.</p>`;
 }
 e.innerHTML=html;}
 async function load(){const data=await api('load');cfg=data.config;revision=cfg.revision;dirty=false;$('lastSaved').textContent='Configuração carregada';$('lastSaved').style.background='';$('workspace').classList.remove('hidden');$('loginPanel').classList.add('hidden');$('logout').classList.remove('hidden');$('password').value='';notify('Cadastros carregados.','info');render();}
