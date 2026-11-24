@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#006ba6">
+  <meta name="theme-color" content="#002034">
   <meta name="description" content="Relatório operacional In-Haus: preencha o turno e compartilhe pelo WhatsApp.">
-  <title>Report Operacional | In-Haus</title>
+  <title>Report Operacional | In-Haus Logística</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/logo-inhaus-grupo-gps.svg">
   <style>
     :root{color-scheme:light;--blue:#0086c8;--blue-strong:#006ba6;--navy:#17344b;--text:#21394c;--muted:#6f8090;--grey:#87939e;--border:#dee6eb;--bg:#f4f7f9;--white:#fff;--soft:#edf7fc;--green:#137b56;--shadow:0 9px 28px rgba(18,51,75,.055)}
     *{box-sizing:border-box}
@@ -336,6 +337,10 @@
     .personnel-breakdown .metrics-head::after{display:none}
     .personnel-breakdown .breakdown-optional{font-size:10px;color:#8999a5;font-weight:550}
     .personnel-breakdown .people-grid input{background:#fff}
+    .personnel-breakdown.needs-reason{background:#fffbf4;border-color:#ebd8b4}
+    .personnel-breakdown .reason-hint{font-size:11px;color:#6b8190;font-weight:600;line-height:1.35;margin:-3px 0 11px}
+    .personnel-breakdown.needs-reason .reason-hint{color:#926516}
+    .personnel-breakdown .reason-required[hidden]{display:none!important}
     @media(max-width:400px){.balance-caption{font-size:10px}.personnel-breakdown{padding:12px 10px}.personnel-breakdown .people-grid{gap:8px}}
     /* Disponibilidade da frota: exclusivo dos CRs habilitados pelo administrador. */
     .fleet-panel{margin:17px 0 18px;padding:15px;border:1px solid #cce2f0;background:#f4faff;border-radius:12px}
@@ -347,6 +352,62 @@
     .fleet-reason[hidden]{display:none!important}
     .fleet-reason textarea{font-size:16px;background:white;min-height:82px}
     @media(max-width:400px){.fleet-panel{padding:12px 10px}.fleet-panel .people-grid{gap:8px}}
+
+    /* CRs: ações agrupadas, legíveis e consistentes no celular. */
+    .cr-toolbar{
+      display:flex;align-items:stretch;justify-content:flex-end;gap:0;
+      width:max-content;max-width:100%;margin:4px 0 15px auto;
+      padding:3px;border:1px solid #cbdce7;border-radius:13px;
+      background:#f3f7fa;box-shadow:0 1px 3px rgba(22,53,77,.055)
+    }
+    .cr-control{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      min-height:43px;min-width:0;padding:10px 15px;
+      border:0;border-radius:10px;background:transparent;
+      color:#34596e;font-size:12px;font-weight:750;line-height:1.2;
+      box-shadow:none;white-space:nowrap;transition:background .15s,color .15s
+    }
+    .cr-control+.cr-control{border-left:1px solid #d9e5ec;border-top-left-radius:0;border-bottom-left-radius:0}
+    .cr-control .ui-icon{width:18px;height:18px;flex:none;color:#087ba9;stroke-width:2.1}
+    .cr-control:hover:not(:disabled){background:#e3f1f9;color:#006b9d;border-color:transparent;box-shadow:none}
+    .cr-control:disabled{opacity:.43;background:transparent;border-color:#d9e5ec;box-shadow:none;cursor:default}
+    .cr-toggle{min-height:43px;padding:5px 6px 5px 12px;border:1px solid #c4dce9;border-radius:11px;background:white;color:#12688f;gap:8px;box-shadow:none;font-size:12px;font-weight:740}
+    .cr-toggle:hover{background:#eff9fe;border-color:#7abbdc}
+    .cr-toggle[aria-expanded="true"]{background:#f2faff;border-color:#b3d5e9}
+    .cr-toggle .ui-icon{width:16px;height:16px;padding:6px;border-radius:7px;color:#1478a5;background:#e8f5fc;stroke-width:2;transform:rotate(180deg)}
+    .cr-toggle[aria-expanded="false"] .ui-icon{transform:rotate(0)}
+    .cr-toggle[aria-expanded="true"] .ui-icon{background:#deeffa}
+    .abs-output.positive{background:#edf9f4;color:#09794f;border-color:#b7e5cd}
+    .fleet-balance{align-items:center}
+    .fleet-balance small{display:block;font-size:10px;font-weight:500;color:#7190a1;margin-top:3px}
+    .fleet-reason .req[hidden]{display:none!important}
+    @media(max-width:767px){
+      .cr-toolbar{width:100%;margin-left:0}
+      .cr-control{flex:1 1 50%;padding:9px 7px;min-height:46px;font-size:11.5px;gap:6px}
+      .cr-control .ui-icon{width:17px;height:17px}
+    }
+    @media(max-width:360px){.cr-control{font-size:11px;padding:9px 4px;gap:5px}}
+
+    /* Identidade visual In-Haus / Grupo GPS | Fonte: logo institucional fornecido */
+    :root{--blue:#257a98;--blue-strong:#1d6c87;--navy:#002034;--text:#2e4750;--muted:#647780;--border:#dae4e6;--bg:#f3f6f6;--soft:#e9f2f4;--shadow:0 8px 25px rgba(0,32,52,.065)}
+    .topline{height:5px;background:linear-gradient(90deg,#257a98 0 66%,#516266 66% 83%,#bbbdbd 83% 100%)}
+    .head{min-height:92px;border-bottom:1px solid #e1e8e9}
+    .logo{display:inline-flex;align-items:center;max-width:74%;text-decoration:none}
+    .brand-logo{display:block;width:262px;max-width:100%;height:auto;aspect-ratio:380/75;object-fit:contain;object-position:left center}
+    .head-right{letter-spacing:.075em;color:#516266}
+    .head-right svg{color:#257a98}
+    .eyebrow{color:#257a98}
+    .number{color:#1e6d87;background:#e4eff2}
+    .panel{border-color:#dce5e7}
+    .choice[aria-pressed="true"]{background:#e7f2f5;color:#1b6580;border-color:#88bdce;box-shadow:inset 0 0 0 .5px #88bdce}
+    .btn-copy{color:#1d6c87;background:#e8f2f5;border-color:#d6e8ee}
+    .cr-card-head{background:#eef5f7}
+    .cr-toggle{color:#1d6c87;border-color:#c4dce4}
+    .cr-control .ui-icon{color:#257a98}
+    .btn-preview{color:#1d6c87;background:#e8f2f5;border-color:#d3e7ee}
+    :focus-visible{outline-color:#257a98}
+    @media(max-width:560px){.head{min-height:72px}.brand-logo{width:215px}.logo{max-width:100%}}
+    @media(max-width:350px){.brand-logo{width:198px}}
   </style>
 </head>
 <body>
@@ -371,9 +432,8 @@
   <div class="topline"></div>
   <main class="shell">
     <header class="head">
-      <a class="logo" href="https://inhauslogistica.com.br/" target="_blank" rel="noopener noreferrer" aria-label="In-Haus Logística, site oficial">
-        <svg class="logo-icon" aria-hidden="true" viewBox="0 0 48 48" fill="none"><path d="M5 17L24 6l19 11-7 4-12-7-12 7-7-4Z" fill="#0086C8"/><path d="M5 25l7-4 12 7 12-7 7 4-19 11L5 25Z" fill="#86949E"/><path d="M5 34l7-4 12 7 12-7 7 4-19 11L5 34Z" fill="#A9B2B9"/></svg>
-        <span class="logo-word"><span class="in">In·</span><span class="haus">Haus</span><small>LOGÍSTICA</small></span>
+      <a class="logo" href="https://inhauslogistica.com.br/" target="_blank" rel="noopener noreferrer" aria-label="Visitar o site oficial da In-Haus Logística">
+        <img class="brand-logo" src="/assets/logo-inhaus-grupo-gps.svg" alt="In-Haus Logística | Grupo GPS" width="380" height="75" decoding="async">
       </a>
       <div class="head-right"><svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M7 2v4m10-4v4M3 10h18"/></svg><span>COMUNICAÇÃO OPERACIONAL</span></div>
     </header>
@@ -510,8 +570,8 @@
         const fleetBlock=FLEET_CRS.has(code)?`<section class="fleet-panel" aria-label="Disponibilidade da frota"><div class="metrics-head">Disponibilidade de veículos</div>
           <div class="people-grid"><div class="field"><label for="cr-${code}-fleetTotal">Veículos previstos</label>${inputHtml(code,'fleetTotal','Veículos previstos para a operação')}</div>
           <div class="field"><label for="cr-${code}-fleetAvailable">Veículos disponíveis</label>${inputHtml(code,'fleetAvailable','Veículos disponíveis para a operação')}</div></div>
-          <div class="fleet-balance"><span>Veículos indisponíveis</span><output id="cr-${code}-fleet-unavailable" class="abs-output" aria-live="polite">—</output></div>
-          <div class="field fleet-reason" id="cr-${code}-fleet-reason-wrapper" hidden><label for="cr-${code}-fleetReason">Justificativa da indisponibilidade <span class="req">*</span></label>
+          <div class="fleet-balance"><span>Variação da disponibilidade <small>(Disponíveis − Previstos)</small></span><output id="cr-${code}-fleet-unavailable" class="abs-output" aria-live="polite">—</output></div>
+          <div class="field fleet-reason" id="cr-${code}-fleet-reason-wrapper" hidden><label for="cr-${code}-fleetReason"><span id="cr-${code}-fleet-reason-label">Justificativa da indisponibilidade</span> <span id="cr-${code}-fleet-reason-required" class="req">*</span></label>
           <textarea id="cr-${code}-fleetReason" data-field="fleetReason" maxlength="700" rows="3" placeholder="Ex.: 2 veículos em manutenção e 1 aguardando liberação."></textarea></div>
         </section>`:'';
         const operationBlock=headcountOnly?'':inspectionOnly?`<div class="metrics-head">Inspeções de veículos</div>
@@ -527,7 +587,8 @@
               <div class="field"><label for="cr-${code}-qa">Quadro Ativo</label>${inputHtml(code,'qa','Quadro Ativo','number')}</div>
             </div>
             <div class="abs-inline"><span>Variação do quadro <span class="balance-caption">(Ativo − Planejado)</span></span><output id="cr-${code}-abs" class="abs-output" aria-live="polite" for="cr-${code}-qp cr-${code}-qa">—</output></div>
-            <div class="personnel-breakdown"><div class="metrics-head">Ocorrências de pessoal <span class="breakdown-optional">(opcional)</span></div>
+            <div class="personnel-breakdown" id="cr-${code}-personnel-breakdown"><div class="metrics-head"><span id="cr-${code}-reason-title">Ocorrências de pessoal</span> <span id="cr-${code}-reason-optional" class="breakdown-optional">(opcional)</span><span id="cr-${code}-reason-required" class="reason-required req" hidden> *</span></div>
+              <p class="reason-hint" id="cr-${code}-reason-hint" aria-live="polite">Ausências e vagas abertas são indicadores separados da variação.</p>
               <div class="people-grid"><div class="field"><label for="cr-${code}-absences">Ausências (absenteísmo)</label>${inputHtml(code,'absences','Ausências por absenteísmo','number')}</div>
                 <div class="field"><label for="cr-${code}-openPositions">Vagas abertas</label>${inputHtml(code,'openPositions','Vagas abertas','number')}</div></div></div>`;
         return `<article class="cr-card${expanded?'':' is-collapsed'}" data-cr="${code}">
@@ -627,13 +688,28 @@
         updateToolbarState();
       }
       function numberVal(raw){if(raw===''||!/^(0|[1-9]\d*)$/.test(raw))return null;return Number(raw)}
+      function signedDelta(n){return n>0?`+${n}`:n<0?`−${Math.abs(n)}`:'0'}
       function updateAbs(code){
         const qp=numberVal(crInput(code,'qp')?.value.trim()||''),qa=numberVal(crInput(code,'qa')?.value.trim()||'');
         const el=$(`cr-${code}-abs`),ready=qp!==null&&qa!==null;
         if(!el)return false;
-        el.textContent=ready?String(qa-qp):'—';
+        el.textContent=ready?signedDelta(qa-qp):'—';
         el.classList.toggle('negative',ready&&qa<qp);
-        el.title=ready?'Variação do quadro: Ativo − Planejado. Ausências e vagas abertas são registradas separadamente.':'Informe o Quadro Planejado e o Quadro Ativo para calcular a variação.';
+        el.classList.toggle('positive',ready&&qa>qp);
+        el.title=ready?'Variação do quadro: Ativo − Planejado. Quando negativa, informe se o déficit decorre de ausências e/ou vagas abertas.':'Informe o Quadro Planejado e o Quadro Ativo para calcular a variação.';
+        const negative=ready&&qa<qp;
+        const breakdown=$(`cr-${code}-personnel-breakdown`);
+        if(breakdown){
+          const absence=numberVal(crInput(code,'absences')?.value.trim()||'')||0;
+          const vacancies=numberVal(crInput(code,'openPositions')?.value.trim()||'')||0;
+          breakdown.classList.toggle('needs-reason',negative&&absence+vacancies===0);
+          $(`cr-${code}-reason-title`).textContent=negative?'Motivo da variação negativa':'Ocorrências de pessoal';
+          $(`cr-${code}-reason-optional`).hidden=negative;
+          $(`cr-${code}-reason-required`).hidden=!negative;
+          $(`cr-${code}-reason-hint`).textContent=negative
+            ?'Informe quantas pessoas faltam por ausências e/ou vagas abertas (ao menos um valor maior que zero).'
+            :'Ausências e vagas abertas são indicadores separados da variação.';
+        }
         const badge=document.querySelector(`[data-cr="${code}"] [data-progress]`);
         const informed=hasData(code);badge.textContent=informed?'Com dados':'Sem dados';badge.classList.toggle('ready',informed);
         return ready;
@@ -642,11 +718,26 @@
         if(!FLEET_CRS.has(code))return;
         const total=numberVal(crInput(code,'fleetTotal')?.value.trim()||'');
         const available=numberVal(crInput(code,'fleetAvailable')?.value.trim()||'');
-        const ready=total!==null&&available!==null&&available<=total;
-        const deficit=ready?total-available:null;
+        const ready=total!==null&&available!==null;
+        const difference=ready?available-total:null;
         const output=$(`cr-${code}-fleet-unavailable`),box=$(`cr-${code}-fleet-reason-wrapper`);
-        if(output){output.textContent=deficit===null?'—':String(deficit);output.classList.toggle('negative',deficit>0)}
-        if(box){box.hidden=!(deficit>0);const reason=crInput(code,'fleetReason');if(reason){reason.required=deficit>0;reason.setAttribute('aria-required',String(deficit>0));}}
+        if(output){
+          output.textContent=difference===null?'—':signedDelta(difference);
+          output.classList.toggle('negative',difference!==null&&difference<0);
+          output.classList.toggle('positive',difference!==null&&difference>0);
+        }
+        if(box){
+          box.hidden=difference===null||difference===0;
+          const reason=crInput(code,'fleetReason'),label=$(`cr-${code}-fleet-reason-label`),required=$(`cr-${code}-fleet-reason-required`);
+          const deficit=difference!==null&&difference<0;
+          if(label)label.textContent=deficit?'Justificativa dos veículos indisponíveis':'Observação sobre veículos adicionais (opcional)';
+          if(required)required.hidden=!deficit;
+          if(reason){
+            reason.required=deficit;
+            reason.setAttribute('aria-required',String(deficit));
+            reason.placeholder=deficit?'Ex.: 2 veículos em manutenção e 1 aguardando liberação.':'Ex.: 2 veículos adicionais de apoio à operação.';
+          }
+        }
       }
       function updateCount(){const codes=linked();const done=codes.filter(code=>{updateAbs(code);updateFleet(code);return hasData(code)}).length;$('crCount').textContent=`${done}/${codes.length} CRs informados`}
       function perc(a,b){
@@ -697,10 +788,11 @@
             const fleetLine=pairLine('Disponibilidade de veículos',fleetTotal,fleetAvailable,'Previstos','Disponíveis',false);
             if(fleetLine)lines.push(fleetLine);
             const total=numberVal(fleetTotal),available=numberVal(fleetAvailable);
-            if(total!==null&&available!==null&&available<=total){
-              const unavailable=total-available;
-              lines.push(`• *Veículos indisponíveis:* ${unavailable}`);
-              if(unavailable>0&&fmt(fleetReason))lines.push(`• *Justificativa:* ${fmt(fleetReason)}`);
+            if(total!==null&&available!==null){
+              const difference=available-total;
+              lines.push(`• *Variação da disponibilidade:* ${signedDelta(difference)}`);
+              if(difference<0&&fmt(fleetReason))lines.push(`• *Justificativa:* ${fmt(fleetReason)}`);
+              if(difference>0&&fmt(fleetReason))lines.push(`• *Observação:* ${fmt(fleetReason)}`);
             }
           }
           if(!vehicleOnly(code)&&!HEADCOUNT_ONLY.has(code)&&!INSPECTION_ACTUAL_ONLY.has(code)){
@@ -717,7 +809,7 @@
             if(peopleLine){
               const nqp=numberVal(qp),nqa=numberVal(qa);
               const delta=nqp!==null&&nqa!==null?nqa-nqp:null;
-              const variation=delta===null?'':` | *Variação:* ${delta<0?'−'+Math.abs(delta):delta>0?'+'+delta:'0'}`;
+              const variation=delta===null?'':` | *Variação:* ${signedDelta(delta)}`;
               lines.push(peopleLine+variation);
             }
             if(absences!=='')lines.push(`• *Ausências (absenteísmo):* ${displayNumber(absences)}`);
@@ -757,6 +849,15 @@
             const raw=el.value.trim();
             if(raw!==''&&numberVal(raw)===null)return focusError(el,`Informe um número inteiro válido no CR ${code}.`);
           }
+          // Uma variação positiva ou zero dispensa justificativa. Um déficit
+          // exige indicar sua origem em Ausências e/ou Vagas abertas por CR.
+          const planned=numberVal(crInput(code,'qp')?.value.trim()||'');
+          const active=numberVal(crInput(code,'qa')?.value.trim()||'');
+          if(planned!==null&&active!==null&&active<planned){
+            const absence=numberVal(crInput(code,'absences')?.value.trim()||'')||0;
+            const vacancies=numberVal(crInput(code,'openPositions')?.value.trim()||'')||0;
+            if(absence+vacancies===0)return focusError(crInput(code,'absences'),`No CR ${code}, informe se a variação negativa é por ausências e/ou vagas abertas.`);
+          }
           if(FLEET_CRS.has(code)){
             const totalField=crInput(code,'fleetTotal'),availableField=crInput(code,'fleetAvailable');
             const total=totalField.value.trim(),available=availableField.value.trim();
@@ -764,7 +865,6 @@
             if(total!==''&&available!==''){
               const t=numberVal(total),a=numberVal(available);
               if(t!==null&&a!==null){
-                if(a>t)return focusError(availableField,`No CR ${code}, os disponíveis não podem ultrapassar os veículos previstos.`);
                 if(a<t&&!crInput(code,'fleetReason').value.trim())return focusError(crInput(code,'fleetReason'),`Justifique os ${t-a} veículos indisponíveis no CR ${code}.`);
               }
             }
@@ -835,7 +935,7 @@
         $('shift').dispatchEvent(new Event('change',{bubbles:true}));
       });
       $('responsible').addEventListener('change',()=>{captureCurrent();renderSupervisorChoice();syncShift(val('responsible'));renderCRs(val('responsible'));update()});
-      $('crList').addEventListener('input',e=>{const card=e.target.closest('[data-cr]');if(card){const field=e.target.dataset.field;if((field==='volumePlan'||field==='volumeActual')&&volumeDecimals(card.dataset.cr)&&e.target.value.includes(',')){const pos=e.target.selectionStart;e.target.value=e.target.value.replace(/,/g,'.');if(pos!==null)e.target.setSelectionRange(pos,pos)}if(field==='qp'||field==='qa')updateAbs(card.dataset.cr);if(FLEET_CRS.has(card.dataset.cr)&&(field==='fleetTotal'||field==='fleetAvailable'))updateFleet(card.dataset.cr);update()}});
+      $('crList').addEventListener('input',e=>{const card=e.target.closest('[data-cr]');if(card){const field=e.target.dataset.field;if((field==='volumePlan'||field==='volumeActual')&&volumeDecimals(card.dataset.cr)&&e.target.value.includes(',')){const pos=e.target.selectionStart;e.target.value=e.target.value.replace(/,/g,'.');if(pos!==null)e.target.setSelectionRange(pos,pos)}if(['qp','qa','absences','openPositions'].includes(field))updateAbs(card.dataset.cr);if(FLEET_CRS.has(card.dataset.cr)&&(field==='fleetTotal'||field==='fleetAvailable'))updateFleet(card.dataset.cr);update()}});
       $('crList').addEventListener('change',update);
       $('crList').addEventListener('click',e=>{
         const toggle=e.target.closest('[data-cr-toggle]');

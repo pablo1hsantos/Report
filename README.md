@@ -1,3 +1,52 @@
+# Report Operacional In-Haus | Identidade visual v33
+
+Atualização visual da versão 32 com a marca institucional oficial In-Haus Logística / Grupo GPS.
+
+O logotipo `assets/logo-inhaus-grupo-gps.svg` é o arquivo enviado pelo usuário, copiado sem modificação. Ele é exibido em `/` (formulário) e `/admin.html` (administração).
+
+As cores da interface foram harmonizadas com a marca (#002034, #257A98, #516266 e #BBBDBD), com adaptação para celular. Não foram alteradas as regras operacionais, autenticação, API nem os cadastros.
+
+**Publicação:** enviar o projeto completo, incluindo a pasta `assets`, para a raiz do repositório conectado à Vercel. A imagem é referenciada em `/assets/logo-inhaus-grupo-gps.svg`; publicar apenas o HTML causará ausência do logo.
+
+---
+
+# Report Operacional In-Haus v32 — Motivo obrigatório somente para déficit no quadro
+
+- **Variação do quadro = Quadro Ativo − Quadro Planejado**; valores positivos, negativos e zero continuam permitidos.
+- **Variação positiva ou zero:** não requer justificativa. Ausências e vagas abertas continuam como indicadores independentes e opcionais.
+- **Variação negativa:** antes de copiar ou compartilhar, informe ao menos uma quantidade maior que zero em **Ausências (absenteísmo)** e/ou **Vagas abertas**, por CR. O formulário mostra a exigência no bloco de pessoal e expande o CR se estiver pendente.
+- **Sem QP ou QA informados:** não há cálculo nem justificativa obrigatória, mantendo a regra de preenchimento parcial.
+- Não é imposto que a soma das ocorrências seja idêntica ao déficit, porque os dois indicadores não precisam explicar matematicamente toda diferença do quadro.
+- Preservados regras de frota, CRs, ADM, API e estrutura de mensagem WhatsApp da versão 31.
+
+---
+
+# Report Operacional In-Haus v31 — Controles, quadro e disponibilidade
+
+- **Botões de CR:** ações “Expandir todos” e “Recolher todos” agrupadas em um controle segmentado, com ícones simples, toque acessível e estado desabilitado claro. Botões individuais também refinados.
+- **Quadro de pessoal:** `Variação = Quadro Ativo − Quadro Planejado`. Pode ser negativa, zero ou positiva. A variação **não representa automaticamente** ausências nem vagas abertas e **não exige justificativa**. Esses dois indicadores permanecem independentes e opcionais.
+- **Disponibilidade de veículos:** o total disponível pode ficar **acima** do previsto. A variação é `Disponíveis − Previstos`; exemplo: 12 previstos / 14 disponíveis = **+2**.
+- **Mais veículos que o previsto:** campo de **observação opcional**, exibido apenas quando preenchido, inclusive no WhatsApp.
+- **Menos veículos que o previsto:** campo de **justificativa obrigatório**, mantendo a regra anterior.
+- **Quantidade igual:** saldo 0 e nenhum campo de justificativa ou observação necessário.
+- Mantidos todos os cadastros, regras por CR, login do ADM, API e a formatação do WhatsApp. Não há mudança nas variáveis de ambiente.
+
+### Exemplos de relatório (dados ilustrativos)
+
+```text
+*CR 66003 | Arcelor Transporte*
+• *Disponibilidade de veículos:* Previstos: 12 | Disponíveis: 14
+• *Variação da disponibilidade:* +2
+• *Observação:* 2 veículos adicionais de apoio à operação.
+• *Quadro de pessoal:* Planejado: 10 | Ativo: 12 | *Variação:* +2
+• *Ausências (absenteísmo):* 0
+• *Vagas abertas:* 0
+```
+
+Para atualizar, envie **todos os arquivos e pastas** ao repositório e aguarde o deploy da Vercel. O arquivo `index.html` sozinho não atualiza funções da API caso as versões sejam diferentes.
+
+---
+
 # Report Operacional In-Haus v30 — Inspeções com Headcount
 
 ## Correção dos CRs 85080 e 85082
