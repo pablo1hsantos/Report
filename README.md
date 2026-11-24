@@ -1,3 +1,56 @@
+# Report Operacional In-Haus v30 — Inspeções com Headcount
+
+## Correção dos CRs 85080 e 85082
+
+- **85080 — Arcelor Inspeções IRC** e **85082 — Arcelor Inspeções PIR** exibem **Veículos inspecionados (realizados)** e **Quadro de pessoal** no mesmo card.
+- Quadro de pessoal: **Quadro Planejado, Quadro Ativo, Variação do quadro (Ativo − Planejado), Ausências (absenteísmo) e Vagas abertas**.
+- Para esses CRs, **não** há veículos programados, volume, itens nem percentual de realização.
+- A mensagem do WhatsApp mostra os dois conjuntos de dados, somente quando os campos forem preenchidos.
+- A configuração do **ADM → CRs** agora descreve corretamente a modalidade como **Inspeção de veículos (realizados) + quadro de pessoal**.
+- Configurações antigas armazenadas no Redis com `vehiclesActualOnly: true` **continuam válidas e passam a exibir headcount**, sem modificar nem apagar supervisores, vínculos ou demais cadastros.
+- Demais CRs, painel de segurança, login e APIs permanecem inalterados.
+
+**Exemplo de WhatsApp (dados ilustrativos):**
+
+```text
+*CR 85080 | Arcelor Inspeções IRC*
+• *Veículos inspecionados (realizados):* 8
+• *Quadro de pessoal:*
+  Planejado: 12 | Ativo: 10 | *Variação:* −2
+• *Ausências (absenteísmo):* 1
+• *Vagas abertas:* 1
+```
+
+**Publicação:** substitua o projeto completo no GitHub e aguarde novo deploy da Vercel. Nenhuma alteração de variáveis secretas é necessária.
+
+---
+
+# Report Operacional In-Haus v29 — Administração e perfis de operações
+
+## O que mudou nesta versão
+
+**Administração → Segurança → Alterar senha**
+- Administrador informa senha atual, nova senha (mínimo de 12 caracteres) e confirmação.
+- Servidor verifica a senha atual; a nova é guardada no Upstash Redis usando `scrypt` e sal aleatório. Nenhuma senha ou hash é embutido no HTML público.
+- A troca substitui a senha anterior para autenticação e invalida as demais sessões administrativas. A sessão que realizou a troca recebe um novo cookie.
+- `ADMIN_PASSWORD` na Vercel continua necessário como credencial inicial. Depois da primeira troca, a credencial do Redis tem prioridade: mudar `ADMIN_PASSWORD` na Vercel não reverte uma senha já alterada no painel. A recuperação por perda de senha exige atuação autorizada no armazenamento.
+
+**Tipos de operação por CR (editáveis em Administração → CRs)**
+- `65496 — Arcelor Trefila`: somente **Quadro de pessoal (Headcount)**, com Quadro Planejado, Quadro Ativo, Variação do quadro, Ausências e Vagas abertas.
+- `66655 — Arcelor Belgo`: somente **Quadro de pessoal (Headcount)**, com os mesmos indicadores.
+- `85080 — Arcelor Inspeções IRC`: somente **Veículos inspecionados (realizados)**, sem Programado, sem percentual e sem Quadro de pessoal.
+- `85082 — Arcelor Inspeções PIR`: mesmo padrão de inspeções.
+- Os demais CRs mantêm suas regras, inclusive frota e itens. Todos mantêm campos opcionais de desvios e pendências.
+- Para não apagar cadastros já existentes, configurações Redis antigas sem esses novos atributos recebem os padrões acima; um administrador pode depois alterá-los e salvar. Flags já explicitamente configuradas são respeitadas.
+
+**Atualização na Vercel**
+1. Copie todos os arquivos e pastas do ZIP para a raiz do repositório, inclusive `api/` e `lib/`.
+2. Mantenha as variáveis `ADMIN_PASSWORD`, `SESSION_SECRET`, `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`.
+3. Publique novamente o projeto e confirme `/api/health` e `/admin.html`.
+4. Entre no ADM, abra **Segurança** e altere a senha. Use uma senha nova e forte.
+
+---
+
 # Report Operacional In-Haus v28 — Variação do quadro (aplicada sobre os arquivos v27)
 
 - No formulário, **ABS (saldo do quadro)** foi substituído por **Variação do quadro (Ativo − Planejado)**.
