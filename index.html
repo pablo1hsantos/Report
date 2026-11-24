@@ -330,9 +330,10 @@
     @media(max-width:767px){.shift-field{grid-column:1/-1}.picker-trigger{min-height:54px;font-size:14px}.picker-option{min-height:54px;font-size:13px;padding:10px 12px}.shift-button{min-height:52px;font-size:12px}.picker-options{max-height:min(325px,47vh)}}
     @media(max-width:380px){.shift-buttons{grid-template-columns:repeat(2,minmax(0,1fr))}.picker-option{font-size:12px}}
   
-    /* Quadro de pessoal: saldo automático distinto de ausências e vagas abertas. */
+    /* Quadro de pessoal: causas da variação negativa, não indicadores independentes. */
     .balance-caption{font-size:11px;font-weight:500;color:#718999;letter-spacing:0}
     .personnel-breakdown{margin-top:14px;padding:13px 14px 14px;border:1px solid #dfebf3;background:#f8fbfd;border-radius:11px}
+    .personnel-breakdown[hidden]{display:none!important}
     .personnel-breakdown .metrics-head{margin:0 0 10px!important;letter-spacing:.02em;text-transform:none;color:#365971}
     .personnel-breakdown .metrics-head::after{display:none}
     .personnel-breakdown .breakdown-optional{font-size:10px;color:#8999a5;font-weight:550}
@@ -587,8 +588,8 @@
               <div class="field"><label for="cr-${code}-qa">Quadro Ativo</label>${inputHtml(code,'qa','Quadro Ativo','number')}</div>
             </div>
             <div class="abs-inline"><span>Variação do quadro <span class="balance-caption">(Ativo − Planejado)</span></span><output id="cr-${code}-abs" class="abs-output" aria-live="polite" for="cr-${code}-qp cr-${code}-qa">—</output></div>
-            <div class="personnel-breakdown" id="cr-${code}-personnel-breakdown"><div class="metrics-head"><span id="cr-${code}-reason-title">Ocorrências de pessoal</span> <span id="cr-${code}-reason-optional" class="breakdown-optional">(opcional)</span><span id="cr-${code}-reason-required" class="reason-required req" hidden> *</span></div>
-              <p class="reason-hint" id="cr-${code}-reason-hint" aria-live="polite">Ausências e vagas abertas são indicadores separados da variação.</p>
+            <div class="personnel-breakdown" id="cr-${code}-personnel-breakdown" hidden><div class="metrics-head"><span id="cr-${code}-reason-title">Justificativa da variação negativa</span><span class="reason-required req"> *</span></div>
+              <p class="reason-hint" id="cr-${code}-reason-hint" aria-live="polite">Indique a origem do déficit: ausências, vagas abertas ou ambas.</p>
               <div class="people-grid"><div class="field"><label for="cr-${code}-absences">Ausências (absenteísmo)</label>${inputHtml(code,'absences','Ausências por absenteísmo','number')}</div>
                 <div class="field"><label for="cr-${code}-openPositions">Vagas abertas</label>${inputHtml(code,'openPositions','Vagas abertas','number')}</div></div></div>`;
         return `<article class="cr-card${expanded?'':' is-collapsed'}" data-cr="${code}">
@@ -625,7 +626,14 @@
         updateToolbarState();
       }
       function dataOf(code){const obj={};for(const f of fields)obj[f]=String(crInput(code,f)?.value||'').trim();return obj}
-      function hasData(code){return Object.values(dataOf(code)).some(v=>v!=='')}
+      function hasData(code){
+        const record=dataOf(code);
+        // Ausências e vagas abertas só compõem o relatório se houver déficit.
+        const planned=numberVal(record.qp),active=numberVal(record.qa);
+        const deficit=planned!==null&&active!==null&&active<planned;
+        return Object.entries(record).some(([field,value])=>value!==''&&
+          (deficit||!['absences','openPositions'].includes(field)));
+      }
       function filterText(s){return String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()}
       function renderSupervisorChoice(){
         const current=val('responsible'),label=$('supervisorSelected');
@@ -702,13 +710,17 @@
         if(breakdown){
           const absence=numberVal(crInput(code,'absences')?.value.trim()||'')||0;
           const vacancies=numberVal(crInput(code,'openPositions')?.value.trim()||'')||0;
+          // Motivos só podem ser informados quando o quadro está em déficit.
+          // Atributo hidden e inputs desabilitados impedem que o bloco apareça
+          // ou seja tratado como preenchimento quando a variação for >= 0.
+          breakdown.hidden=!negative;
+          breakdown.setAttribute('aria-hidden',String(!negative));
+          for(const field of ['absences','openPositions']){
+            const input=crInput(code,field);
+            if(input)input.disabled=!negative;
+          }
           breakdown.classList.toggle('needs-reason',negative&&absence+vacancies===0);
-          $(`cr-${code}-reason-title`).textContent=negative?'Motivo da variação negativa':'Ocorrências de pessoal';
-          $(`cr-${code}-reason-optional`).hidden=negative;
-          $(`cr-${code}-reason-required`).hidden=!negative;
-          $(`cr-${code}-reason-hint`).textContent=negative
-            ?'Informe quantas pessoas faltam por ausências e/ou vagas abertas (ao menos um valor maior que zero).'
-            :'Ausências e vagas abertas são indicadores separados da variação.';
+          $(`cr-${code}-reason-hint`).textContent='Indique a origem do déficit: ausências, vagas abertas ou ambas (ao menos um valor maior que zero).';
         }
         const badge=document.querySelector(`[data-cr="${code}"] [data-progress]`);
         const informed=hasData(code);badge.textContent=informed?'Com dados':'Sem dados';badge.classList.toggle('ready',informed);
@@ -775,7 +787,7 @@
         if(name)lines.push(`*Supervisor:* ${name}`);
         for(const code of codes){
           const d=dataOf(code);
-          if(!Object.values(d).some(v=>v!==''))continue;
+          if(!hasData(code))continue;
           const {vehiclesPlan:vp,vehiclesActual:va,volumePlan:mp,volumeActual:ma,itemsPlan:ip,itemsActual:ia,fleetTotal,fleetAvailable,fleetReason,qp,qa,absences,openPositions,issues,pending}=d;
           lines.push('',`*CR ${code} | ${CRS[code]}*`);
           if(INSPECTION_ACTUAL_ONLY.has(code)){
@@ -812,8 +824,14 @@
               const variation=delta===null?'':` | *Variação:* ${signedDelta(delta)}`;
               lines.push(peopleLine+variation);
             }
-            if(absences!=='')lines.push(`• *Ausências (absenteísmo):* ${displayNumber(absences)}`);
-            if(openPositions!=='')lines.push(`• *Vagas abertas:* ${displayNumber(openPositions)}`);
+            // Motivos são parte da variação negativa, não indicadores avulsos.
+            const planned=numberVal(qp),active=numberVal(qa);
+            if(planned!==null&&active!==null&&active<planned){
+              const reasons=[];
+              if(absences!=='')reasons.push(`Ausências (absenteísmo): ${displayNumber(absences)}`);
+              if(openPositions!=='')reasons.push(`Vagas abertas: ${displayNumber(openPositions)}`);
+              if(reasons.length)lines.push(`• *Justificativa da variação negativa:* ${reasons.join(' | ')}`);
+            }
           }
           if(fmt(issues))lines.push(`• *Desvios:* ${fmt(issues)}`);
           if(fmt(pending))lines.push(`• *Pendências:* ${fmt(pending)}`);
@@ -849,8 +867,8 @@
             const raw=el.value.trim();
             if(raw!==''&&numberVal(raw)===null)return focusError(el,`Informe um número inteiro válido no CR ${code}.`);
           }
-          // Uma variação positiva ou zero dispensa justificativa. Um déficit
-          // exige indicar sua origem em Ausências e/ou Vagas abertas por CR.
+          // Ausências e vagas abertas são exclusivamente motivos do déficit;
+          // variação positiva ou zero não precisa de justificativa.
           const planned=numberVal(crInput(code,'qp')?.value.trim()||'');
           const active=numberVal(crInput(code,'qa')?.value.trim()||'');
           if(planned!==null&&active!==null&&active<planned){

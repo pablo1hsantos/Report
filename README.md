@@ -1,3 +1,32 @@
+# Report Operacional In-Haus | v35 - Motivos somente em variação negativa
+
+- Com **Quadro Ativo acima do Planejado**, a variação aparece com sinal positivo, sem bloco de Ausências/Vagas abertas.
+- Com **Quadro Ativo igual ao Planejado**, a variação é zero e o bloco de motivos não aparece.
+- Com **Quadro Ativo abaixo do Planejado**, aparece **Justificativa da variação negativa** com Ausências e Vagas abertas; é necessário preencher ao menos uma causa positiva antes de copiar ou enviar.
+- O bloco fica oculto e os campos são desabilitados quando não existe déficit. Nenhum motivo entra na mensagem do WhatsApp em caso de variação positiva ou zero.
+- Mantidos logo oficial, CRs, frota, painel ADM, API e regras da versão anterior.
+
+**Se o site ainda mostrar “Ocorrências de pessoal” ou “indicadores separados”, está executando uma versão antiga.** Atualize o `index.html` no GitHub, confirme o deploy da Vercel e recarregue a página sem cache.
+
+---
+
+# Report Operacional In-Haus | v34 — Justificativa da variação negativa
+
+**Regra atual:** Ausências (absenteísmo) e Vagas abertas **não são indicadores separados da variação**. São **motivos do déficit no quadro de pessoal**, a serem informados somente quando `Quadro Ativo < Quadro Planejado`.
+
+- A variação continua automática: `Quadro Ativo − Quadro Planejado`.
+- Se a variação for **positiva ou zero**, o formulário **não mostra** a justificativa e o WhatsApp **não inclui** Ausências nem Vagas abertas, mesmo que haja valores em rascunhos anteriores.
+- Se for **negativa**, aparece **Justificativa da variação negativa** com Ausências e Vagas abertas; ao menos uma causa deve ter quantidade maior que zero antes do envio.
+- Na mensagem WhatsApp, ambas aparecem agrupadas numa única linha de justificativa abaixo do quadro, quando informadas.
+- Não há exigência de que a soma dos motivos seja igual ao déficit, conforme regra já existente.
+- O restante da versão 33, incluindo logo oficial, painel ADM, API, CRs e regras de frota, permanece inalterado.
+
+**Publicação:** atualize todos os arquivos/pastas no repositório; não coloque credenciais no GitHub.
+
+---
+
+## Histórico das versões anteriores (substituído pela regra atual quando houver divergência)
+
 # Report Operacional In-Haus | Identidade visual v33
 
 Atualização visual da versão 32 com a marca institucional oficial In-Haus Logística / Grupo GPS.
